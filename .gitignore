@@ -1,0 +1,13 @@
+# Jekyll build output — rebuilt by CI on every push
+_site/
+
+# Jekyll cache and incremental build metadata
+.jekyll-cache/
+.jekyll-metadata
+
+# Bundler local install directory (if anyone runs: bundle install --path vendor)
+vendor/
+.bundle/
+
+# macOS
+.DS_Store

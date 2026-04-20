@@ -1,0 +1,5 @@
+// Sidebar wide enough for the longest nav items (~48 chars at level 2)
+$nav-width: 25rem;
+
+// Content: effectively unconstrained — CSS below removes the max-width
+$content-width: 200rem;
