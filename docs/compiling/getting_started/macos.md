@@ -1,8 +1,8 @@
 ---
 title: "MacOS"
-nav_order: 13
-parent: "Getting Started"
-grand_parent: "Compiling and Running"
+nav_order: 8
+parent: "Systems"
+grand_parent: "Getting Started"
 layout: default
 render_with_liquid: false
 ---

@@ -1,7 +1,8 @@
 ---
 title: "Run Particle Simulations with Neutral Collisions"
-nav_order: 42
-parent: "Howto"
+nav_order: 4
+parent: "Impurities, Neutrals and Fuelling"
+grand_parent: "Howto"
 layout: default
 render_with_liquid: false
 ---

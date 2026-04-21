@@ -1,7 +1,8 @@
 ---
 title: "Choose Boundary Conditions"
-nav_order: 24
-parent: "Howto"
+nav_order: 4
+parent: "Numerics and Stabilization"
+grand_parent: "Howto"
 layout: default
 render_with_liquid: false
 ---

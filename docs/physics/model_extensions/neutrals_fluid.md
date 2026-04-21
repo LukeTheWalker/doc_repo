@@ -1,8 +1,8 @@
 ---
 title: "Neutrals — Fluid Model"
-nav_order: 6
-parent: "Model Extensions"
-grand_parent: "Physics Models"
+nav_order: 1
+parent: "Neutrals"
+grand_parent: "Model Extensions"
 layout: default
 render_with_liquid: false
 ---

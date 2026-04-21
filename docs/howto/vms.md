@@ -1,7 +1,8 @@
 ---
 title: "Variable MultiScale (VMS) Stabilization"
-nav_order: 37
-parent: "Howto"
+nav_order: 6
+parent: "Numerics and Stabilization"
+grand_parent: "Howto"
 layout: default
 render_with_liquid: false
 ---

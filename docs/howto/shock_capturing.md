@@ -1,7 +1,8 @@
 ---
 title: "Use Shock Capturing Features"
-nav_order: 25
-parent: "Howto"
+nav_order: 5
+parent: "Numerics and Stabilization"
+grand_parent: "Howto"
 layout: default
 render_with_liquid: false
 ---

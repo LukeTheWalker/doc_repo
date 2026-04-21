@@ -1,8 +1,8 @@
 ---
 title: "TGCC-CEA"
-nav_order: 12
-parent: "Getting Started"
-grand_parent: "Compiling and Running"
+nav_order: 7
+parent: "Systems"
+grand_parent: "Getting Started"
 layout: default
 render_with_liquid: false
 ---

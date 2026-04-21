@@ -1,8 +1,9 @@
 ---
-title: "Generate Poincaré Plots with Particle Tracker"
+title: "Physics Options"
 nav_order: 3
-parent: "Kinetic Particles"
-grand_parent: "Howto"
+parent: "Howto"
+has_children: true
+nav_fold: true
 layout: default
 render_with_liquid: false
 ---

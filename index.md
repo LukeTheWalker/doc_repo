@@ -10,6 +10,7 @@ render_with_liquid: false
 - **[Information for New JOREK Users](docs/jorek_access.md)** \| **[Code License](docs/code_license.md)**
 - **[Publication Rules](docs/publication_rules.md)** \| **[JOREK Logo](docs/jorek_logo.md)** \| **[jorek-preprint@jorek.eu](mailto:jorek-preprint@jorek.eu)**
 - **[Frequently Asked Questions (FAQ)](docs/faq.md)**
+- **[Contributing to the Docs](docs/contributing.md)**
 
 ### Compiling and Running
 

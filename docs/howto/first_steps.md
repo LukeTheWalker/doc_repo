@@ -1,8 +1,9 @@
 ---
-title: "Plot Equation Terms in VTK"
-nav_order: 4
-parent: "Post-processing"
-grand_parent: "Howto"
+title: "First Steps"
+nav_order: 1
+parent: "Howto"
+has_children: true
+nav_fold: true
 layout: default
 render_with_liquid: false
 ---

@@ -1,7 +1,8 @@
 ---
 title: "Calculate B Outside and Inside the JOREK Grid"
-nav_order: 15
-parent: "Howto"
+nav_order: 1
+parent: "Post-processing"
+grand_parent: "Howto"
 layout: default
 render_with_liquid: false
 ---

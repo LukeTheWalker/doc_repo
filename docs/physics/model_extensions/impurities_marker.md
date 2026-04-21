@@ -1,8 +1,8 @@
 ---
 title: "Impurities — Marker Model"
-nav_order: 3
-parent: "Model Extensions"
-grand_parent: "Physics Models"
+nav_order: 2
+parent: "Impurities"
+grand_parent: "Model Extensions"
 layout: default
 render_with_liquid: false
 ---

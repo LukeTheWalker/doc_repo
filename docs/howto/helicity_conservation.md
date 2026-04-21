@@ -1,7 +1,8 @@
 ---
 title: "Helicity Conservation"
-nav_order: 45
-parent: "Howto"
+nav_order: 12
+parent: "Physics Options"
+grand_parent: "Howto"
 layout: default
 render_with_liquid: false
 ---

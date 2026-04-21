@@ -1,8 +1,9 @@
 ---
-title: "REs — Kinetic Model"
+title: "Grid and Equilibrium"
 nav_order: 2
-parent: "Runaway Electrons"
-grand_parent: "Model Extensions"
+parent: "Howto"
+has_children: true
+nav_fold: true
 layout: default
 render_with_liquid: false
 ---

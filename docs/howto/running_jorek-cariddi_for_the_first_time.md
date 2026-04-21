@@ -1,7 +1,8 @@
 ---
 title: "Get Started with JOREK-CARIDDI"
 nav_order: 3
-parent: "Howto"
+parent: "First Steps"
+grand_parent: "Howto"
 layout: default
 render_with_liquid: false
 ---

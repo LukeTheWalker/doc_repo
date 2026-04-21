@@ -1,7 +1,8 @@
 ---
 title: "Use the Controller Module"
-nav_order: 33
-parent: "Howto"
+nav_order: 13
+parent: "Physics Options"
+grand_parent: "Howto"
 layout: default
 render_with_liquid: false
 ---

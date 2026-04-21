@@ -1,7 +1,8 @@
 ---
 title: "Get Started with JOREK"
 nav_order: 1
-parent: "Howto"
+parent: "First Steps"
+grand_parent: "Howto"
 layout: default
 render_with_liquid: false
 ---

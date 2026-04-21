@@ -1,7 +1,8 @@
 ---
 title: "Run with RMPs"
-nav_order: 14
-parent: "Howto"
+nav_order: 4
+parent: "Physics Options"
+grand_parent: "Howto"
 layout: default
 render_with_liquid: false
 ---

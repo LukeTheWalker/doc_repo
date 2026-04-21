@@ -1,7 +1,8 @@
 ---
 title: "Run with Non-Linear Time-Stepping (Newton)"
-nav_order: 34
-parent: "Howto"
+nav_order: 7
+parent: "Numerics and Stabilization"
+grand_parent: "Howto"
 layout: default
 render_with_liquid: false
 ---

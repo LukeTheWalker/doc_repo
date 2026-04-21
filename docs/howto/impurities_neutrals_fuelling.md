@@ -1,8 +1,9 @@
 ---
-title: "Run with Ohmic Heating"
+title: "Impurities, Neutrals and Fuelling"
 nav_order: 5
-parent: "Physics Options"
-grand_parent: "Howto"
+parent: "Howto"
+has_children: true
+nav_fold: true
 layout: default
 render_with_liquid: false
 ---

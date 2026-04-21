@@ -1,7 +1,8 @@
 ---
 title: "Run Stellarator Model with Divertor Region"
-nav_order: 40
-parent: "Howto"
+nav_order: 2
+parent: "Stellarator"
+grand_parent: "Howto"
 layout: default
 render_with_liquid: false
 ---

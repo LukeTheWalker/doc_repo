@@ -1,8 +1,9 @@
 ---
-title: "Plot Equation Terms in VTK"
+title: "Numerics and Stabilization"
 nav_order: 4
-parent: "Post-processing"
-grand_parent: "Howto"
+parent: "Howto"
+has_children: true
+nav_fold: true
 layout: default
 render_with_liquid: false
 ---

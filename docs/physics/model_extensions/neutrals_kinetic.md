@@ -1,8 +1,8 @@
 ---
 title: "Neutrals — Kinetic Model"
-nav_order: 7
-parent: "Model Extensions"
-grand_parent: "Physics Models"
+nav_order: 2
+parent: "Neutrals"
+grand_parent: "Model Extensions"
 layout: default
 render_with_liquid: false
 ---

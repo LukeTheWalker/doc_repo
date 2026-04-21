@@ -1,7 +1,8 @@
 ---
 title: "Show Time in Paraview Plots"
-nav_order: 36
-parent: "Howto"
+nav_order: 5
+parent: "Post-processing"
+grand_parent: "Howto"
 layout: default
 render_with_liquid: false
 ---

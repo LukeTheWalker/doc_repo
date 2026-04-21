@@ -1,7 +1,8 @@
 ---
 title: "Convert EFIT Data with eqdsk2jorek"
-nav_order: 6
-parent: "Howto"
+nav_order: 2
+parent: "Grid and Equilibrium"
+grand_parent: "Howto"
 layout: default
 render_with_liquid: false
 ---

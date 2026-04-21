@@ -1,8 +1,8 @@
 ---
 title: "Impurities — Fluid Model"
-nav_order: 2
-parent: "Model Extensions"
-grand_parent: "Physics Models"
+nav_order: 1
+parent: "Impurities"
+grand_parent: "Model Extensions"
 layout: default
 render_with_liquid: false
 ---
