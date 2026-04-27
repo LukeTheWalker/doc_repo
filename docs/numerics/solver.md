@@ -193,3 +193,19 @@ The PETSc integration layer lives in `solvers/mod_petsc.f90` and exposes:
 
 Details of the PETSc-based preconditioners and their configuration will be
 documented separately.
+
+---
+
+## Further reading
+
+#### JOREK solver and numerical methods
+- Y. Saad, *Iterative Methods for Sparse Linear Systems*, 2nd ed., SIAM (2003). [Freely available from the author.](https://www-users.cse.umn.edu/~saad/IterMethBook_2ndEd.pdf)
+- T. A. Davis, *Direct Methods for Sparse Linear Systems*, SIAM (2006).
+- I. Holod *et al.*, "Enhanced preconditioner for JOREK MHD solver," arXiv:2101.08646 (2021).
+- A. Quinlan, V. Dwarka, I. Holod, M. Hoelzl, "Towards Robust Solvers for Nuclear Fusion Simulations Using JOREK: A Numerical Analysis Perspective," arXiv:2308.16124 (2023).
+
+#### Direct Solver back-ends
+- **MUMPS** — [mumps-solver.org](https://mumps-solver.org/)
+- **PaStiX** — [solverstack.gitlabpages.inria.fr/pastix](https://solverstack.gitlabpages.inria.fr/pastix/)
+- **STRUMPACK** — [portal.nersc.gov/project/sparse/strumpack](https://portal.nersc.gov/project/sparse/strumpack/)
+- **PETSc** — [petsc.org](https://petsc.org/)
