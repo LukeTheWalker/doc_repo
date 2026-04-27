@@ -14,17 +14,21 @@ The kinetic extension in JOREK is a flexible framework including options for kin
 
 Currently the kinetics extension lives in a separate branch called "kinetic_develop". There is an ongoing effort to pull together the capability of many separate example programs into "kinetic_main", so that the separate example files are not necessary anymore (once this is done, kinetic_develop will be merged into develop).
 
-To use kinetic_main, you first need to compile. Make sure that your hard coded settings are correct (./util/config.sh) and are compatible with kinetic_main (currently, kinetic_main is compatible with with_vpar and with_TiTe, but not with with_neutrals and with_impurities as it assumes you will do those kinetically. Furthermore everything should be compatible with 2D and 3D so you can choose any normal combination of n_tor, n_plane and n_period. If you don't know what this is about, please see [[../running jorek for the first time | running jorek for the first time]]). Then, simply run the following command in your jorek folder to compile kinetic_main:
-  make kinetic_main
+To use kinetic_main, you first need to compile. Make sure that your hard coded settings are correct (`./util/config.sh`) and are compatible with kinetic_main (currently, kinetic_main is compatible with with_vpar and with_TiTe, but not with with_neutrals and with_impurities as it assumes you will do those kinetically. Furthermore everything should be compatible with 2D and 3D so you can choose any normal combination of n_tor, n_plane and n_period. If you don't know what this is about, please see [running jorek for the first time](../../howto/running_jorek_for_the_first_time.md)). Then, simply run the following command in your jorek folder to compile kinetic_main:
 
-To run kinetic_main, you need an initial base MHD jorek_restart.h5 file, such as can be made by running jorek_model600 with restart=.f. (for more information on running the fluid model, see [[../running jorek for the first time | running jorek for the first time]], be sure to use model600 though). kinetic_main will automatically load in jorek_restart.h5 from the folder in which it is run (or throw an error if it doesn't exist).
+```bash
+  make kinetic_main
+```
+
+To run kinetic_main, you need an initial base MHD jorek_restart.h5 file, such as can be made by running jorek_model600 with restart=.f. (for more information on running the fluid model, see [running jorek for the first time](../../howto/running_jorek_for_the_first_time.md), be sure to use model600 though). kinetic_main will automatically load in jorek_restart.h5 from the folder in which it is run (or throw an error if it doesn't exist).
 
 Furthermore, depending on your application you might need additional files in your simulation folder such a wall.txt (for grid_to_wall=.true. if you don't use patches), or files like acd12_h.dat (which contain rate coefficients for kinetic neutral/impurity reactions with the plasma), or files like y_DD.dat (which contain Eckstein coefficients which describe rates for wall interactions such as sputtering).
 
 Furthermore, you need a namelist input file which contains input for both the MHD plasma and the kinetic particles you are including (which will be explained shortly).
 
 With the right files in your simulation folder, you can simply run like:
-```
+
+```bash
   kinetic_main < namelist
 ```
 
