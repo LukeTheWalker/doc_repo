@@ -209,7 +209,7 @@ Note that EXTENDER_P is a pure MPI code, so there will be no benefit to assignin
 
 ### Calculating the Dommaschk potential coefficients
 
-Once EXTENDER_P finishes, the actual Dommaschk potential coefficients can be calculated using the `compute_dcoef.py` script, which is included the JOREK repository. The script can be run as follows:
+Once EXTENDER_P finishes, the actual Dommaschk potential coefficients can be calculated using the `compute_dcoef_lsq.py` script, which is included the JOREK repository. The script can be run as follows:
 ```bash
 jorek_path/util/compute_dcoef_lsq.py -R 1.99 -m 10 -l 9 -p 5 -o coef_1Pa_R1p99_l9.npy extended_field.gvec_w7a_unst_1Pa.nc
 ```
@@ -241,13 +241,13 @@ for i in range(Nt+1):
       if (coef[P*i,l,j] != 0.0):
         print(" dcoef(" + str(j+1) + "," + str(l) + "," + str(i) + ") = " + str(coef[P*i,l,j]))
 ```
-The variables `Nt` and `Mp` should be set to the values passed to the `-m` and `-l` parameters, respectively, of the `compute_dcoef.py` script. The `P` variable is just the periodicity. The output of this script should then be copied to the namelist file. In addition, the namelist should include the `R_domm` variable, which should be set to the value of $R_0$, as printed out by `compute_dcoef.py`.
+The variables `Nt` and `Mp` should be set to the values passed to the `-m` and `-l` parameters, respectively, of the `compute_dcoef_lsq.py` script. The `P` variable is just the periodicity. The output of this script should then be copied to the namelist file. In addition, the namelist should include the `R_domm` variable, which should be set to the value of $R_0$, as printed out by `compute_dcoef_lsq.py`. An example of how the Dommaschk potential namelist file should look like is available here: [dc_W7A_unst_1Pa](assets/stellarator_setup/dc_W7A_unst_1Pa).
 
 ## 4. Reconstructing the equilibrium in JOREK using model 180
 
 The next step is to compile JOREK with model 180, which is a "fake" model that does not evolve the plasma in time, but only calculates the initial conditions. The hard-coded options are to be set as follows: both `n_period` and `n_coord_period` should match `NFP` in the VMEC namelist, `n_coord_tor` should be `2*ntor + 1`, where `ntor` is the value of the corresponding parameter passed to VMEC.
 
-If Dommaschk coefficients are used, `l_pol_domm` should be set to the number passed to the `-l` parameter in `compute_dcoef.py` in the previous step. If the code is run without Dommaschk potentials, `USE_DOMM=0` in jorek/defaults.mk and `l_pol_domm=0` must be set. This will mean that a Poisson solve is carried out as part of model 180 to compute $\chi$. Note that while this can take some time, it will make further calculations significantly faster, as computation of Dommaschk potentials is computationally demanding.
+If Dommaschk coefficients are used, `l_pol_domm` should be set to the number passed to the `-l` parameter in `compute_dcoef_lsq.py` in the previous step. If the code is run without Dommaschk potentials, `USE_DOMM=0` in jorek/defaults.mk and `l_pol_domm=0` must be set. This will mean that a Poisson solve is carried out as part of model 180 to compute $\chi$. Note that while this can take some time, it will make further calculations significantly faster, as computation of Dommaschk potentials is computationally demanding.
 
 If 32-bit integers are used, an integer overflow of the matrix array indices may be reached for more complex setups due to the many DOF in the matrix solver. How switch to 64-bit integers is described here: [Compiling JOREK and solvers using long integers](docs/compiling/compiling_int64.md)
 
@@ -310,11 +310,11 @@ After compilation, JOREK will need to be run with an input namelist. A sample na
 /
 ```
 
-Here, `nstep` must always be 1, since there is no actual time stepping, and the initial conditions only need to be calculated once, while the value of `tstep` is irrelevant and does not affect the results. The `gvec_grid_import` parameter tells JOREK to look for the `gvec2jorek.dat` file, which must be present in the working directory, and import from there, while `bc_natural_open` allows the current to be nonzero on the boundary. Moreover, `F0` should be set to the value printed out by `compute_dcoef.py`. If run without Dommaschk potentials, `F0` is given by the `rbtor` variable in the NetCDF file produced by VMEC.
+Here, `nstep` must always be 1, since there is no actual time stepping, and the initial conditions only need to be calculated once, while the value of `tstep` is irrelevant and does not affect the results. The `gvec_grid_import` parameter tells JOREK to look for the `gvec2jorek.dat` file, which must be present in the working directory, and import from there, while `bc_natural_open` allows the current to be nonzero on the boundary. Moreover, `F0` should be set to the value printed out by `compute_dcoef_lsq.py`. If run without Dommaschk potentials, `F0` is given by the `rbtor` variable in the NetCDF file produced by VMEC.
 
 IMPORTANT: When running without the Dommaschk potentials, a density profile must also be provided. Otherwise, the density and the temperature will return NaN values. 
 
-`n_flux` and `n_tht` must match the values passed to the `-r` and `-p` parameters of `convert_gvec_to_jorek`, respectively, and `domm_file` gives the path to the namelist where the Dommaschk potential coefficients from the previous step are stored.
+`n_flux` and `n_tht` must match the values passed to the `-r` and `-p` parameters of `convert_gvec_to_jorek`, respectively, and `domm_file` gives the path to the namelist where the Dommaschk potential coefficients from the previous step are stored. The file used in this tutorial is available here: [dc_W7A_unst_1Pa](assets/stellarator_setup/dc_W7A_unst_1Pa).
 
 JOREK can then be run as follows:
 ```bash
