@@ -311,7 +311,7 @@ You can inspect the evolution of magnetic and kinetic energies in the individual
 
 An example for `./util/plot_live_data.sh` output for the `intear` test case:
 
-<img src="assets/running_jorek_for_the_first_time/tutorial_.png" alt="Alt text" width="600">
+<img src="assets/running_jorek_for_the_first_time/tutorial_intear-energies-example.png" alt="Alt text" width="600">
 
 
 Pressing `u` should update the plot while your simulation is running. You can zoom in with the right mouse button and switch between logarithmic and normal y-axis with `l`. There are more quantities available for plotting:
@@ -426,7 +426,7 @@ Blanks are not allowed when setting variables via `setinput.sh`. You can obvious
 An example for the energies plot and the mode structure for the `inxflow` test case:
 
 <img src="assets/running_jorek_for_the_first_time/tutorial_inxflow-energies.png" alt="Alt text" width="600">
-<img src="assets/running_jorek_for_the_first_time/tutorial_inxflow-modestruct.jpg" alt="Alt text" width="600">
+<img src="assets/running_jorek_for_the_first_time/tutorial_inxflow-modestruct.jpg" alt="Alt text" width="400">
 
 
 ### Model extensions
