@@ -9,8 +9,8 @@ render_with_liquid: false
 # Random number generators in JOREK
 
 For the JOREK-particles extension many random numbers are required, for example in the particle initialization routines.
-To get acceptable speed, parallelisation and accuracy, we need a high-quality random number generator.
-This we find in the [PCG](http://www.pcg-random.org/) family of pseudo-random number generators, which is both extremely fast and of high quality.
+To meet the combined demands of speed, statistical quality, and parallel correctness, JOREK uses the [PCG](http://www.pcg-random.org/) family of pseudo-random number generators alongside an optional Sobol' quasi-random sequence generator.
+
 
 ## Why not use the Fortran built-in RNG?
 
@@ -70,7 +70,7 @@ Please consider the following example in a serial context (only one OpenMP threa
 
 ### OpenMP parallel context
 
-In parallel we define a number of streams of random numbers, where each thread selects one stream.
+In the parallel context, a number of streams of random numbers are defined, where each thread selects one stream.
 The following OpenMP example is adapted from `particles/examples/W_sputtering_rad_coll.f90`:
 
 ```fortran
@@ -126,6 +126,7 @@ This can be done easily with a few MPI calls combined with the above example.
 ### Seeding
 
 A module to create seed numbers for the generator is provided from `/dev/urandom` or by xor-ing the time and current process pid in `tools/mod_random_seed.f90`.
+If reproducibility across runs is required (e.g. for debugging), replace `random_seed()` with a fixed integer. 
 
 ## Sobol' sequence QRNG
 
