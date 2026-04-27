@@ -6,8 +6,6 @@ layout: default
 render_with_liquid: false
 ---
 
-Andres working on this
-
 # Notation Conventions
 
 ## General
