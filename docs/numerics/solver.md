@@ -126,12 +126,12 @@ MPI ranks are distributed among families in the same way:
 
 <div style="display: flex; justify-content: space-evenly; align-items: flex-start; text-align: center;">
   
-  <figure style="width: 40%; margin: 0;">
+  <figure style="width: 30%; margin: 0;">
     <img src="assets/solver/pc_matrix.png" alt="Single block harmonic" style="width: 100%;">
     <figcaption><i>Single harmonic pair per block</i></figcaption>
   </figure>
 
-  <figure style="width: 40%; margin: 0;">
+  <figure style="width: 31.5%; margin: 0;">
     <img src="assets/solver/pc_matrix_coupled.png" alt="Grouped block harmonic" style="width: 100%;">
     <figcaption><i>Grouped harmonic families</i></figcaption>
   </figure>
