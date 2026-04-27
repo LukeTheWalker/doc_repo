@@ -8,20 +8,20 @@ render_with_liquid: false
 
 # Random number generators in JOREK
 
-For the JOREK-particles extension we use many random numbers.
-To get acceptable speed, parallelisation and accuracy we need a high-quality random number generator.
+For the JOREK-particles extension many random numbers are required, for example in the particle initialization routines.
+To get acceptable speed, parallelisation and accuracy, we need a high-quality random number generator.
 This we find in the [PCG](http://www.pcg-random.org/) family of pseudo-random number generators, which is both extremely fast and of high quality.
 
-## Why do we need a different RNG?
+## Why not use the Fortran built-in RNG?
 
-The builtin random-number generators in Fortran are often of low quality and not usable in openmp contexts.
+The Fortran intrinsic `random_number` has several limitations that make it unsuitable for JOREK's use case. 
+The builtin random-number generators in Fortran are compiler-dependent and often of low quality. Furthermore they are not thread-safe and cannot be used in OpenMP parallel regions without external locking.
 Additionally they do not offer strided sampling and jump-ahead to specific values.
 Those attributes are very useful when generating related sets of random numbers on different MPI tasks.
-Additionally I would like to experiment with low-discrepancy sequences (quasi-random) instead of pseudo-random numbers.
 
 ## Usage
 
-Please consider the following example in a serial context:
+Please consider the following example in a serial context (only one OpenMP thread):
 
 ```fortran
   use mod_pcg32_rng
@@ -34,7 +34,17 @@ Please consider the following example in a serial context:
   call rng%next(rans)
 ```
 
-### Parallel implementation
+**Parameters for `rng%initialize`:**
+
+| Parameter | Description |
+|---|---|
+| `n_dims` | Number of random values produced per call to `next`. |
+| `seed` | Integer seed for the generator. See the [Seeding section](#seeding). |
+| `n_streams` | Total number of independent streams being initialised (across all threads and ranks). |
+| `i_stream` | Index of the stream assigned to this instance, in the range `[1, n_streams]`. |
+| `ierr` | Returns 0 on success, non-zero on failure.  |
+
+### OpenMP parallel context
 
 In parallel we define a number of streams of random numbers, where each thread selects one stream.
 The following OpenMP example is adapted from `particles/examples/W_sputtering_rad_coll.f90`:
