@@ -297,6 +297,10 @@ You can also plot the grids separately, print to a postscript file, and so on:
 ./util/plot_grids.sh -o x  # plot an X-point 
 ```
 
+An example for `./util/plot_grids.sh -o fl` output for the `intear` test case:
+
+<img src="assets/running_jorek_for_the_first_time/tutorial_grid-example-intear.png" alt="Alt text" width="600">
+
 ### Energies
 
 You can inspect the evolution of magnetic and kinetic energies in the individual toroidal harmonics by typing:
@@ -304,6 +308,11 @@ You can inspect the evolution of magnetic and kinetic energies in the individual
 ```bash
 ./util/plot_live_data.sh
 ```
+
+An example for `./util/plot_live_data.sh` output for the `intear` test case:
+
+<img src="assets/running_jorek_for_the_first_time/tutorial_.png" alt="Alt text" width="600">
+
 
 Pressing `u` should update the plot while your simulation is running. You can zoom in with the right mouse button and switch between logarithmic and normal y-axis with `l`. There are more quantities available for plotting:
 
@@ -326,7 +335,6 @@ Simulations write out a restart file every `nout` time steps. The tool `jorek2vt
 ```
 This converts all or selected restart files to VTK files in a subfolder such as `vtk_iplane1/`. The `-h` option prints usage information. It is possible to exclude the axisymmetric component from the VTK files by adding `-no0`. With `-si` we can plot without normalized units.
 
-
 Without using the `convert2vtk.sh` script (not recommended), you would instead do the following:
 
 ```bash
@@ -335,6 +343,9 @@ cp jorekXXXXX.h5 jorek_restart.h5
 ```
 and then plot `jorek_tmp.vtk`.
 
+An example for a VTK plot for the `intear` test case (perturbation of the current density created using the `-no0` option):
+
+<img src="assets/running_jorek_for_the_first_time/tutorial_intear-current-pert.png" alt="Alt text" width="600">
 
 ### jorek2_postproc
 
@@ -412,6 +423,12 @@ nice mpirun -n 2 ./jorek_model600 < ./inxflow | tee -a logfile
 
 Blanks are not allowed when setting variables via `setinput.sh`. You can obviously change the input file (called `inxflow` here) also by hand.
 
+An example for the energies plot and the mode structure for the `inxflow` test case:
+
+<img src="assets/running_jorek_for_the_first_time/tutorial_inxflow-energies.png" alt="Alt text" width="600">
+<img src="assets/running_jorek_for_the_first_time/tutorial_inxflow-modestruct.jpg" alt="Alt text" width="600">
+
+
 ### Model extensions
 
 Various extensions are available for `model600`, a few examples are:
@@ -458,7 +475,7 @@ A few more exist for some code extensions.
 
 ## Next steps
 
-- See [here](docs/howto/first_steps.md) for more information on how to get started.
+- See [here](/docs/howto/first_steps.md) for more information on how to get started.
 - If you find something important missing from the documentation or you stumble across a mistake, please help improve it. The documentation is part of the repository in the `docs/` folder.
 - JOREK is a large and powerful code. Running real-life problems is far more complicated than running the test cases shown in this tutorial. You will need experience to become really successful, and on the longer term you will need to make at least some modifications to diagnostics or equations.
 - And you should definitely connect yourself to more experienced users. Dare to ask questions! Our community is very willing to help.
