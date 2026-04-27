@@ -15,7 +15,7 @@ The discretization of JOREK is well described in the paper [O. Czarny, G. Huysma
 Two-dimensional third-order Bernstein polynomials $B_{i,j}^3(s,t)$ defined by
 
 $$
-  B_{i,j}^3(s,t)=B_i^3(s)\;B_j^3(t)\qquad i,\;j\;=\;0\dots3
+  B_{i,j}^3(s,t)=B_i^3(s)\;B_j^3(t)\qquad i,\;j\;=\;0\dots3 \tag{1}
 $$
 
 with
