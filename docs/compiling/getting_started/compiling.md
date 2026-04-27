@@ -9,11 +9,11 @@ render_with_liquid: false
 
 # Compiling JOREK
 
-- **Check the code out from the git repository** as explained here.
-- **Compile the libraries SCOTCH and PaStiX** as described in the following, or use ITER old HPC modules or ITER new HPC modules
+- **Check the code out from the git repository** as explained here.**(todo: page to be created)**
+- **Compile the libraries SCOTCH and PaStiX** as described in the following, or use ITER old HPC modules or ITER new HPC modules**(todo: these pages might not be needed anymore)**
 - **Compile JOREK** as explained at the end of this page.
 
-Specialized guides:(the following pages have not been created)
+Specialized guides:**(todo: the following pages have not been created)**
 - Compiling on MareNostrum
 - Compiling on macos
 - Compiling MUMPS (+METIS)
@@ -34,7 +34,7 @@ tar -xvzf scotch_5.1.12b.tar.gz
 
 - Create the configuration file `Makefile.inc` in the `src/` folder
   - Generic examples can be found in `src/Make.inc/`
-  - Suitable example for use with JOREK (Scotch 5.1.12b)
+  - [Suitable example for use with JOREK (Scotch 5.1.12b)](exp_scotch.md)
 - Compile the library:
 
 ```bash
@@ -57,7 +57,7 @@ tar -xvjf pastix_5.2.3.tar.bz2
 
 - Create the configuration file `config.in` in the `src/` folder
   - Generic examples can be found in `src/config/`
-  - Suitable example for use with JOREK (PaStiX revision 4492)
+  - [Suitable example for use with JOREK (PaStiX revision 4492)](exp_pastix.md)
   - Do not forget to uncomment the memory usage statistics, located under Options in `config.in`
 - Compile the library:
 
