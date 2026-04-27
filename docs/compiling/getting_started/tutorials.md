@@ -40,7 +40,7 @@ In order to compile JOREK, first of all you need to prepare the `Makefile.inc` c
 
 The `Makefile.inc` file needs is placed into the main folder of the JOREK repository you have cloned (where you also find the `jorek2_main.f90` file). You can have a look in the `Make.in` subfolder to see if there is a `Makefile.inc` file already setup for your specific machine, and copy it into the `Makefile.inc` file in the main folder.
 
-The most important **hard-coded parameters** that need to be setup in the `Makefile.inc` file are:
+The most important **hard-coded parameters** that need to be setup in the `Makefile.inc` file are (see also [this page](hard-coded_parameters.md) for details.):
 
 | Name | Description | Reasonable values |
 |---|---|---|
@@ -60,3 +60,8 @@ A few examples to illustrate which toroidal harmonics are included in a simulati
 |3  |6	|0, 6|
 |5  |3	|0, 3, 6|
 
+Another important class of hard-coded parameters is related to the used of the reduced mhd model 600, where different physics can be switched on and off via hard-coded flags such as `with_vpar`, `with_TiTe`, `with_neutrals`, and `with_impurities`.
+
+The easiest way to display and change the hard-coded parameters is via the bash script
+
+    ./util/config.sh
