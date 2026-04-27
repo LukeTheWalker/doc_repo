@@ -19,6 +19,28 @@ The builtin random-number generators in Fortran are compiler-dependent and often
 Additionally they do not offer strided sampling and jump-ahead to specific values.
 Those attributes are very useful when generating related sets of random numbers on different MPI tasks.
 
+## Implementation
+
+A common abstract interface for all generators is defined in `tools/mod_rng.f90`, making it straightforward to swap generators without changing calling code. The interface is currently implemented by:
+
+
+- pcg32 (`tools/mod_pcg32_rng.f90` using `tools/mod_pcg32.f90` and `tools/pcg_basic.c`)
+- Sobol sequence (`tools/mod_sobseq_rng.f90` using `tools/mod_sobseq.f90`)
+
+### Interface
+
+An implementation of the RNG interface must provide the following routines:
+
+- `initialize(rng, n_dims, seed, n_streams, i_stream, ierr)`
+- `next(rng, out)`
+- `jump_ahead(rng, delta)`
+
+whose names should be self-explanatory.
+
+## Seeding
+
+A module to create seed numbers for the generator is provided from `/dev/urandom` or by xor-ing the time and current process pid in `tools/mod_random_seed.f90`.
+
 ## Usage
 
 ### Parameters for `rng%initialize`:
@@ -26,7 +48,7 @@ Those attributes are very useful when generating related sets of random numbers 
 | Parameter | Description |
 |---|---|
 | `n_dims` | Number of random values produced per call to `next`. |
-| `seed` | Integer seed for the generator. See the [Seeding section](#seeding). |
+| `seed` | Integer seed for the generator. |
 | `n_streams` | Total number of independent streams being initialised (across all threads and ranks). |
 | `i_stream` | Index of the stream assigned to this instance, in the range `[1, n_streams]`. |
 | `ierr` | Returns 0 on success, non-zero on failure.  |
@@ -105,7 +127,7 @@ This can be done easily with a few MPI calls combined with the above example.
 
 ### Sobol' sequence QRNG
 
-The `sobseq` qrng has some properties which need to be treated with care.
+The `sobseq` generator has some properties which need to be treated with care.
 
 #### Output stream correlation
 
@@ -121,24 +143,5 @@ Due to the strided implementation of the `sobseq` generator it can only accept a
 
 The Sobol' series has no possibility of seeding with any number. The `seed` parameter is ignored in calls to `rng%initialize`.
 
-## Implementation
 
-To simplify adoption in JOREK and the testing of different generators I have created an interface for random-number generators in `tools/mod_rng.f90`.
-This is at present implemented by two different generators:
 
-- pcg32 (`tools/mod_pcg32_rng.f90` using `tools/mod_pcg32.f90` and `tools/pcg_basic.c`)
-- Sobol sequence (`tools/mod_sobseq_rng.f90` using `tools/mod_sobseq.f90`)
-
-### Interface
-
-An implementation of the RNG interface must provide the following routines:
-
-- `initialize(rng, n_dims, seed, n_streams, i_stream, ierr)`
-- `next(rng, out)`
-- `jump_ahead(rng, delta)`
-
-whose names should be self-explanatory.
-
-## Seeding
-
-I have also provided a module to create seed numbers for the generator, from `/dev/urandom` or by xor-ing the time and current process pid in `tools/mod_random_seed.f90`.
