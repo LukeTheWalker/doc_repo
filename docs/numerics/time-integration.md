@@ -41,7 +41,7 @@ $$
     -(1+\xi)\mathbf{A}^n-\xi\mathbf{A}^n+\xi\mathbf{A}^{n-1} \\
     =\Delta t\left[\theta\left(\mathbf{B}^n+\left(\frac{\partial \mathbf{B}}{\partial \mathbf{u}}\right)^n\delta\mathbf{u}^n\right)
       +(1-\theta)\mathbf{B}^n\right] 
-\end{split}
+\end{split} \tag{4}
 $$
 
 Here, 
