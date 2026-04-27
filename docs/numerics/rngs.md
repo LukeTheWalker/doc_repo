@@ -21,6 +21,18 @@ Those attributes are very useful when generating related sets of random numbers 
 
 ## Usage
 
+### Parameters for `rng%initialize`:
+
+| Parameter | Description |
+|---|---|
+| `n_dims` | Number of random values produced per call to `next`. |
+| `seed` | Integer seed for the generator. See the [Seeding section](#seeding). |
+| `n_streams` | Total number of independent streams being initialised (across all threads and ranks). |
+| `i_stream` | Index of the stream assigned to this instance, in the range `[1, n_streams]`. |
+| `ierr` | Returns 0 on success, non-zero on failure.  |
+
+### Serial context
+
 Please consider the following example in a serial context (only one OpenMP thread):
 
 ```fortran
@@ -34,15 +46,7 @@ Please consider the following example in a serial context (only one OpenMP threa
   call rng%next(rans)
 ```
 
-**Parameters for `rng%initialize`:**
 
-| Parameter | Description |
-|---|---|
-| `n_dims` | Number of random values produced per call to `next`. |
-| `seed` | Integer seed for the generator. See the [Seeding section](#seeding). |
-| `n_streams` | Total number of independent streams being initialised (across all threads and ranks). |
-| `i_stream` | Index of the stream assigned to this instance, in the range `[1, n_streams]`. |
-| `ierr` | Returns 0 on success, non-zero on failure.  |
 
 ### OpenMP parallel context
 
@@ -74,8 +78,30 @@ The following OpenMP example is adapted from `particles/examples/W_sputtering_ra
   !$omp end parallel
 ```
 
+### Hybrid MPI + OpenMP context
+
 To use this with a hybrid MPI-OpenMP architecture we need to calculate the stream number and index across the processors.
 This can be done easily with a few MPI calls combined with the above example.
+
+```fortran
+  call MPI_COMM_RANK(MPI_COMM_WORLD, my_id, ierr)
+  call MPI_COMM_SIZE(MPI_COMM_WORLD, n_cpu, ierr)
+
+  ! Calculate a single random seed and communicate it over MPI
+  if (my_id .eq. 0) seed = random_seed()
+  call MPI_Bcast(seed, 1, MPI_INTEGER, 0, MPI_COMM_WORLD, ierr)
+
+  ! Set up rngs
+  n_threads = 1
+!$ n_threads = omp_get_max_threads()
+  allocate(rng(0:n_threads-1), source=pcg32_rng())
+  n_streams = n_cpu*n_threads
+  do i_thread=0, n_threads-1
+    seq=my_id*n_threads + i_thread + 1
+    call rng(i_thread)%initialize(5, seed, n_streams, seq, ierr)
+    if(ierr .ne. 0) call MPI_ABORT(MPI_COMM_WORLD, -1, ierr)
+  end do
+``` 
 
 ### Sobol' sequence QRNG
 
