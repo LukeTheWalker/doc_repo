@@ -48,3 +48,14 @@ The most important **hard-coded parameters** that need to be setup in the `Makef
 | `n_tor ` | number of toroidal harmonics (counting sine and cosine separately!) | 1, 3, 5, 7, 9, …         |
 | `n_period ` | toroidal periodicity | 1, 2, 3, 4, …         |
 | `n_plane ` | number of toroidal planes for real-space representation | at leat `2*(n_tor-1)`       |
+
+A few examples to illustrate which toroidal harmonics are included in a simulation depending on the hard-coded parameter settings:
+
+| n_tor | n_period | Toroidal mode numbers n included in the simulation |
+|1     |1	       |0|
+|3     |1	       |0, 1|
+|5     |1	       |0, 1, 2|
+|17    |1	       |0, 1, 2, 3, 4, 5, 6, 7, 8|
+|3     |6	       |0, 6
+|5     |3	       |0, 3, 6|
+
