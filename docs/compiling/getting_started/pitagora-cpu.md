@@ -312,3 +312,148 @@ HDF5LIB     = -L${HDF5_HOME}/lib -lhdf5_hl_fortran -lhdf5_hl -lhdf5_fortran -lhd
 
 ```
 
+## Compiling STARWALL with INTEL oneapi
+
+Below are the .bashrc and config.in files required to compile STARWALL
+(tested by D. Bonfiglio).
+
+- Add the following lines to your `.bashrc` file
+
+<!-- -->
+
+    module purge
+    module load git
+    module load intel-oneapi-mpi/
+    module load intel-oneapi-compilers
+    module load intel-oneapi-mkl/2024.0.0--intel-oneapi-mpi--2021.12.1
+
+- Compile STARWALL (make clean; make -j 8) using this `config.in` file
+
+``` config.in
+# config.in file for the LINUX systems
+MKL_HOME = $(INTEL_ONEAPI_MKL_HOME)/mkl/latest
+
+include $(FILES_MK)
+FC = mpif90 -f90=ifort -fc=ifort
+FFLAGS = -autodouble -I$(OBJ_DIR) -module $(OBJ_DIR) -g
+
+ifeq ($(DEBUG),1)
+  FFLAGS += -O0 -warn all,nounused -check all,noarg_temp_created -debug all    \
+  -debug-parameters -fstack-security-check -ftrapuv -traceback
+else
+  FFLAGS += -O3 -g
+endif
+
+FPPFLAGS =
+
+LD = $(FC)
+LDFLAGS = $(FFLAGS)
+
+DPREF = -D
+FPPFLAGS += $(DPREF)$(COMPILER) $(DPREF)$(OSTYPE)
+
+########################################################################
+
+MKLLIB = $(MKL_HOME)/lib/intel64
+LAPACK_LIB = $(MKLLIB)/libmkl_sequential.a -Wl,--start-group                   \
+  $(MKLLIB)/libmkl_intel_lp64.a $(MKLLIB)/libmkl_sequential.a                  \
+  $(MKLLIB)/libmkl_core.a $(MKLLIB)/libmkl_scalapack_lp64.a                    \
+  $(MKLLIB)/libmkl_blacs_intelmpi_lp64.a    -Wl,--end-group -lpthread
+
+LIB = $(LAPACK_LIB) #-lX11 -lpmapi
+########################################################################
+
+all: $(EXECOS_MAIN)
+
+$(EXECOS_MAIN): $(MAIN_OBJ) $(OS_MK) $(FILES_MK)
+        $(LD) $(LDFLAGS) -o $@ $(MAIN_OBJ) $(addprefix -L,$(LIB_DIR)) $(LIB)
+        mv $@ $(OBJ_DIR)
+
+$(OBJ_DIR)/%.o: %.f90
+        $(FC) -fpp $(FPPFLAGS) $(FFLAGS) -c -o $@ $<
+```
+
+### Example job script
+
+- The sbatch with a job script seems still not working perfectly (until
+  02.07.2025), which returns the following error information: *"sbatch:
+  error: Batch job submission failed: Unexpected message received" if
+  there are some loaded modules*.
+- Please run ***module purge*** before submitting the job via sbatch.
+- Load all the modules you need inside the jobscript itself.
+- (kuan-wen) For kinetic-MHD codes that uses STRUMPACK as the solver,
+  the total number of MPI ranks must be the power of 2. E.g. 2\^6=64.
+  Otherwise, the solver will hang forever after the particle loop and
+  projection step, because STRUMPACK uses distributed symbolic
+  factorization.
+
+``` bash
+#!/bin/bash
+
+#SBATCH -J jorek
+#SBATCH -p cpu
+
+#SBATCH --nodes=5
+#SBATCH --ntasks-per-node=16                   # number of tasks per node
+#SBATCH --cpus-per-task=16                     # number of cores per task max 256 cores per node
+
+#SBATCH --mem=760000                           # memory per node
+
+#SBATCH --time=24:00:00
+#SBATCH --output=./jorek.%j.out
+#SBATCH --error=./jorek.%j.err
+
+
+### Request e-mail notification
+#SBATCH --mail-type=FAIL   # can be BEGIN, END, TIME_LIMIT, FAIL, ALL, NONE
+#SBATCH --mail-user=xxxx@ipp.mpg.de
+
+export OMP_NUM_THREADS=$SLURM_CPUS_PER_TASK
+
+## For Intel compiler
+module load intel-oneapi-mpi/
+module load intel-oneapi-compilers
+module load intel-oneapi-mkl/2024.0.0--intel-oneapi-mpi--2021.12.1
+module load hdf5/1.14.3--intel-oneapi-mpi--2021.12.1--oneapi--2024.1.0
+
+# This line is critical (at least for PastiX, tbc for Strumpack).
+# This infiniband option was changed to default ``export FI_PROVIDER=verbs`` by Cineca team,
+# which causes runs to hang forever after a few time-steps (usually during the PastiX solve)
+export FI_PROVIDER=MLX
+
+# srun ./jorek_model711 < ./input | tee logfile
+mpirun -np $SLURM_NTASKS ./jorek_model711 < ./input | tee logfile
+```
+
+- Alternatively, the test job can also be submitted via salloc
+  interactively, such as:
+
+``` bash
+salloc --nodes=5 --ntasks=80 --cpus-per-task=16 --partition=cpu bash -c 'export OMP_NUM_THREADS=16; mpirun -np 80 ./jorek_model711 < ./input | tee logfile'
+```
+
+\<color #ed1c24\> If your simulations are hanging at the matrix
+factorization when using Intel and STRUMPACK, try adding the following
+line to your jobscript: \</color\>
+
+``` bash
+unset UCX_TLS
+```
+
+*Use with care, in a few cases this was seen to change simulation
+results!*
+
+## Accounting
+
+\<color #ed1c24\> Please be mindful about the CPU consumption, we're
+burning up too fast so far! You can check the usage with the saldo
+commands below. \</color\>
+
+To check the used resources on Leonardo DCGP, use
+
+`saldo -b –dcgp`
+
+To check more details (containing the usage of all the users) one can
+use
+
+`saldo -ra PROJECT_NAME –dcgp`
