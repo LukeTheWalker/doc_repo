@@ -9,11 +9,11 @@ render_with_liquid: false
 
 # Compiling JOREK
 
-- **Check the code out from the git repository** as explained here.**(todo: page to be created)**
-- **Compile the libraries SCOTCH and PaStiX** as described in the following, or use ITER old HPC modules or ITER new HPC modules**(todo: these pages might not be needed anymore)**
+- **Check the code out from the git repository** as explained [here](get_jorek.md).
+- **Compile the libraries SCOTCH and PaStiX** as described in the following, or use ITER old HPC modules or ITER new HPC modules **(todo: these pages might not be needed anymore)**
 - **Compile JOREK** as explained at the end of this page.
 
-Specialized guides:**(todo: the following pages have not been created)**
+Specialized guides: **(todo: the following pages have not been created)**
 - Compiling on MareNostrum
 - Compiling on macos
 - Compiling MUMPS (+METIS)
