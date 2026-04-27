@@ -8,7 +8,7 @@ render_with_liquid: false
 
 # Basic Cylindrical Coordinate System
 
-![Alt text](assets/coordinates/jorek-coordinates.png)
+![JOREK cylindrical coordinate system](assets/coordinates/jorek-coordinates.png)
 
 Please also look at the [Notation Conventions](notation.md).
 
