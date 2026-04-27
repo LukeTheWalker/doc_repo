@@ -13,7 +13,7 @@ render_with_liquid: false
 - **Compile the libraries SCOTCH and PaStiX** as described in the following, or use ITER old HPC modules or ITER new HPC modules
 - **Compile JOREK** as explained at the end of this page.
 
-Specialized guides:
+Specialized guides:(the following pages have not been created)
 - Compiling on MareNostrum
 - Compiling on macos
 - Compiling MUMPS (+METIS)
@@ -112,12 +112,12 @@ make -j 8 install
 
 ## FFTW
 
-*JOREK also uses FFTW for fast Fourier transformations. This library is usually available on machines via `module load fftw`. See also here to include FFTW.*
+*JOREK also uses FFTW for fast Fourier transformations. This library is usually available on machines via `module load fftw`.* See also [here](preprocessor.md) to include FFTW.
 
 ## Compile JOREK
 
 We use `Make` to compile JOREK, with dependency generation via `util/makedepend`.
-See Makefile for more information.
+See [Makefile](makefile.md) for more information.
 
 - **Create the JOREK configuration file `trunk/Makefile.inc` for your system**, examples are available in `trunk/Make.inc/`.
 - Add the following lines to link to the libraries:
