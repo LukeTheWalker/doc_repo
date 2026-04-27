@@ -5,9 +5,7 @@ parent: "Numerics and Tools"
 layout: default
 render_with_liquid: false
 ---
-$$
-\newcommand{\pderiv}[2]{\frac{\partial #1}{\partial #2}}
-$$
+
 # Time integration 
 
 The time-integration of a set of equations of the form 
