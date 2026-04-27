@@ -15,4 +15,13 @@ This tutorial will show you how to run your first small JOREK simulations. It wi
 
 ## Preparation of the environment
 
-On most machines, the `module` command is used to make the required software (e.g. compilers and libraries) available. 
+On most machines, the `module` command is used to make the required software (e.g. compilers and libraries) available. Typically, JOREK is compiler with the Intel compiler and MPI/OpenMP libraries for best efficiency, but can be also compiled e.g. with the GNU compilers and libraries.
+
+You can put the `module` commands in your `.bashrc` file in the home directory, so that the required software is loaded automatically at login. Typical `module` commands will look like this:
+
+    module purge
+    module load git
+    module load intel-oneapi-mpi/
+    module load intel-oneapi-compilers
+    module load intel-oneapi-mkl/2024.0.0--intel-oneapi-mpi--2021.12.1
+    module load hdf5/1.14.3--intel-oneapi-mpi--2021.12.1--oneapi--2024.1.0
