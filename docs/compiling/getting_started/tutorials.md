@@ -40,4 +40,4 @@ This is an example using the ITER platform:
 
 In order to compile JOREK, first of all you need to prepare the `Makefile.inc` configuration file for compiling JOREK. This file contains the hard-coded parameters and needs to be adapted for the specific machine were the code is going to be run.
 
-The `Makefile.inc` file needs is placed into the main folder of the JOREK repository you have cloned (where you also find the `jorek2_main.f90` file).
+The `Makefile.inc` file needs is placed into the main folder of the JOREK repository you have cloned (where you also find the `jorek2_main.f90` file). You can have a look in the `Make.in` subfolder to see if there is a `Makefile.inc` file already setup for your specific machine, and copy it into the `Makefile.inc` file in the main folder.
