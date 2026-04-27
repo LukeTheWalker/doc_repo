@@ -66,7 +66,7 @@ mpirun -n 4 ./jorek_model303 < input
 | `eta` | Resistivity | |
 | `visco(_par)` | Viscosity of the perpendicular(parallel) velocity | |
 | `D_par` | Parallel particle diffusion | = zero |
-| `D_perp(i)` | Perpendicular particle diffusion $D_{base} = D_1 \left(( 1 - D_2) + \frac{D_2}{2} \left(1 - \tanh \left(\frac{\psi - D_5}{D_4} \right) \right)\right)$ if model < 300 then $ D = D_{base}$ else $D = D_{base} + \frac{D_6 D_2}{2} \left(1 - \tanh \left( \frac{D_5 + D_3 -\psi}{D_4}  \right) \right)$ | in the centre, (1-D(2)) in the pedestal, width of the pedestal region, width of transition, start of pedestal, diffusion outside of pedestal respectively (1-6) |
+| `D_perp(i)` | Perpendicular particle diffusion $D_{base} = D_1 \left(( 1 - D_2) + \frac{D_2}{2} \left(1 - \tanh \left(\frac{\psi - D_5}{D_4} \right) \right)\right)$ if model < 300 then $D = D_{base}$ else $D = D_{base} + \frac{D_6 D_2}{2} \left(1 - \tanh \left( \frac{D_5 + D_3 -\psi}{D_4}  \right) \right)$ | in the centre, (1-D(2)) in the pedestal, width of the pedestal region, width of transition, start of pedestal, diffusion outside of pedestal respectively (1-6) |
 | `ZK_par` | Parallel heat diffusion | |
 | `ZK_perp(i)` | Perpendicular heat diffusion | See particle diffusion |
 | `F0` | R*B_phi | |
