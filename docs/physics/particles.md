@@ -15,7 +15,7 @@ Hannes working on this one now.
 Think page is a hub for the kinetic framework with links to all subpages. This kinetics wiki is still being written, so this is work in progress.
 
 ## Introduction
-  * [[particles:Introduction | Introduction to the kinetic framework]]. Read this first before you read any other link on this page.
+* [Introduction to the kinetic framework](particles/particle_introduction.md) Read this first before you read any other link on this page.
 
 
 ## Introductions to the available particle species
