@@ -7,4 +7,4 @@ layout: default
 render_with_liquid: false
 ---
 
-*This page is a stub — content to be added.*
+**BEWARE! This page should be removed because there is an analogous one in the Howto section**
