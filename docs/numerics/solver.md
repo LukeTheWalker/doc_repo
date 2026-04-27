@@ -37,6 +37,8 @@ time via flags (`USE_MUMPS`, `USE_PASTIX`, `USE_STRUMPACK`) and at
 runtime by the corresponding `use_*` input flags.
 
 
+<font color="red">Warning:</font> Factorization of large sparse matrices is an expensive operation and will create a lot of fill-in resulting in increased memory requirements. Thus, for most cases use of the **iterative solver** is recommended! 
+
 ---
 
 ## Iterative Solvers
@@ -103,7 +105,7 @@ library.
 
 ### Mode Family Distribution
 
-Toroidal modes $0, \pm 1, \pm 2, \ldots$ are partitioned into mode families.
+Toroidal modes $0, 1, 2, 3, \ldots$ are partitioned into mode families.
 Two strategies are available:
 
 - **Automatic** (`autodistribute_modes = .true.`): mode 0 (axisymmetric) forms
@@ -116,6 +118,20 @@ MPI ranks are distributed among families in the same way:
 - **Automatic** (`autodistribute_ranks = .true.`): ranks are distributed as
   equally as possible across families.
 - **Manual**: specified via `ranks_per_family(:)`.
+
+<div style="display: flex; justify-content: space-evenly; align-items: flex-start; text-align: center;">
+  
+  <figure style="width: 40%; margin: 0;">
+    <img src="assets/solver/pc_matrix.png" alt="Single block harmonic" style="width: 100%;">
+    <figcaption><i>Single harmonic pair per block</i></figcaption>
+  </figure>
+
+  <figure style="width: 40%; margin: 0;">
+    <img src="assets/solver/pc_matrix_coupled.png" alt="Grouped block harmonic" style="width: 100%;">
+    <figcaption><i>Grouped harmonic families</i></figcaption>
+  </figure>
+
+</div>
 
 ### Preconditioner Solve Workflow
 
