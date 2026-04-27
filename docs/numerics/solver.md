@@ -17,10 +17,11 @@ Two high-level solution strategies are supported:
 
 | | **Direct solve** | **Iterative solve** |
 |---|---|---|
-| Method | Sparse LU / multifrontal factorisation of $A$ | GMRES / BiCGSTAB with a block preconditioner |
-| Strengths | Robust; insensitive to conditioning; one factorisation reused across many right-hand sides | Lower memory footprint; scales to large problem sizes; preconditioner can be reused across time steps |
-| Weaknesses | Memory and fill-in grow rapidly with problem size | Convergence depends on preconditioner quality and problem conditioning |
-| Typical use | Small-to-moderate problems; reference / robustness-critical runs | Large problems; production runs at scale |
+| Input flag | `gmres = .false.` | `gmres = .true.` |
+| Method | Sparse LU factorisation of $A$ | GMRES (or BiCGSTAB) with block preconditioner |
+| Strengths | Robust; insensitive to conditioning | Lower memory; scales to large problems |
+| Weaknesses | Memory and fill-in grow rapidly | Convergence depends on preconditioner |
+| Typical use | Small-to-moderate problems | Large / production runs |
 
 Both strategies support multiple third-party libraries as back-ends and can optionally offload the matrix–vector products to GPU hardware.
 
@@ -37,7 +38,7 @@ time via flags (`USE_MUMPS`, `USE_PASTIX`, `USE_STRUMPACK`) and at
 runtime by the corresponding `use_*` input flags.
 
 
-<font color="red">Hint:</font> Factorization of large sparse matrices is an expensive operation and will create a lot of fill-in resulting in increased memory requirements. Thus, for most cases use of the **iterative solver** is recommended! 
+<font color="red">Hint:</font> Factorisation of large sparse matrices is an expensive operation and will create a significant amount of fill-in resulting in increased memory requirements. Thus, for most cases use of the **iterative solver** is recommended! 
 
 ---
 
@@ -48,7 +49,7 @@ When `gmres = .true.`, a Krylov iterative method is used, preconditioned by the
 
 ### GMRES
 
-Left-preconditioned restarted GMRES(m) is implemented in `solvers/mod_gmres.f90`. (A more modern implementatoin avaliable in selected branches is implemented in `solvers/mod_gmres2.f90`).
+Left-preconditioned restarted GMRES(m) is implemented in `solvers/mod_gmres.f90`. (A more modern implementation available in selected branches is implemented in `solvers/mod_gmres2.f90`).
 
 The algorithm applies the preconditioner $M^{-1}$ to both the initial residual
 and to each new Krylov vector.  Orthogonalisation is performed by a
@@ -74,14 +75,14 @@ Key input parameters:
 
 ### BiCGSTAB
 
-BiCGSTAB `solvers/mod_bicgstab.f90` is an
+BiCGSTAB (in `solvers/mod_bicgstab.f90`) is an
 alternative that requires no restart and uses $O(n)$ memory independent of the
 iteration count.  It applies the preconditioner **twice per iteration** (once
 for the search direction, once for the stabilizer), which is more expensive per
 step than GMRES but avoids restarting costs.  Enable it at compile time with the
 `USE_BICGSTAB` preprocessor flag.
 
-<font color="red">Hint:</font> Use of BiSCSTAB is generally not recommended.
+<font color="red">Hint:</font> Use of BiCGSTAB is generally not recommended.
 
 ---
 
@@ -93,12 +94,13 @@ independent sparse-direct solves on smaller sub-systems, one per **mode family**
 
 The preconditioner is set up and applied by
 `solvers/mod_preconditioner.f90`.
+
 ### Concept
 
 For a purely axisymmetric geometry, toroidal harmonics decouple completely: the
 mode-$n$ rows of the system matrix have no coupling to mode-$m \ne n$ columns.
-JOREK's matrix does contain inter-harmonic coupling terms (from non-linear MHD),
-but the dominant, physics-relevant coupling is intra-harmonic.  The
+JOREK's matrix does contain inter-harmonic coupling terms (from inter-harmonic coupling terms in the system),
+but in many cases the dominant, physics-relevant coupling is intra-harmonic.  The
 preconditioner $M$ is therefore built by **grouping the toroidal modes into
 families** and assembling one block-diagonal preconditioner matrix per family
 that retains all intra-family coupling while discarding the inter-family terms.
@@ -142,16 +144,16 @@ Each GMRES / BiCGSTAB preconditioner application performs the following steps:
 1. **Scatter RHS** — extract the rows belonging to this mode family from the
    global residual vector (via pre-computed `row_index` mapping).
 2. **Solve** — the family's direct solver (MUMPS / PaStiX / STRUMPACK)
-   factorizes (or reuses) and solves the preconditioner matrix for the local
+   factorises or reuses, and solves the preconditioner matrix for the local
    RHS.
 3. **Gather solution** — contributions from all families are reduced by
    `MPI_AllReduce` (sum) into the global solution vector; each family's rows are
    weighted by `row_factor` (normally 1).
 
-### Factorization Reuse
+### Factorisation Reuse
 
 Refactoring the preconditioner at every time step is expensive.  JOREK reuses
-the existing factorization (the `solve_only` path) when:
+the existing factorisation (the `solve_only` path) when:
 
 $$\texttt{iter\_gmres} + \texttt{iter\_prev} \le 2 \times \texttt{iter\_precon}
 \quad \text{and} \quad
@@ -180,7 +182,7 @@ Two assembly strategies are available (selected by compile-time flag
 > **Note:** PETSc-based solver paths are under active development.
 > This section will be expanded once the implementation stabilises.
 
-When compiled with `USE_PETSC, an alternative solver path is
+When compiled with `USE_PETSC`, an alternative solver path is
 available that uses PETSc's KSP framework for both direct and iterative solves.
 The PETSc integration layer lives in `solvers/mod_petsc.f90` and exposes:
 
