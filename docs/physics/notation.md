@@ -46,7 +46,7 @@ Refer also to the page about [Coordinates](coordinates).
 | $\psi$ | Poloidal Flux |
 | $\psi_N$ | Normalized Poloidal Flux $\psi_N=(\psi - \psi_\text{axis})/(\psi_\text{bnd}-\psi_\text{axis})$ |
 | $\mathbf{B}$ | Magnetic Field Vector |
-| $\mathbf{b}$ | Normalized Magnetic Field Vector $\mathbf{b}=\mathbf{B}/|\mathbf{B}|$ |
+| $\mathbf{b}$ | Normalized Magnetic Field Vector $\mathbf{b}=\mathbf{B}/\vert B\vert$ |
 | ... | ... |
 
 Refer also to the page about [Models](base_fluid_models/base_fluid_models.md).
