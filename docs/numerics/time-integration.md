@@ -31,7 +31,7 @@ which guarantees second-order accuracy, if $\phi+\theta-\xi = 1/2$. Superscripts
 The linearization 
 
 $$
-\mathbf{H}^{n+1} \approx \mathbf{H}^n + \left[ \frac{\partial \mathbf{H}}{\partial \mathbf{u}} \right]^n \cdot \, \delta \mathbf{u}^n \tag{3}
+\mathbf{H}^{n+1} \approx \mathbf{H}^n + \left[ \frac{\partial \mathbf{H}}{\partial \mathbf{u}} \right]^n \cdot \delta \mathbf{u}^n \tag{3}
 $$
 
 where $\mathbf{H} = \mathbf{A}$ or $\mathbf{H} = \mathbf{B}$, which is described in Reference Hirsch91, Chapter 11.3, allows to rewrite Equation (2) in the following way, where $\phi = 0$ has been chosen.
@@ -41,7 +41,7 @@ $$
   (1+\xi)\left[\mathbf{A}^n+\left(\frac{\partial \mathbf{A}}{\partial \mathbf{u}}\right)^n\delta\mathbf{u}^n\right]
     -(1+\xi)\mathbf{A}^n-\xi\mathbf{A}^n+\xi\mathbf{A}^{n-1} \\
     =\Delta t\left[\theta\left(\mathbf{B}^n+\left(\frac{\partial \mathbf{B}}{\partial \mathbf{u}}\right)^n\delta\mathbf{u}^n\right)
-      +(1-\theta)\mathbf{B}^n\right] \tag{4}
+      +(1-\theta)\mathbf{B}^n\right] 
 \end{split}
 $$
 
@@ -147,7 +147,7 @@ $$
 \sum_i [\theta a_i^{n+1} + (1-\theta)a_i^n][(1+\xi)\mathbf{A}_i^{n+1} - (1+2\xi)\mathbf{A}_i^n + \xi\mathbf{A}_i^{n-1}] = \Delta t[\theta\mathbf{B}^{n+1} + (1-\theta)\mathbf{B}^n]. \tag{16}
 $$
 
-By plugging in the corresponding values for $\theta$ and $\xi$ from Table 1, the Crank-Nicolson, BDF2 and implicit Euler schemes can be recovered from equation (16).)
+By plugging in the corresponding values for $\theta$ and $\xi$ from Table 1, the Crank-Nicolson, BDF2 and implicit Euler schemes can be recovered from equation (16).
 
 ### References
   * **[Beam80]** Beam, R.M. and Warming, R.F. Alternating direction implicit methods for parabolic equations with a mixed derivative. SIAM Journal on Scientific and Statistical Computing, 1(1), 131 (1980). ISSN 01965204. [[http://dx.doi.org/10.1137/0901007|doi:10.1137/0901007]]
