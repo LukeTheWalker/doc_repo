@@ -24,7 +24,7 @@ export OMP_NUM_THREADS=16
 ```
 
 - Run with MPI parallelization, e.g. with 4 processes:
-  - The number of MPI processes must be a multiple of `(n_tor+1)/2` [see hard-coded parameters](hard-coded_parameters)
+  - The number of MPI processes must be a multiple of `(n_tor+1)/2` [see hard-coded parameters](hard-coded_parameters.md)
 
 ```bash
 mpirun -n 4 ./jorek_model303 < input
