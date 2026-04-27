@@ -7,10 +7,6 @@ layout: default
 render_with_liquid: false
 ---
 
----
-title: Running JOREK for the first time
----
-
 This tutorial will show you how to run your first small JOREK simulation(s). It will help you configure and compile libraries, the main code, and diagnostics, and run interactively or via a batch system. You will also learn how to use a few simple diagnostics. Basic Linux knowledge is required, and you should have access to a batch Linux cluster to run the examples yourself.
 
 ## Getting and keeping the overview
@@ -299,6 +295,7 @@ You can also plot the grids separately, print to a postscript file, and so on:
 ./util/plot_grids.sh -o in # plot initial grid
 ./util/plot_grids.sh -o fl # plot flux surface aligned grid
 ./util/plot_grids.sh -o x  # plot an X-point 
+```
 
 ### Energies
 
@@ -426,7 +423,7 @@ Various extensions are available for `model600`, a few examples are:
 
 ## Exercises
 
-- **Exercise 6**: Run the case yourself, plot the initial and flux-surface aligned grid, energies, growth rates, VTKs, and so on. What is the approximate poloidal mode number of the instability? What is the value of the resistivity in \(\Omega m\) at the mode location (see [normalization](normalization))?
+- **Exercise 6**: Run the case yourself, plot the initial and flux-surface aligned grid, energies, growth rates, VTKs, and so on. What is the approximate poloidal mode number of the instability? What is the value of the resistivity in \(\Omega m\) at the mode location (see [normalization](docs/physics/normalization.md))?
 - **Exercise 7**: Try to continue the simulation further into the non-linear phase by restarting with a smaller time step. If you restart in the linear phase with a different time step, does the growth rate change?
 - **Exercise 8**: Try to run the same case with diamagnetic drift effects by including `tauIC` in the namelist input file and see how the growth rate and mode structure changes.
 
