@@ -73,7 +73,7 @@ mileage : The distance [m] that a marker travelled in total
 - At the moment the data is collected at Rz-plane corresponding to phi = 0, and at the outer mid-plane.
 The results can be visualized with `util/plot_poincare.py` just by running the script. Here's an example output:
 
-![Poincare plot created using particle tracer](/assets/particles_poincare/2022_11_22_poincare.png)
+    <img src="assets/particles_poincare/2022_11_22_poincare.png" alt="Poincare plot created using particle tracer" width="600">
 
 - The colors in red hue indicate confined markers (ones that were not lost during the simulation). Each marker is assigned a (red tinted) color from a pool of six colors, which makes it easier to separate adjacent lines.
 - The colors in blue hue indicate connection length of the lost markers. The color shows the connection length at that position
