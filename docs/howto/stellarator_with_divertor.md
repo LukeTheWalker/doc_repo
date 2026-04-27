@@ -32,6 +32,7 @@ For W7-X divertor workflows where coil-field topology at the boundary is require
 To realistically capture divertor physics, **sheath boundary conditions** (SBC) are necessary to capture the dynamics close to the first wall when open magnetic field intersect the boundary. The well-established main physics formulae, already implemented in the JOREK tokamak model and in other divertor physics codes, state that for flux surfaces intersecting boundaries with angle $\alpha$, we have (where $\alpha_0$ can bet set to e.g. 5 deg):
 
 1. **The Bohm criterion**: 
+
 $$
 
 v_{\parallel} \geq \pm c_s f(\alpha), \quad \alpha = \arcsin\left(\frac{\lvert\hat{n} \cdot \mathbf{B}\rvert}{\Vert\mathbf{B}\Vert}\right), \quad f(\alpha)=\tanh\left(\frac{\alpha}{\alpha_0}\right)
