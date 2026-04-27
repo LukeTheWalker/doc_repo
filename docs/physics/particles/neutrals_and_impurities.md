@@ -45,11 +45,11 @@ Where $S_E$, $\vec{S}_{\rho v}$ and $S_\rho$ are the physical source terms.
 
 | Reaction | $S_\rho$   | $\vec{S}_{\rho v}$  | $\vec{S}_{v}$ | $S_{E,i} $ | $S_{Ti} $ | $S_{E,e} $ | $S_{Te} $ |
 | - | - | - | - | - | - | - | - |
-| *n* Ion| $m_i \Gamma_{ion}$ | $m_i \Gamma_{ion} \vec{v}_n$ | $m_i \Gamma_{ion} (\vec{v}_n - \vec{v}_n)$ | $\Gamma_{ion} ( \frac{m_i}{m_n}\frac{T_n}{\gamma-1} + \frac{1}{2} m_i v_n^2)$ | $\Gamma_{ion} ( T_n + \frac{1}{2} m_i (\vec{v}_n-\vec{v}_i)^2)$ | $-\Gamma_{ion} |E_{Bind}|$ | $-\Gamma_{ion} |E_{Bind}|$ |
-| *n* rec | $-m_i \Gamma_{rec}$ | $-m_i \Gamma_{rec} \vec{v}_i$ | - | $-\Gamma_{rec}( \frac{T_i}{\gamma-1}+\frac{1}{2} m_i v_i^2 ) $| $-\Gamma_{rec} T_i$ | $-\Gamma_{rec} \frac{T_e}{\gamma-1}$ | $-(L_{PRB}-S_{rec}|E_{bind}|)n_e n_i$ |
+| *n* Ion| $m_i \Gamma_{ion}$ | $m_i \Gamma_{ion} \vec{v}_n$ | $m_i \Gamma_{ion} (\vec{v}_n - \vec{v}_n)$ | $\Gamma_{ion} ( \frac{m_i}{m_n}\frac{T_n}{\gamma-1} + \frac{1}{2} m_i v_n^2)$ | $\Gamma_{ion} ( T_n + \frac{1}{2} m_i (\vec{v}_n-\vec{v}_i)^2)$ | $-\Gamma_{ion} \|E_{Bind}\|$ | $-\Gamma_{ion} \|E_{Bind}\|$ |
+| *n* rec | $-m_i \Gamma_{rec}$ | $-m_i \Gamma_{rec} \vec{v}_i$ | - | $-\Gamma_{rec}( \frac{T_i}{\gamma-1}+\frac{1}{2} m_i v_i^2 ) $| $-\Gamma_{rec} T_i$ | $-\Gamma_{rec} \frac{T_e}{\gamma-1}$ | $-(L_{PRB}-S_{rec}\|E_{bind}\|)n_e n_i$ |
 | *n* CX | - | $w_p (v_n^{old} - (N_{rng} \sqrt{\frac{T_i}{m_i}}+v_{drift}))$ | idem | $ \frac{1}{2} w_p ((v_n^{old})^2-(v_n^{new})^2)$ | $S_E^{CX} - v \cdot S_v^{CX}$ | | |
-| *Imp* ion/rec | - | - | - | - | - | $-w_p |E_{bind}|$ |  $ -(\gamma-1)w_p |E_{bind}|$ |
-| *Imp* rad | - | - | - | - | - | $-n_e w_p (PLT + PRB -S_{rec}|E_{bind}|)\delta t$ | $-(\gamma-1)n_e w_p (PLT + PRB -S_{rec}|E_{bind}|)\delta t$ |
+| *Imp* ion/rec | - | - | - | - | - | $-w_p \|E_{bind}\|$ |  $ -(\gamma-1)w_p \|E_{bind}\|$ |
+| *Imp* rad | - | - | - | - | - | $-n_e w_p (PLT + PRB -S_{rec}\|E_{bind}\|)\delta t$ | $-(\gamma-1)n_e w_p (PLT + PRB -S_{rec}\|E_{bind}\|)\delta t$ |
 | *Imp* coll | - | $w_p m_{imp}(v_{old}-v_{new})$| idem | $\frac{1}{2} w_p m_{imp}(v_{old}^2-v_{new}^2)$ | $ (\gamma - 1)\frac{1}{2} w_p m_{imp}(v_{old}^2-v_{new}^2)$ | | |
 
 Note 1, the terms including $T + \frac{1}{2} m_i (\vec{v}_a-\vec{v}_b)^2)$ is a fluid picture, where the macroscopic drift velocity can be slpit from the random microscopic velocity resulting in the temperature. For the particle picture, it is just the kinetic energy.

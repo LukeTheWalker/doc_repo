@@ -37,9 +37,9 @@ Think page is a hub for the kinetic framework with links to all subpages. This k
 
 ## Available diagnostics and post-processors:
 
-  * [Particle fast camera](particles/particle_fast_camera.md): Post-processor generating synthetic images from JOREK MHD and particle simulations.
-  * [Particles poincare](particles/particles_poincare.md) for REs.
-  * [Particles phase space](particles/particles_phase_space.md): for FPs.
+  * [Particle fast camera](../howto/particle_fast_camera.md): Post-processor generating synthetic images from JOREK MHD and particle simulations.
+  * [Particles poincare](../howto/particles_poincare.md) for REs.
+  * [Particles phase space](../howto/particles_phase_space.md): for FPs.
 
 ## Work in progress
 
