@@ -50,7 +50,7 @@ render_with_liquid: false
 - [Spatial Discretization](docs/numerics/spatial-discretization.md) \| [Grids](docs/numerics/grids.md)
 - [Time Integration](docs/numerics/time-integration.md)
 - [Element Matrix FFT](docs/numerics/element_matrix_fft.md)
-- [Solver and Preconditioner](docs/numerics/solver.md)
+- [Solver and Preconditioner](docs/numerics/solver.md) \| [Sparse Matrix Format](docs/numerics/sparse-matrix.md) 
 - [Random-Number Generators](docs/numerics/rngs.md)
 - [HDF5 Tools](docs/numerics/hdf5tools.md)
 
