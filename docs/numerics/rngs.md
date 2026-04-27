@@ -37,9 +37,7 @@ An implementation of the RNG interface must provide the following routines:
 
 whose names should be self-explanatory.
 
-## Seeding
 
-A module to create seed numbers for the generator is provided from `/dev/urandom` or by xor-ing the time and current process pid in `tools/mod_random_seed.f90`.
 
 ## Usage
 
@@ -125,21 +123,25 @@ This can be done easily with a few MPI calls combined with the above example.
   end do
 ``` 
 
-### Sobol' sequence QRNG
+### Seeding
+
+A module to create seed numbers for the generator is provided from `/dev/urandom` or by xor-ing the time and current process pid in `tools/mod_random_seed.f90`.
+
+## Sobol' sequence QRNG
 
 The `sobseq` generator has some properties which need to be treated with care.
 
-#### Output stream correlation
+### Output stream correlation
 
 The strength of the Sobol' sequence is the correlation in the output stream, but this causes some problems too.
 For instance in the first stream of the sobseq generator every even number is > 0.5.
 This has consequences for rejection sampling in parallel, where we use the strided generator to provide multiple streams. It is very important to try an equal number of samples on every thread, instead of looking for an equal number of accepted proposals.
 
-#### Strided generation
+### Strided generation
 
 Due to the strided implementation of the `sobseq` generator it can only accept a number of streams which is a power of 2.
 
-#### Seeding
+### Seeding
 
 The Sobol' series has no possibility of seeding with any number. The `seed` parameter is ignored in calls to `rng%initialize`.
 
