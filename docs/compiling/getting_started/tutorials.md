@@ -25,3 +25,14 @@ You can put the `module` commands in your `.bashrc` file in the home directory, 
     module load intel-oneapi-compilers
     module load intel-oneapi-mkl/2024.0.0--intel-oneapi-mpi--2021.12.1
     module load hdf5/1.14.3--intel-oneapi-mpi--2021.12.1--oneapi--2024.1.0
+
+Other useful commands: Use `module avail` to check for available modules, `module list` to see what you have already loaded, `module unload` to unload a specific module, `module purge` to unload all modules.
+
+## Getting the JOREK code
+
+You need to get an account on one of the platforms where the JOREK code is hosted and clone the repository of the code using git.
+
+This is an example using the ITER platform:
+
+     git clone ssh://git@git.iter.org/stab/jorek.git
+
