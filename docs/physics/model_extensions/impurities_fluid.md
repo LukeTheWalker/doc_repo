@@ -7,6 +7,8 @@ layout: default
 render_with_liquid: false
 ---
 
+===========Di Hu working on the fluid impurity session==============
+
 The fluid impurities are supported in dedicated impurity models (models 501/502) as well as the more general model 600.
 
 ===== Models 501/502 =====
@@ -37,6 +39,8 @@ __**Pressure:**__ In models 501/502, the pressure that appears naturally in the 
 where we define $\alpha_{imp} \equiv \frac{(\langle Z \rangle_{imp}+1)m_i}{2m_{imp}}-1$. Note that we will assume that $\langle Z \rangle_{imp}=\langle Z \rangle_{imp}(T)$, so that $\alpha_{imp}=\alpha_{imp}(T)$.
 
 __**Variable number 8:**__ In models 501/502, variable number 8 is $\rho_{imp}$, the impurity mass density, all charge states included.
+
+
 ==== Normalizations ====
 
 ^ Connection between SI and normalized units ^^ Description of the quantity / Comment ^
@@ -49,6 +53,8 @@ __**Variable number 8:**__ In models 501/502, variable number 8 is $\rho_{imp}$,
 | $n_0~[m^{-3}]$ |= ''central_density'' $\cdot 10^{20}$ | ''central_density'' gets a default value in ''preset_parameters.f90'' and should be specified in the input file |
 |$\rho_0~[kg\;m^{-3}]$|= ''central_mass'' $\cdot n_0 \cdot m_\text{AMU}$| ''central_mass'' gets a default value in ''preset_parameters.f90'' and should be specified in the input file |
 |$\mu_\mathrm{imp}~[1]$|= ''m_i_over_m_imp'' $ = m_\mathrm{i}/m_\mathrm{imp}$ | ''m_i_over_m_imp'' is defined by the impurity species.|
+
+
 ==== Equations ====
 
 {{ :note501.pdf | Di's note}} 
@@ -131,5 +137,8 @@ See {{ :note_marker_particles.pdf | Di's note on the particle-based non-equilibr
 ==== Tests ====
 
 A few tests of models 501/502 are described [[validation_of_model501|here]].
+
+
+============End of Di Hu's construction site============
 
 *This page is a stub — content to be added.*
