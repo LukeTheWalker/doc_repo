@@ -7,22 +7,22 @@ render_with_liquid: false
 ---
 
 # JOREK Solver
-The implicit time integration scheme implemented by JOREK leads to a **large** and **sparse** linear system of the general form:
-$$Ax = b$$
-The linear system is assembled in a distributed block-COO format (which can be converted to a distributed block-CSR format) partitioned by
-**toroidal Fourier harmonics** and **finite-element nodes**, and the solver
-infrastructure is designed to exploit that block structure both at the
-factorisation and preconditioning level.
+The implicit time integration scheme implemented by JOREK leads to a **large** and **sparse** linear system of the general form
+
+$$A\,x = b.$$
+
+The matrix $A$ is assembled in a distributed block-COO format (which can be converted to a distributed block-CSR format on demand) and is partitioned by **toroidal Fourier harmonics** and **finite-element nodes**. The solver infrastructure exploits this block structure at both the factorisation and the preconditioning level.
 
 Two high-level solution strategies are supported:
 
-| Strategy | When to use |
-|---|---|
-| **Direct solve** | Robustness-first; Moderate problem sizes |
-| **Iterative solve (GMRES / BiCGSTAB + block preconditioner)** | Large problems; Reuse of factorisation across time steps |
+| | **Direct solve** | **Iterative solve** |
+|---|---|---|
+| Method | Sparse LU / multifrontal factorisation of $A$ | GMRES / BiCGSTAB with a block preconditioner |
+| Strengths | Robust; insensitive to conditioning; one factorisation reused across many right-hand sides | Lower memory footprint; scales to large problem sizes; preconditioner can be reused across time steps |
+| Weaknesses | Memory and fill-in grow rapidly with problem size | Convergence depends on preconditioner quality and problem conditioning |
+| Typical use | Small-to-moderate problems; reference / robustness-critical runs | Large problems; production runs at scale |
 
-Both strategies support multiple third-party libraries as back-ends and can
-optionally run the matrix–vector products on GPU hardware.
+Both strategies support multiple third-party libraries as back-ends and can optionally offload the matrix–vector products to GPU hardware.
 
 The main entry point is `solve_sparse_system()` in
 `solvers/mod_sparse.f90`.
@@ -37,7 +37,7 @@ time via flags (`USE_MUMPS`, `USE_PASTIX`, `USE_STRUMPACK`) and at
 runtime by the corresponding `use_*` input flags.
 
 
-<font color="red">Warning:</font> Factorization of large sparse matrices is an expensive operation and will create a lot of fill-in resulting in increased memory requirements. Thus, for most cases use of the **iterative solver** is recommended! 
+<font color="red">Hint:</font> Factorization of large sparse matrices is an expensive operation and will create a lot of fill-in resulting in increased memory requirements. Thus, for most cases use of the **iterative solver** is recommended! 
 
 ---
 
@@ -59,7 +59,9 @@ solution is updated as $x \leftarrow x + V y$, where $y$ minimises the
 preconditioned residual over the current Krylov subspace.
 
 Convergence is declared when
+
 $$\frac{\|r_k\|}{\|r_0\|} < \texttt{gmres\_tol}$$
+
 or when the absolute residual drops below a secondary threshold.
 
 Key input parameters:
@@ -79,7 +81,7 @@ for the search direction, once for the stabilizer), which is more expensive per
 step than GMRES but avoids restarting costs.  Enable it at compile time with the
 `USE_BICGSTAB` preprocessor flag.
 
-<font color="red">Warning:</font> Use of BiSCSTAB is generally not recommended.
+<font color="red">Hint:</font> Use of BiSCSTAB is generally not recommended.
 
 ---
 
@@ -140,16 +142,16 @@ Each GMRES / BiCGSTAB preconditioner application performs the following steps:
 1. **Scatter RHS** — extract the rows belonging to this mode family from the
    global residual vector (via pre-computed `row_index` mapping).
 2. **Solve** — the family's direct solver (MUMPS / PaStiX / STRUMPACK)
-   factorises (or reuses) and solves the preconditioner matrix for the local
+   factorizes (or reuses) and solves the preconditioner matrix for the local
    RHS.
 3. **Gather solution** — contributions from all families are reduced by
    `MPI_AllReduce` (sum) into the global solution vector; each family's rows are
    weighted by `row_factor` (normally 1).
 
-### Factorisation Reuse
+### Factorization Reuse
 
-Refactorising the preconditioner at every time step is expensive.  JOREK reuses
-the existing factorisation (the `solve_only` path) when:
+Refactoring the preconditioner at every time step is expensive.  JOREK reuses
+the existing factorization (the `solve_only` path) when:
 
 $$\texttt{iter\_gmres} + \texttt{iter\_prev} \le 2 \times \texttt{iter\_precon}
 \quad \text{and} \quad
