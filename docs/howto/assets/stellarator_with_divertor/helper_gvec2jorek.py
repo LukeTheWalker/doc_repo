@@ -104,3 +104,115 @@ def calculate_modes_full(data, phi, n_modes, nfp):
     mode_data[:,:,n_max:] =  (2/n_planes) * np.einsum('ijk,kl->ijl', data, cos_values)
     mode_data[:,:,n_max] /= 2   # The m=0 mode should be halved (as you don't get the 2 at the front)
     return mode_data
+
+def read_gvec_header(filepath):
+    """Read gvec2jorek.dat header and return grid parameters."""
+    with open(filepath) as f:
+        # Skip comment lines to find grid params
+        for line in f:
+            line = line.strip()
+            if line.startswith('##'):
+                continue
+            parts = line.split()
+            n_rad, n_theta, n_phi = int(parts[0]), int(parts[1]), int(parts[2])
+            break
+        # Next non-comment line: global params
+        for line in f:
+            line = line.strip()
+            if line.startswith('##'):
+                continue
+            parts = line.split()
+            coord_type = int(parts[0])
+            nfp = int(parts[1])
+            asym = int(parts[2])
+            m_max = int(parts[3])
+            n_max = int(parts[4])
+            n_modes = int(parts[5])
+            sin_range = (int(parts[6]), int(parts[7]))
+            cos_range = (int(parts[8]), int(parts[9]))
+            break
+
+    return {
+        'n_rad': n_rad, 'n_theta': n_theta, 'n_phi': n_phi,
+        'coord_type': coord_type, 'nfp': nfp, 'asym': asym,
+        'm_max': m_max, 'n_max': n_max, 'n_modes': n_modes,
+        'sin_range': sin_range, 'cos_range': cos_range,
+    }
+
+def read_gvec_blocks(filepath, n_theta, n_rad, n_modes):
+    """Read all data blocks from gvec2jorek.dat.
+    Returns dict of {name: array(n_theta, n_rad, n_modes)}."""
+    blocks = {}
+    block_names = []
+    current_name = None
+    data_lines = []
+
+    with open(filepath) as f:
+        for line in f:
+            stripped = line.strip()
+            if stripped.startswith('##<<'):
+                # Save previous block if any
+                if current_name is not None and data_lines:
+                    values = []
+                    for dl in data_lines:
+                        values.extend(float(x) for x in dl.split())
+                    arr = np.array(values, dtype=np.float64)
+                    expected = n_theta * n_rad * n_modes
+                    if len(arr) == expected:
+                        blocks[current_name] = arr.reshape(
+                            (n_theta, n_rad, n_modes), order='F')
+                    block_names.append(current_name)
+                    data_lines = []
+
+                # Parse block name
+                if 'Variable name:' in stripped:
+                    name = stripped.split('"')[1]
+                    current_name = name
+                elif 'number of grid points' in stripped:
+                    current_name = '_grid_params'
+                elif 'global:' in stripped:
+                    current_name = '_global_params'
+                else:
+                    current_name = stripped
+                data_lines = []
+            elif stripped.startswith('##'):
+                continue  # Header comment
+            else:
+                if current_name is not None:
+                    data_lines.append(stripped)
+
+        # Save last block
+        if current_name is not None and data_lines:
+            values = []
+            for dl in data_lines:
+                values.extend(float(x) for x in dl.split())
+            arr = np.array(values, dtype=np.float64)
+            expected = n_theta * n_rad * n_modes
+            if len(arr) == expected:
+                blocks[current_name] = arr.reshape(
+                    (n_theta, n_rad, n_modes), order='F')
+            block_names.append(current_name)
+
+    return blocks, block_names
+
+def write_gvec_block(f, data, name):
+    """Write one data block in gvec2jorek.dat format."""
+    f.write(f'##<< 2D scalar variable fourier modes (1:Ntheta,1:Ns), Variable name:  "{name}"\n')
+    flat = data.ravel(order='F')
+    for i in range(0, len(flat), 6):
+        chunk = flat[i:i+6]
+        strings = []
+        for val in chunk:
+            s = f"{val:23.15E}"
+            if 'E' in s:
+                parts = s.split('E')
+                dec = decimal.Decimal(parts[0].strip())
+                exp = int(parts[1])
+                if dec != 0:
+                    dec /= 10
+                    exp += 1
+                dec_fmt = f"{dec: .15f}"
+                exp_fmt = f"{exp:+03d}"
+                s = f"{dec_fmt}E{exp_fmt}"
+            strings.append(f"{s: >23}")
+        f.write(" ".join(strings) + "\n")
