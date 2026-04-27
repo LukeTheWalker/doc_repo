@@ -138,7 +138,7 @@ INC_PASTIX        = `$(PASTIX_HOME)/pastix-conf --incs`
 LIBFFTW           = $(FFTW_HOME)/lib/libfftw3.a
 ```
 
-- For PaStiX after revision 3945, additionally the following is required (see also preprocessor flags):
+- For PaStiX after revision 3945, additionally the following is required (see also [preprocessor flags](preprocessor.md)):
 
 ```make
 FFLAGS := $(FFLAGS) -DFUNNELED -DWORLDWAR2
@@ -146,7 +146,7 @@ FFLAGS := $(FFLAGS) -DFUNNELED -DWORLDWAR2
 
 - In case of **PaStiX 6.x**, instead of the parameters shown above, `USE_PASTIX6=1`, `PASTIX6_HOME`, `LIB_PASTIX6`, `LIB_PASTIX6_BLAS`, and `INC_PASTIX6` need to be set correctly. In that case, `USE_PASTIX` must be 0.
 
-- Set the hard-coded parameters correctly. For example:
+- Set the [hard-coded parameters](hard-coded_parameters.md) correctly. For example:
 
 ```bash
 ./util/config.sh model=303 n_tor=3 n_period=8 n_plane=8   # set hard-coded parameters
