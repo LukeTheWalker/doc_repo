@@ -41,3 +41,10 @@ In order to compile JOREK, first of all you need to prepare the `Makefile.inc` c
 The `Makefile.inc` file needs is placed into the main folder of the JOREK repository you have cloned (where you also find the `jorek2_main.f90` file). You can have a look in the `Make.in` subfolder to see if there is a `Makefile.inc` file already setup for your specific machine, and copy it into the `Makefile.inc` file in the main folder.
 
 The most important **hard-coded parameters** that need to be setup in the `Makefile.inc` file are:
+
+| Name     | Description   | Reasonable values |
+|----------|---------------|-------------------|
+| `model`  | physics model | 600, 710          |
+| `n_tor ` | number of toroidal harmonics (counting sine and cosine separately!) | 1, 3, 5, 7, 9, …         |
+| `n_period ` | toroidal periodicity | 1, 2, 3, 4, …         |
+| `n_plane ` | number of toroidal planes for real-space representation | at leat `2*(n_tor-1)`       |
