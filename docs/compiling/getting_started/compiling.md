@@ -87,7 +87,7 @@ The new version of PaStiX (with new features such as block-low-rank compression)
 
 - [Download the source code here](https://gforge.inria.fr/frs/?group_id=186) (release versions)
 - [Download latest develop version here](https://gitlab.inria.fr/solverstack/pastix) (see Readme for git download instructions)
-- Download the tar.gz of the version used for the benchmarks and BLR test from 2019/07
+- [Download the tar.gz of the version used for the benchmarks and BLR test from 2019/07](assets/compiling/pastix6.tar.gz)
 - Unless downloaded from git, unpack with:
 
 ```bash
