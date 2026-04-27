@@ -23,7 +23,6 @@ $$
 + (1 - \theta - \phi) \, \mathbf{B}^{n}
 - \phi \, \mathbf{B}^{n-1}
 \right] \tag{2}
-
 $$
 
 which guarantees second-order accuracy, if $\phi+\theta-\xi = 1/2$. Superscripts like $\mathbf{B}^n$ indicate at which timestep the corresponding expression is evalued.
