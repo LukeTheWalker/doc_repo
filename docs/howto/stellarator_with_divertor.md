@@ -31,12 +31,16 @@ For W7-X divertor workflows where coil-field topology at the boundary is require
 
 To realistically capture divertor physics, **sheath boundary conditions** (SBC) are necessary to capture the dynamics close to the first wall when open magnetic field intersect the boundary. The well-established main physics formulae, already implemented in the JOREK tokamak model and in other divertor physics codes, state that for flux surfaces intersecting boundaries with angle $\alpha$, we have (where $\alpha_0$ can bet set to e.g. 5 deg):
 
-1. **The Bohm criterion**: $$v_{\parallel} \geq \pm c_s f(\alpha), \quad \alpha = \arcsin\left(\frac{|\hat{n} \cdot \mathbf{B}|}{\Vert\mathbf{B}\Vert}\right), \quad f(\alpha)=\tanh\left(\frac{\alpha}{\alpha_0}\right)$$
+1. **The Bohm criterion**: 
+$$
 
+v_{\parallel} \geq \pm c_s f(\alpha), \quad \alpha = \arcsin\left(\frac{\lvert\hat{n} \cdot \mathbf{B}\rvert}{\Vert\mathbf{B}\Vert}\right), \quad f(\alpha)=\tanh\left(\frac{\alpha}{\alpha_0}\right)
 
-2. **Particle flux** at sheath entrance: $$\Gamma_n = n \cdot v_{\parallel}$$
+$$
 
-3. **Heat flux** (simplest case with single $T$): $$q = \gamma \cdot k T_e \Gamma_n$$
+2. **Particle flux** at sheath entrance: $\Gamma_n = n \cdot v_{\parallel}$
+
+3. **Heat flux** (simplest case with single $T$): $q = \gamma \cdot k T_e \Gamma_n$
 
 More physics details on SBC and their implementation can be found in P.C Stangeby (2000), CRC Press, and M. Hoelzl et al., Nucl. Fusion 61, 065001 (2021). The stellarator model 183 now contains a working stellarator SBC path, but unlike tokamaks we must handle strongly 3D, toroidally varying incidence angles $\alpha(\theta,\phi)$ and represent BC targets consistently in the toroidal Fourier basis.
 
