@@ -38,7 +38,8 @@ time via flags (`USE_MUMPS`, `USE_PASTIX`, `USE_STRUMPACK`) and at
 runtime by the corresponding `use_*` input flags.
 
 
-<font color="red">Hint:</font> Factorisation of large sparse matrices is an expensive operation and will create a significant amount of fill-in resulting in increased memory requirements. Thus, for most cases use of the **iterative solver** is recommended! 
+> <b><font color="red">Hint</font></b>:
+> Factorization of large sparse matrices is an expensive operation and will create a lot of fill-in resulting in increased memory requirements. Thus, for most cases use of the **iterative solver** is recommended! 
 
 ---
 
@@ -49,7 +50,7 @@ When `gmres = .true.`, a Krylov iterative method is used, preconditioned by the
 
 ### GMRES
 
-Left-preconditioned restarted GMRES(m) is implemented in `solvers/mod_gmres.f90`. (A more modern implementation available in selected branches is implemented in `solvers/mod_gmres2.f90`).
+Left-preconditioned restarted GMRES is implemented in `solvers/mod_gmres.f90`. (A more modern implementation avaliable in selected branches is implemented in `solvers/mod_gmres2.f90`).
 
 The algorithm applies the preconditioner $M^{-1}$ to both the initial residual
 and to each new Krylov vector.  Orthogonalisation is performed by a
@@ -61,7 +62,7 @@ preconditioned residual over the current Krylov subspace.
 
 Convergence is declared when
 
-$$\frac{\|r_k\|}{\|r_0\|} < \texttt{gmres\_tol}$$
+$$\frac{\|r_k\|}{\|r_0\|} < \texttt{gmres_tol}$$
 
 or when the absolute residual drops below a secondary threshold.
 
@@ -82,7 +83,7 @@ for the search direction, once for the stabilizer), which is more expensive per
 step than GMRES but avoids restarting costs.  Enable it at compile time with the
 `USE_BICGSTAB` preprocessor flag.
 
-<font color="red">Hint:</font> Use of BiCGSTAB is generally not recommended.
+> <b><font color="red">Hint:</font></b> Use of BiSCSTAB is generally not recommended.
 
 ---
 
@@ -155,9 +156,9 @@ Each GMRES / BiCGSTAB preconditioner application performs the following steps:
 Refactoring the preconditioner at every time step is expensive.  JOREK reuses
 the existing factorisation (the `solve_only` path) when:
 
-$$\texttt{iter\_gmres} + \texttt{iter\_prev} \le 2 \times \texttt{iter\_precon}
+$$\texttt{iter_gmres} + \texttt{iter_prev} \le 2 \times \texttt{iter_precon}
 \quad \text{and} \quad
-\texttt{n\_since\_update} < \texttt{max\_steps\_noUpdate}$$
+\texttt{n_since_update} < \texttt{max_steps_noUpdate}$$
 
 where `iter_precon` and `max_steps_noUpdate` are input parameters.  When
 neither condition is satisfied, the preconditioner matrix is reassembled and
