@@ -38,9 +38,7 @@ To realistically capture divertor physics, **sheath boundary conditions** (SBC) 
 
 3. **Heat flux** (simplest case with single $T$): $$q = \gamma \cdot k T_e \Gamma_n$$
 
-More physics details on SBC and their implementation can be found in P.C Stangeby (2000), CRC Press, and M. Hoelzl et al., Nucl. Fusion 61, 065001 (2021).
-
-To put the progress status in one sentence: model183 now contains a working stellarator SBC path, but unlike tokamaks we must handle strongly 3D, toroidally varying incidence angles $\alpha(\theta,\phi)$ and represent BC targets consistently in the toroidal Fourier basis.
+More physics details on SBC and their implementation can be found in P.C Stangeby (2000), CRC Press, and M. Hoelzl et al., Nucl. Fusion 61, 065001 (2021). The stellarator model 183 now contains a working stellarator SBC path, but unlike tokamaks we must handle strongly 3D, toroidally varying incidence angles $\alpha(\theta,\phi)$ and represent BC targets consistently in the toroidal Fourier basis.
 
 <img src="assets/stellarator_with_divertor/sheath_boundary_conditions_incidence_angle.png" alt="Alt text" width="250">
 
@@ -48,7 +46,7 @@ To put the progress status in one sentence: model183 now contains a working stel
 
 ## Simplistic case: W7-A with artificial divertor
 
-The first minimum viable stellarator divertor grid example features an artificial divertor indentation in the stellarator Wendelstein 7-A:
+The first minimum viable stellarator divertor grid example features an artificial divertor indentation in the stellarator Wendelstein 7-A (sketch for illustrative purposes only):
 
 <img src="assets/stellarator_with_divertor/W7-A_divertor_illustrated.png" alt="Alt text" width="700">
 
@@ -68,7 +66,7 @@ def tanh_smooth(x, center, width, smooth_width):
     return left * right
 ```
 
-and $\kappa$ is the ellipticity factor (in this example, $\kappa=1.5$). In practice, boundary nodes are moved inward by $\Delta r$ and interior shells are scaled proportionally from axis (0) to boundary (1).
+and $\kappa$ is the ellipticity factor (in this example, $\kappa=1.5$). In practice, boundary nodes are moved inward by $\Delta r$ and interior shells are scaled proportionally from axis (0) to boundary (1). An example usage to plot this artificial indentation is found in `assets/stellarator_with_divertor/plot_w7a_example_indentation_map.py`
 
 Bezier-Hermite handling in this W7-A step is intentionally simple: geometry is modified in real space and first/mixed derivatives (`_s`, `_t`, `_st`) are recomputed with `scipy.interpolate.PchipInterpolator` in radial and poloidal directions (including periodic closure in poloidal angle). This avoids stale handles after boundary displacement.
 
@@ -83,3 +81,34 @@ This step is a first direct geometry-indentation workflow for W7-A, to demonstra
 ### Grid construction
 
 #### Incorporating the vacuum field in the gvec2jorek.dat file 
+
+In step20, vacuum field is added by sampling the W7-X mgrid coil field on the JOREK flux grid, transforming to toroidal Fourier modes, and appending `B_vac_*` blocks to `gvec2jorek.dat`. The reference script is `runs/019_w7x_half_beta_island_divertor/step20_w7x_bean_scaling/mgrid2bvac_step20.py`.
+
+Minimal example from that script:
+
+```python
+GVEC2JOREK_IN = Path('.../gvec2jorek_harmonic_12.dat')
+MGRID_FILE = Path('.../mgrid_w7x_nv36_hires.nc')
+EXTCUR = [13470.0, 13470.0, 13470.0, 13470.0, 13470.0, 0.0, 0.0]
+
+# 1) evaluate geometry R(s,theta,phi), Z(s,theta,phi)
+# 2) interpolate mgrid B(R,Z,phi)
+# 3) Fourier transform in phi
+# 4) write B_vac_R/Z/phi (+ _s, _t, _st)
+```
+
+Practical requirement: the mgrid file and `EXTCUR` values must correspond to the same magnetic configuration used to generate the target equilibrium (otherwise imported vacuum topology is inconsistent).
+
+Compilation/runtime requirement for this path: `USE_EXT_FIELD=1` and a `gvec2jorek.dat` that contains the `B_vac_*` blocks.
+
+#### Harmonic mapping
+
+Harmonic mapping constructs smooth, nested extension shells in strongly non-axisymmetric geometry by solving the mapping problem per toroidal plane and then rebuilding a toroidally consistent Fourier representation. This reduces geometric distortion and helps preserve positive Jacobians during extension/moulding. See also Robert Babin et al., Plasma Phys. Control. Fusion 67 (2025) 035005.
+
+In `extend_grid_harmonic.py`, Step 1 is the harmonic mapping stage: for each toroidal plane, LCFS is mapped to an additive conformal envelope (`CONFORMAL_EXT_M = 0.150` m), then transformed back to Fourier modes over all planes.
+
+#### Divertor moulding
+
+In the same script, Step 2 is divertor moulding: a displacement/scale field is built from ray intersections with divertor target segments, then extension shells are rescaled toward those targets with smooth angular tapers (`DIVERTOR_SMOOTH_DEG`, `PHI_TAPER_DEG`) and safety bounds (`SCALE_MIN`, `SCALE_MAX`) to keep the mesh regular.
+
+<img src="assets//stellarator_with_divertor/w7x_divertor_grid_5panel.png" alt="Alt text" width="700">

@@ -1,3 +1,8 @@
+"""
+Minimal helper functions for reading and writing gvec files for the divertor example, 
+and evaluating the Fourier modes in real space.
+"""
+
 import numpy as np
 import decimal
 
