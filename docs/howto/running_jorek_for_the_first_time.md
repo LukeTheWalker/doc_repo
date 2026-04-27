@@ -11,19 +11,23 @@ This tutorial will show you how to run your first small JOREK simulation(s). It 
 
 ## Getting and keeping the overview
 
-- The **code documentation** is done in our Wiki system. Take some time to look through the items linked from the [main page](index.md). The documentation is neither complete nor perfect, and the whole community has to continuously work on it.
+- The **code documentation** is done in our Wiki system. Take some time to look through the items linked from the [main page](/index.md). The documentation is neither complete nor perfect, and the whole community has to continuously work on it.
 - Important information is normally announced via our **mailing list** [everyone@jorek.eu](mailto:everyone@jorek.eu).
 - Our [public website](https://jorek.eu) is hosted on a virtual server under our control. There is also a restricted Wiki on jorek.eu for organizing meetings etc.
 
 ## Preparation of the environment
 
-We assume in the following that you are using the `bash` shell. On most machines it is possible to load modules to make additional software available. We recommend doing this directly in your `.bashrc` file in the home directory. Put something like the following there; module names might differ between machines.
+We assume in the following that you are using the `bash` shell.
+
+On most machines it is possible to load modules to make additional software available. We recommend doing this directly in your `.bashrc` file in the home directory. Put something like the following there; module names might differ between machines.
 
 ```bash
 module load intel ...
 ```
 
-This will become active only after you have logged out and back in again, or opened a new terminal.
+For machines used regularly by our community, you can find the names of modules (and much more) here: [here](/docs/compiling/getting_started/systems.html).
+
+If you add it to the `.bashrc` file, it will become active after you have logged out and back in again, you opened a new terminal, or you do `source ~/.bashrc` manually.
 
 Other useful commands: use `module avail` to check for available modules, `module list` to see what you have already loaded, `module unload` to unload, and `module show` to look at details.
 
@@ -42,13 +46,21 @@ cd <where you want to check out the code>
 git clone git@github.com:<REPOSITORY>
 ```
 
-Next you need to compile the required libraries or load them as modules and prepare the `Makefile.inc` configuration file that contains the machine specific information (which compiler to use, where to find libraries). This file needs to be adapted for the respective computing system you are using. The `Makefile.inc` needs to be placed into the main folder of the repository you cloned, where you also find `jorek2_main.f90`. For some computing systems, you can find instructions [here](docs/compiling/getting_started/systems.html).
+After cloning the repository now, you have a local copy of the JOREK source code. Next is to compile this source code to obtain the executable binary for the desired model, as well as for required diagnostics programs. These binaries are what you will later copy into your run directory and use to run and analyze the simulation. To achieve this, the main steps are:
+- prepare the `Makefile.inc` file, which contains machine specific information
+- set hard-coded parameters, e.g., the selection of the physics model using `./util/config.sh`
+- run `make clean` when you have changed the configuration or hard-coded parameters
+- compile the code with, for example, `make -j 8`
+
+These steps are described in more detail in the following. 
+
+First, you need to prepare the `Makefile.inc` configuration file that contains information regarding which compiler to use, where to find libraries (in case of a new computing system, you might need to compile some of the libraries yourself; this goes beyond this tutorial), etc.. This file needs to be adapted for the respective computing system you are using. For computing systems that are in frequent use by the community, you can find the files at [here](/docs/compiling/getting_started/systems.html). The `Makefile.inc` needs to be placed into the main folder of the repository you cloned, where you also find `jorek2_main.f90`.
 
 Before compiling the code, you need to set a few **hard-coded parameters**. The most important ones are:
 
 | name | description | reasonable values |
 | --- | --- | --- |
-| `model` | physics model (see [here](docs/physics/cat_physics.md) for a basic overview) | 600, ... |
+| `model` | physics model (see [here](/docs/physics/cat_physics.md) for a basic overview) | 600, ... |
 | `n_tor` | number of toroidal harmonics (counting sine and cosine separately) | 1, 3, 5, 7, 9, ... |
 | `n_period` | toroidal periodicity | 1, 2, 3, 4, ... |
 | `n_plane` | number of toroidal planes for real-space representation | at least `2*(n_tor-1)` |
@@ -64,13 +76,14 @@ A few examples of toroidal harmonics included in a simulation depending on the h
 | 3 | 6 | 0, 6 |
 | 5 | 3 | 0, 3, 6 |
 
-The model is selected directly in `Makefile.inc`, and the other hard-coded parameters are in `models/mod_settings` and `models/modelXXX/model_settings`. The easiest way to display and change the hard-coded parameters is via the bash script:
+The best way to change these hard-coded settings is via the bash script:
 
 ```bash
 ./util/config.sh
 ```
+(The model is set directly in `Makefile.inc`, and the other hard-coded parameters are in `models/mod_settings` and `models/modelXXX/model_settings`.)
 
-The script also lists a few additional hard-coded parameters not mentioned above:
+The script also lists a few additional hard-coded parameters that are not mentioned above:
 
 ```text
 ==============================
@@ -185,7 +198,7 @@ We pipe the namelist input file `intear` into the code so it can read the case s
 
 Usually, production simulations are prepared as follows. You compile the code, prepare the JOREK input file, and set up a specific **batch job file**. In this file, you specify what should be executed exactly and on what hardware. You "submit" this job and the job scheduler will run it once the required hardware becomes available. This is the usual way of running simulations on large systems. Waiting times can depend a lot on the size of the job, the amount of resources you used already, on the size of the project you have on the system, and other parameters.
 
-For example jobscript files, see the [pages for different computing systems](docs/compiling/getting_started/systems.html).
+For example jobscript files, see the [pages for different computing systems](/docs/compiling/getting_started/systems.html).
 
 When you have your jobfile prepared, you can submit it as follows (for computing systems that use the [SLURM scheduler](https://slurm.schedmd.com/documentation.html)):
 
@@ -215,7 +228,18 @@ This works both interactively and in a batch system and is especially useful if 
 
 Restarting a JOREK simulation is easy. If the simulation exited cleanly, you can simply restart it by setting `restart=.true.` in the namelist input file (called `intear` in this example) and submitting the job script again. This allows, for example, continuing a simulation with a different time step, or simply continuing it. The simulation is restarted from the state stored in `jorek_restart.h5`.
 
-If the simulation did not finish cleanly, or if you want to restart from a different time step than the very last one, you need to copy one of the numbered restart files `jorekXXXXXX.h5` to `jorek_restart.h5`. JOREK writes a numbered restart file every `nout` time steps, where `nout` can be specified in the namelist input file. Most diagnostics also read their data from the restart files.
+If the simulation did not finish cleanly, or if you want to restart from a different time step than the very last one, you need to copy one of the numbered restart files `jorekXXXXXX.h5` to `jorek_restart.h5`. JOREK writes a numbered restart file every `nout` time steps (to be precise, it writes out a restart file whenever modulo(step,nout)==0), where `nout` can be specified in the namelist input file. Most diagnostics also read their data from the restart files.
+
+Note that the JOREK restart file number is really just an index. The simulation time corresponding to the index depends on the time stepping you choose in your simulation. You can check this correspondence via the following command to get the time in normalized units:
+
+``
+./util/plot_live_data.sh -q time
+``
+
+For time in SI units, use the following command instead:
+``
+./util/plot_live_data.sh -q time -si
+``
 
 ## Namelist input parameters
 
@@ -246,6 +270,8 @@ Most input variables are defined in `models/phys_module.f90` with a short commen
 | `rho_*` | Density profile as function of \(\Psi_N\) by coefficients |
 | ... | ... |
 
+For the full list of JOREK input parameters, please refer to [the complete list of namelist inputs](/docs/compiling/input.md). For some parameters, it is possible to provide numerical profiles instead. This is described in the end of the tutorial.
+
 Input parameters can also be manipulated via `./util/setinput.sh`, which is particularly helpful in scripts. For example, to switch an input file to restarting:
 
 ```bash
@@ -254,7 +280,7 @@ Input parameters can also be manipulated via `./util/setinput.sh`, which is part
 
 ## Analyzing the simulation
 
-We have a separate tutorial on [JOREK diagnostics](docs/howto/introduction_to_jorek_diagnostics.md), but here is a rough overview so you can inspect a few aspects of the simulations.
+We have a separate tutorial on [JOREK diagnostics](/docs/howto/introduction_to_jorek_diagnostics.md), but here is a rough overview so you can inspect a few aspects of the simulations.
 
 ### Logfile
 
@@ -326,7 +352,7 @@ The script extracts information from `macroscopic_vars.dat`, for example into `e
 
 ### VTK files
 
-Simulations write out a restart file every `nout` time steps. The tool `jorek2vtk` can translate restart files into VTK files suitable for plotting with tools like VisIt or Paraview. This can be done by:
+Simulations write out a restart file every `nout` time steps. The tool `jorek2vtk` can translate restart files into VTK files suitable for plotting with tools like VisIt or Paraview (usually `module load visit` or `module load paraview`). This can be done by:
 
 ```bash
 ./util/convert2vtk.sh -j 8 jorek2vtk intear
@@ -363,7 +389,7 @@ Then type the commands you want to execute. `help` lists all available commands,
 
 All results are written into a `postproc/` subfolder.
 
-A more detailed explanation is given in the [JOREK diagnostics tutorial](docs/howto/introduction_to_jorek_diagnostics.md).
+A more detailed explanation is given in the [JOREK diagnostics tutorial](/docs/howto/introduction_to_jorek_diagnostics.md).
 
 ### Other potentially useful files
 
@@ -440,7 +466,7 @@ Various extensions are available for `model600`, a few examples are:
 
 ## Exercises
 
-- **Exercise 6**: Run the case yourself, plot the initial and flux-surface aligned grid, energies, growth rates, VTKs, and so on. What is the approximate poloidal mode number of the instability? What is the value of the resistivity in \(\Omega m\) at the mode location (see [normalization](docs/physics/normalization.md))?
+- **Exercise 6**: Run the case yourself, plot the initial and flux-surface aligned grid, energies, growth rates, VTKs, and so on. What is the approximate poloidal mode number of the instability? What is the value of the resistivity in \(\Omega m\) at the mode location (see [normalization](/docs/physics/normalization.md))?
 - **Exercise 7**: Try to continue the simulation further into the non-linear phase by restarting with a smaller time step. If you restart in the linear phase with a different time step, does the growth rate change?
 - **Exercise 8**: Try to run the same case with diamagnetic drift effects by including `tauIC` in the namelist input file and see how the growth rate and mode structure changes.
 
