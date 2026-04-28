@@ -13,13 +13,13 @@ The derivation and implementation of the (kinetic) neutral model for JOREK is de
 For the neutral (ncs) and impurity (ics) coupling scheme, sources and sinks for particles are projected for the density, (parallel) momentum, and energy equations. However, as the JOREK form of the equations is different than the typical Euler form of the equations, the source terms need to be corrected. The sources are corrected as follows:
 
 $$
-\begin{align}
+\begin{aligned}
 \left( \frac{\partial \rho}{\partial t}\right) &= S_\rho \\
 
 \rho \left( \frac{\partial v}{\partial t}\right) &= \vec{S}_v = \vec{S}_{\rho v}-\vec{v}S_\rho \\
 
 \left( \frac{\partial \rho T}{\partial t}\right) &= S_T = (\gamma -1)\left( S_E - \vec{v}\cdot \vec{S}_{\rho v} + \frac{1}{2} v^2 S_\rho \right), \\
-\end{align}
+\end{aligned}
 $$
 
 Where $`S_E`$, $`\vec{S}_{\rho v}`$ and $`S_\rho`$ are the physical source terms.
