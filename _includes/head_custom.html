@@ -26,6 +26,19 @@
             /* We strip the code tags so MathJax can process the math inside. */
             rawHTML = rawHTML.replace(/\$<code[^>]*>([\s\S]*?)<\/code>\$/g, '$$$1$$');
 
+            /* 0.5 Fix Kramdown accidentally turning inline math with unescaped pipes into tables */
+            /* If a single line has | characters, Kramdown wraps it in a table without a header */
+            rawHTML = rawHTML.replace(/(?:<div class="table-wrapper">\s*)?<table>\s*<tbody>\s*<tr>([\s\S]*?)<\/tr>\s*<\/tbody>\s*<\/table>(?:\s*<\/div>)?/g, function(match, inner) {
+              var cells = inner.match(/<td>([\s\S]*?)<\/td>/g);
+              if (!cells || cells.length < 2) return match;
+              var firstDollars = (cells[0].match(/\$/g) || []).length;
+              var lastDollars = (cells[cells.length - 1].match(/\$/g) || []).length;
+              if (firstDollars % 2 !== 0 && lastDollars % 2 !== 0) {
+                return cells.map(function(c) { return c.replace(/^<td>([\s\S]*?)<\/td>$/, '$1'); }).join('|');
+              }
+              return match;
+            });
+
             /* 1. Match ALL math blocks: $$...$$, \[...\], \(...\), and $...$ */
             /* We use [\s\S]+? to ensure it matches across multiple lines. */
             var mathRegex = /(\$\$[\s\S]+?\$\$|\\\[[\s\S]+?\\\]|\\\([\s\S]+?\\\)|\$[^$]+?\$)/g;
