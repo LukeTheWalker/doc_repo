@@ -1,13 +1,7 @@
-<style>
-  .main-content-wrap {
-    max-width: 100% !important;
-  }
-</style>
-
 <script>
   MathJax = {
     tex: {
-      inlineMath: [['$', '$']],
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
       displayMath: [['$$', '$$'], ['\\[', '\\]']],
       processEscapes: true,
       macros: {
@@ -18,6 +12,58 @@
         psderiv: "\\partial_{\\psi_v}",
         pLap:    "\\Delta^\\perp",
         red:     ["{\\color{red}#1}", 1]
+      }
+    },
+    startup: {
+      pageReady: function() {
+        try {
+          /* Change this selector if your main content area has a different class */
+          var el = document.querySelector('.main-content');
+          if (el) {
+            var rawHTML = el.innerHTML;
+
+            /* 1. Match ALL math blocks: $$...$$, \[...\], \(...\), and $...$ */
+            /* We use [\s\S]+? to ensure it matches across multiple lines. */
+            var mathRegex = /(\$\$[\s\S]+?\$\$|\\\[[\s\S]+?\\\]|\\\([\s\S]+?\\\)|\$[^$]+?\$)/g;
+            
+            el.innerHTML = rawHTML.replace(mathRegex, function(math) {
+              
+              /* A. Fix Kramdown underscores: Convert <em>x</em> back to _x_ */
+              var cleaned = math.replace(/<\/?(em|strong)>/g, function(tag) {
+                return tag.includes('strong') ? '__' : '_';
+              });
+
+              /* B. Aggressive Comment Stripping */
+              /* We protect escaped percent signs (\%) first */
+              cleaned = cleaned.replace(/\\%/g, '@@PCT@@');
+              
+              /* Remove specific full-line commented environments (like %\begin{split} or %\end{split}) */
+              cleaned = cleaned.replace(/%\\(?:begin|end)\{[^}]*\}/g, '');
+
+              /* Remove comments (%) and everything until the next newline OR */
+              /* a backslash (which usually starts a LaTeX command on the next line */
+              /* like \end, \mathbf, \\), OR the end of the math block. */
+              /* This is a best-effort approach since Kramdown flattens newlines into spaces. */
+              cleaned = cleaned.replace(/%.*?(?=\n|<br\s*\/?>|$|\\|\$\$|\\\]|\\\))/gi, ' ');
+              
+              /* Restore literal percent signs */
+              cleaned = cleaned.replace(/@@PCT@@/g, '\\%');
+              
+              /* Kramdown incorrectly wraps inline-styled $$ blocks in \(...\). */
+              /* If this block contains a display environment, force it to block display \[...\] */
+              if (cleaned.startsWith('\\(') && cleaned.endsWith('\\)')) {
+                if (/\\begin\{(?:align|equation|eqnarray|gather|split|multline|matrix|pmatrix|bmatrix|Bmatrix|vmatrix|Vmatrix|cases|array)/.test(cleaned)) {
+                  cleaned = '\\[' + cleaned.substring(2, cleaned.length - 2) + '\\]';
+                }
+              }
+
+              return cleaned;
+            });
+          }
+        } catch(e) {
+          console.error('MathJax preprocess failed:', e);
+        }
+        return MathJax.startup.defaultPageReady();
       }
     }
   };
