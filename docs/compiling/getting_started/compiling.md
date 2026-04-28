@@ -10,15 +10,13 @@ render_with_liquid: false
 # Compiling JOREK
 
 - **Check the code out from the git repository** as explained [here](get_jorek.md).
-- **Compile the libraries SCOTCH and PaStiX** as described in the following, or use ITER old HPC modules or ITER new HPC modules **(todo: these pages might not be needed anymore)**
 - **Compile JOREK** as explained at the end of this page.
 
-Specialized guides: **(todo: the following pages have not been created)**
-- Compiling on MareNostrum
-- Compiling on macos
-- Compiling MUMPS (+METIS)
-- Compiling with long integers int64
-- Compiling all dependencies without MKL
+Specialized guides: 
+- [Compiling on macos](macos.md)
+- [Compiling MUMPS (+METIS)](compiling_mumps.md)
+- [Compiling with long integers int64](compiling_int64.md)
+- [Compiling all dependencies without MKL](compiling_wo_mkl.md)
 
 ## SCOTCH
 
