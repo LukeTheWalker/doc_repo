@@ -7,6 +7,7 @@ render_with_liquid: false
 ---
 
 # Regression Testing
+TODO: it needs to be updated based on the github workflow.
 
 ***Regression testing aims at detecting problems that are accidentally introduced into the code.** A regression test makes sure that a selected set of code results does not change after a commit pushed on the repository.*
 
@@ -41,36 +42,36 @@ Finally you need to obtain data for running the regression tests:
 - Note that **`reg_tests/run_test.sh -h`** will print the list of possible command line options.
 - List all available test cases (name plus short explanation):
 
-```text
-reg_tests/run_test.sh -l
-```
+    ```
+    reg_tests/run_test.sh -l
+    ```
 
 - If you have access to a machine that can run mpi jobs interactively, just run one test case with the following command (compilation + execution will occur):
 
-```text
-reg_tests/run_test.sh -j 8 tear_circ_303
-```
+    ```
+    reg_tests/run_test.sh -j 8 tear_circ_303
+    ```
 
 - It is also possible to split compilation and execution into two commands:
 
-```text
-reg_tests/run_test.sh -p -j 8 tear_circ_303  # compile the binaries required
-reg_tests/run_test.sh -n tear_circ_303       # run without compiling
-```
+    ```
+    reg_tests/run_test.sh -p -j 8 tear_circ_303  # compile the binaries required
+    reg_tests/run_test.sh -n tear_circ_303       # run without compiling
+    ```
 
 ### Run a single test case via a job script
 
 - Compile the jorek executables for the test case (the -p flag specifies that the simulation will not run, only the compilation will be perfomed):
 
-```text
-reg_tests/run_test.sh -p -j 8 tear_circ_303
-```
+    ```
+    reg_tests/run_test.sh -p -j 8 tear_circ_303
+    ```
 
 - Put the following command into your job script and submit it
 
-```text
-reg_tests/run_test.sh -k -n tear_circ_303
-```
+    ```
+    reg_tests/run_test.sh -k -n tear_circ_303
+    ```
 
 - For some machines, a batch script is already prepared in `reg_tests/job_scripts`
 
@@ -78,19 +79,19 @@ reg_tests/run_test.sh -k -n tear_circ_303
 
 - All test cases can be executed all at once with these commands
 
-```text
-cd reg_tests
-compile_all.sh
-run_all.sh
-```
+    ```
+    cd reg_tests
+    compile_all.sh
+    run_all.sh
+    ```
 
 - All test cases can be submitted as batch jobs via
 
-```text
-cd reg_tests
-compile_all.sh
-launch_all.sh
-```
+    ```
+    cd reg_tests
+    compile_all.sh
+    launch_all.sh
+    ```
 
 - Note, that you have to set environment variables, e.g., `export JOREK_HOST=helios` and `export BATCHCOMMAND=sbatch` for the `launch_all.sh` script. You can also equivalently source the following file: reg_tests/job_scripts/helios/env.sh
 
@@ -101,29 +102,29 @@ launch_all.sh
 - Copy (from another existing test case) a `settings.sh` file into `verynew_333` and modify it to match your needs
 - Launch the initial run that generates the `begin.h5` and `end.h5` files
 
-```text
-reg_tests/run test.sh -i verynew_333
-```
+    ```
+    reg_tests/run test.sh -i verynew_333
+    ```
 
 - Send the restart files (`begin.h5`  and `end.h5`) to the web store on jorek.eu. Indeed, reference restart files are stored on a web site `http://jorek.eu/dav_nrt` to prevent the git repository to get too big.
 
-```text
-cd reg_tests/testcases/
-./send_testcase_data.sh verynew_333
-cd -
-```
+    ```
+    cd reg_tests/testcases/
+    ./send_testcase_data.sh verynew_333
+    cd -
+    ```
 
 - Note that for some cases, not only the `begin.h5` and `end.h5` files need to be sent to jorek.eu for storage, but also additional files (e.g., STARWALL response for free boundary cases, or RMP field files)
 - You have finished. You may also add verynew_333 in git repository to share the test:
 
-```text
-cd reg_tests/testcases/
-rm verynew_333/*.h5 verynew_333/*.tar* verynew_333/jorek_model*
-git add verynew_333
-# note, you may need to add more files depending on the case!
-git commit -m "Adding the verynew_333 test case"
-git push
-```
+    ```
+    cd reg_tests/testcases/
+    rm verynew_333/*.h5 verynew_333/*.tar* verynew_333/jorek_model*
+    git add verynew_333
+    # note, you may need to add more files depending on the case!
+    git commit -m "Adding the verynew_333 test case"
+    git push
+    ```
 
 ## How do the non-regression scripts work ?
 
@@ -131,9 +132,9 @@ What do the scripts perform when typing `jorek/reg_tests/run_test.sh -k tear_cir
 
 - Compile. Three executables are generated and stored in `reg_tests/testcases/tear_circ_199`:
 
-```text
-jorek_model199_3, rst_bin2hdf5, rst_hdf52bin
-```
+    ```
+    jorek_model199_3, rst_bin2hdf5, rst_hdf52bin
+    ```
 
 - Create directory to run the test, then needed files are copied into this directory. Example of a temporary directory name: `reg_tests/tmp13027`
 - Go to this temporary directory to run the test
@@ -148,26 +149,26 @@ For instance after a bug fix, a test case might need to be updated since the cod
 
 - Launch the test case from scratch with `-i` option (i.e. we do not want to restart from `begin.h5`)
 
-```text
-reg_tests/run_test.sh -i tear_circ_199
-```
+    ```
+    reg_tests/run_test.sh -i tear_circ_199
+    ```
 
 - In case of success, `begin.h5` and `end.h5` are stored into `reg_tests/testcases/tear_circ_199` overwriting older files
 - Then, it is required to update the restart files on the web site `http://jorek.eu/dav_nrt` with the command
 
-```text
-cd reg_tests/testcases/
-./send_testcase_data.sh tear_circ_199
-cd -
-```
+    ```
+    cd reg_tests/testcases/
+    ./send_testcase_data.sh tear_circ_199
+    cd -
+    ```
 
 - Then, after you have run this, the `.version` file in your test directory will contain the latest version name of your test. You need to commit and push this to the git server, otherwise the tests on the ITER will not know about your latest versione, e.g.:
 
-```text
-git add reg_tests/testcases/tear_circ_303/.version
-git commit -m "Updating regression test tear_circ_303 due to changes XYZ."
-git push
-```
+    ```
+    git add reg_tests/testcases/tear_circ_303/.version
+    git commit -m "Updating regression test tear_circ_303 due to changes XYZ."
+    git push
+    ```
 
 - A set of job scripts that can be used on supercomputers are stored in `reg_tests/job_scripts/`. This can help you to run a full case in order to update the restart files.
 
@@ -175,7 +176,7 @@ git push
 
 Before retrieving the new files, you need to remove previous files. The commands are:
 
-```text
+```
 reg_tests/cleanup.sh
 reg_tests/get_all_data.sh
 ```
