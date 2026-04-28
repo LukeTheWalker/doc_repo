@@ -23,7 +23,7 @@ part_group_configs(1)%type            = 'particle_kinetic_leapfrog'
 part_group_configs(1)%use_kin_neutral_coll = .true.
 part_group_configs(1)%neutral_coll_dTw     = 2.d-10, 273, 0.68
 ```
-### The collisional parameters %neutral\_coll\_dTw ###
+#### The collisional parameters %neutral\_coll\_dTw ####
 The collisions are modeled with binary collisions between super particles, where the collisional cross section and its temperature dependence are determined from the variable hard sphere (VHS) model, which requires reference diameter d\_ref (m), reference temperatrue T\_ref (K) and viscosity index ω (-). These three values are the d, T and w of the %neutral\_coll\_dTw input parameter required from the user. They represent the physical collisional properties of the gas, and must be given to the code from outside sources.
 
 In [G. A. Bird, Gas Dynamics and the Direct Simulation of Gas Flows, Appendix A](https://doi.org/10.1093/oso/9780198561958.005.0001) in tables A1 (for ω) and A2 (for diameter d<sub>ref</sub>) we can find the collisional parameters for H<sub>2</sub>, He, Ne, Ar, N<sub>2</sub> etc (both tables are for T<sub>ref</sub>=0°C=273K). However, there are no known values for specific isotopes or for radicals, so we have to approximate values for H/D/D<sub>2</sub>/T/T<sub>2</sub>. (If you know of better values, please discuss and share that knowledge.)
@@ -44,7 +44,7 @@ _Table with example parameters for dTw (H/D/T comes from the calculation above, 
 | N<sub>2</sub> | 4.17・10<sup>-10</sup> | 273 | 0.74 |
 | Ar | 4.17・10<sup>-10</sup> | 273 | 0.81 |
 
-#### How the code works ####
+### How the code works ###
 Detailed information on why this neutral neutral collision (NNC) algorithm was chosen, how it is exactly implemented (including all equations), and how it was verified can be found at git: [NNC implementation pdf](https://git.iter.org/rest/api/1.0/projects/STAB/repos/jorek/attachments/1327). What follows is a brief summary of the main components.
 
 **Overview of the collisional algorithm:**
@@ -66,7 +66,7 @@ It was verified that the correct diffusion coefficient of a gas chamber can be r
   * In kinetic\_main, the timestep for the neutral collisions calls is the fluid timestep, which might be a bit large for the neutral collisions depending on your application. In the worst case, you would need to lower the fluid timestep to resolve the neutral collisions well. In the future it is the idea to make the timing of different particle processes more flexible so that also multiple collision events can happen between each fluid timestep.
 
 
-==== Running the code ====
+### Running the code ###
 Running the NNC algorithm for a single species is about 5x faster than a single particle timestep for that species, and that ratio holds up to 10^7 particles (and probably above too, although this hasn’t been checked), so including the collisions should not slow you down too much, if your timestep was small enough to capture the collisions.
 
 While the code runs, there will be some output generated for the self collisions of each species. This will look something like the following:
@@ -82,14 +82,14 @@ diagnostics (P_real av/tau av/sigma av/pairs tried/pairs coll/weight coll/#P_try
 Neutral self collision complete in (min/mean/max)    0.0653   0.0665   0.0677 s
 ```
 
-### What output to keep an eye on: ###
+#### What output to keep an eye on: ####
 For the algorithm to work well, we need both P\_try<1 (as otherwise our NTC algorithm rescaling is missing collisions that should have happened) and P\_real<<1 (as otherwise our assumption that particle collides at most once during a timestep is inaccurate meaning we are missing collisions). If either P\_try>1 or P\_max>1 (which means that P\_real>1 last timestep, and next timestep some particles will be tried more than once) you will get a warning message. In the above example there was a warning for P\_try>1, which often happens at the first few timesteps of simulations as the rescaling value P\_max still needs to be determined accurately.
 
 
 The main diagnostics to keep an eye on are the **P\_max\_elm (max)** (second line) (as a rule of thumb, maybe don’t let it go above 50%) and the average **P\_real** (diagnostic line) (as a rule of thumb, don’t let it go above 20%) as when either of them is big, this means that the timestep is a bit large for the collisions. If you need to lower your fluid timestep, you can use the **min tau** (first line) and **av tau** (diagnostics) to guide you in the new choice for the timestep.
 
 
-### Details of logfile output: ###
+#### Details of logfile output: ####
 In the diagnostic output, the first two line tells as about the extremes of last timestep, we have: the maximum number of particles in an element **pa in elm**, the maximum number of particles in a collisional bin **pa in bin**, the maximum **P\_real**, the minimum collision time tau (=timestep/P\_real) **min tau**. On the second line we have the **min**imum and **max**imum P\_max in the domain (P\_max is tracked per grid element rather than globally).
 
 The diagnostic line tells us about domain averages/values, so first we have the **av**erage **P\_real**, then the **av**erage **tau**, then the **av**erage collisional cross-section **sigma**, then the number of **pairs** that were **tried** for collision, the number of **pairs** that **coll**ided, the **weight** (# real particles) that **coll**ided, the number (**#**) of pairs with **P\_try>1** (this should be negligible and preferably 0), the number (**#**) of pairs with **P\_try<0** (should also be small and preferably 0, but due to negative projected densities this might be nonzero, but in any case in regions with negative projected densities, the real neutral density would be small and thus collisions are negligible), a sanity check on the **sum** of the collisional cell volumes **V\_c** (this is equal to the domain volume only if there are neutrals in every grid element, which for normal fusion simulations is not true in the core), the average distance between two super particles **d av** (which ideally should be smaller than the distance travelled between two collisions i.e. v*tau, as otherwise momentum and energy transport is overestimated, but given that the neutrals are not big channels anyway, in practice this overestimation happens a lot and can be ignored), and lastly the average scattering angle fraction (average of scattering angle/90° of all collided pair) **av angle frac** which tells us something about the whether the collisions are large angle collisions (~1) or small angle collisions (<<1) (since the collisions are elastic neutral collisions, we are expecting large angle collisions, so if this fraction is smaller than 0.7 or so, there might be something strange going on in the simulation, such as that most particles that collide have aligned velocities, maybe due to some neutral gas flow effect).
