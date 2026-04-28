@@ -17,7 +17,8 @@ Currently the following atomic physics processes are modeled, usually using coef
   * *Ionization*: kinetic neutral -> background fluid ion.
   * *Recombination*: background fluid ion -> kinetic neutral.
   * *Charge-exchange*: modeled here as elastic collision between a background fluid- and kinetic ion, changes particle velocity and contributes to parallel momentum coupling term.
-  * [[particles:neutral_neutral_collisions|Neutral neutral collisions]]
+  * [Neutral neutral collisions](../../howto/neutral_neutral_collisions.md)
+
 **Impurities:**
   * *Radiation*: including line radiation, Bremsstrahlung and contribution from recombination.
   * *Ionization*: increases charge state by one.
@@ -52,10 +53,6 @@ Where $`S_E`$, $`\vec{S}_{\rho v}`$ and $`S_\rho`$ are the physical source terms
 | *Imp* rad | - | - | - | - | - | $`-n_e w_p (PLT + PRB -S_{rec}\|E_{bind}\|)\delta t`$ | $`-(\gamma-1)n_e w_p (PLT + PRB -S_{rec}\|E_{bind}\|)\delta t`$ |
 | *Imp* coll | - | $`w_p m_{imp}(v_{old}-v_{new})`$| idem | $`\frac{1}{2} w_p m_{imp}(v_{old}^2-v_{new}^2)`$ | $`(\gamma - 1)\frac{1}{2} w_p m_{imp}(v_{old}^2-v_{new}^2)`$ | | |
 
-Note 1, the terms including 
-$$ 
-T + \frac{1}{2} m_i (\vec{v}_a-\vec{v}_b)^2 
-$$ 
-is a fluid picture, where the macroscopic drift velocity can be slpit from the random microscopic velocity resulting in the temperature. For the particle picture, it is just the kinetic energy.
+Note 1, the terms including $` T + \frac{1}{2} m_i (\vec{v}_a-\vec{v}_b)^2 `$ is a fluid picture, where the macroscopic drift velocity can be slpit from the random microscopic velocity resulting in the temperature. For the particle picture, it is just the kinetic energy.
 
 Note 2, there is a difference between a radiation rate, and cooling rate. The energy sink for the plasma is the cooling rate. Not all radiation is couling the plasma, e.g. the dielectric cascade in i-e recombination
