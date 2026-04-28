@@ -57,7 +57,7 @@ restart = .f.
 nstep   = 0
 ```
 which tells JOREK to calculate a new equilibrium for the other parameters in this input file.
-We can then use `jorek_model303_equil` to calculate the equilibrium and save it in `jorek_restart.rst`
+We can then use `jorek_model303_equil` to calculate the equilibrium and save it in `jorek_restart.h5`
 
 ### Equilibrium with flows
 To add flows we only need to set a nonzero number of timesteps and timestep sizes, in the file `in_jet_n0`.
@@ -103,10 +103,10 @@ The same goes for './launch_jet_run.sh'
 
 ### Restarting the simulation
 
-The easiest way of restarting a simulation to longer time simulated is copiing the last restart (.rst) file to the jorek_restart.rst file and then rerun JOREK.
+The easiest way of restarting a simulation to longer time simulated is copiing the last restart (.h5) file to the jorek_restart.h5 file and then rerun JOREK.
 
 ```bash
-cp jorekXXXXX.rst jorek_restart.rst
+cp jorekXXXXX.h5 jorek_restart.h5
 ./launch_jet_run.sh
 ```
 
