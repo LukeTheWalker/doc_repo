@@ -22,6 +22,10 @@
           if (el) {
             var rawHTML = el.innerHTML;
 
+            /* 0. Fix Kramdown's $`...`$ behavior which creates $<code class="...">...</code>$ */
+            /* We strip the code tags so MathJax can process the math inside. */
+            rawHTML = rawHTML.replace(/\$<code[^>]*>([\s\S]*?)<\/code>\$/g, '$$$1$$');
+
             /* 1. Match ALL math blocks: $$...$$, \[...\], \(...\), and $...$ */
             /* We use [\s\S]+? to ensure it matches across multiple lines. */
             var mathRegex = /(\$\$[\s\S]+?\$\$|\\\[[\s\S]+?\\\]|\\\([\s\S]+?\\\)|\$[^$]+?\$)/g;
@@ -48,6 +52,9 @@
               
               /* Restore literal percent signs */
               cleaned = cleaned.replace(/@@PCT@@/g, '\\%');
+
+              /* C. Convert Kramdown escaped pipes (\|) to \Vert so MathJax renders them correctly */
+              cleaned = cleaned.replace(/\\\|/g, '\\Vert ');
               
               /* Kramdown incorrectly wraps inline-styled $$ blocks in \(...\). */
               /* If this block contains a display environment, force it to block display \[...\] */
