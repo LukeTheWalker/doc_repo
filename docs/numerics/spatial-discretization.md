@@ -6,17 +6,47 @@ layout: default
 render_with_liquid: false
 ---
 
+# WARNING: still work in progress
+Giacomo is working on this
+
 # Spatial Discretization in JOREK
 
 The discretization of JOREK is well described in the papers [O. Czarny, G. Huysmans, J.Comput.Phys 227, 7423 (2008)](https://www.sciencedirect.com/science/article/pii/S0021999108002118) and [S. Pamela et al. J. Comput. Phys. 464, 111101 (2022)](https://www.sciencedirect.com/science/article/pii/S0021999122001632?via%3Dihub). Here we present a summary of the most important aspects and the code implementation.
 
 As extensively explained [here](http://localhost:4000/doc_repo/docs/physics/coordinates.html), JOREK uses the cylindrical coordinates $(R,Z,\phi)$. The discretization on the poloidal plane (variables $R$ and $Z$) is discretized using 2D Bezier finite elements, discussed the [following section](#2d-bezier-finite-elements-in-the-poloidal-plane) whereas the discretization along the toroidal direction (variable $\phi$) is performed with a truncated real Fourier series, as explained in [this section](#real-fourier-series-in-toroidal-direction).
 
+The two discretizations combined read as follows:
+
+$$
+\mathbf{X}(R,Z,\phi) = \left(\sum_{l=1}^{N_{tor}} Z_l(\phi) \left (\sum_{i = 1}^{N_{vert}}\sum_{j = 1}^{\text{dof_per_vertex}} h^{ij} \vec{u}^{ij} b^*_{i,j}(R,Z)\right) \right ) \tag{1}
+$$
+
+The inner parenthesis is the poloidal discretization, which uses the basis functions $b^*_i$, while $Z_l$ are the basis functions for the toroidal discretization.
+
+
 ## 2D Bezier finite elements in the poloidal plane
 
 JOREK uses isoparametric Gm-continuous Bezier finite elements for spatial discretization on the poloidal plane $RZ$. Instead of using control points as "direct" degrees of freedom, a different formulation, called *nodal formulation* (see [here](#bezier-finite-element-nodal-representation)), is used, which greatly facilitate imposing Gm-continuity across multiple finite elements. What isoparametric and Gm-continuous (with $m\in \mathbb{N}$) means will be explained soon.
 
 For an overview of Bezier curves, Bezier surfaces and how to pass from these to the concept of Bezier finite elements see the [Appendix A](#appendix-a-introduction-on-bezier-curves-and-bezier-surfaces)
+
+We use the parameters $s,t\in [0,1]$ as local coordinates of a Bezier finite element, so the discretization on a single Bezier finite element of degree $n$ reads as
+
+$$
+X_\text{pol}(s,t) = \sum_{i=0}^{n}\sum_{j=0}^{n} \mathbf{P}_{ij} B_i^n(s)B_j^n(t) \tag{2}
+$$
+
+with $B_i^n$ and $B_j^n$ Bernstein polynomials and $P_{ij}$ control points of the surface.
+
+As explained in the following section, Equation $(2)$ is rewritten in a more convenient way, that is:
+
+$$
+X_\text{pol}(s,t) = \sum_{i=0}^{N_\text{vert}-1} \sum_{j=0}^{\text{dof_per_vertex}} h^{ij} \vec{u}^{ij} b_i(s,t)
+$$
+
+It is important to note that this formulation holds only locally to _one_ finite element.
+
+Formally it can be extended to multiple elements, creating a mapping between $(R,Z)$ and $(s,t)$, which is needed anyway. ... (finish here)
 
 ### Bezier finite element nodal representation
 In JOREK a particular formulation of the finite elements is used. In particular, the control points are divided into $4$ groups, based on which interpolation point they are close to. When the degree $n$ is odd, each group has $(n+1)^2/4$ points. 
@@ -45,7 +75,7 @@ $$
 \end{matrix}
 $$
 
-Points $x0$, with $x\in \{0,1,2,3\}$ are the points their group are $xy$ with $y\in \{1,2,3\}$.
+Points $x0$, with $x\in \{0,1,2,3\}$ are the interpolation points and the points in their group are $xy$ with $y\in \{1,2,3\}$.
 
 Then for each group $i$ the vectors $p_i, v_i, u_i$ and $w_i$ are introduced along with 
 certain pre-defined quantities $d_{u,i}$ and $d_{v,i}$
@@ -77,7 +107,7 @@ This formulation is based on the following work: [O. Czarny, G. Huysmans, J.Comp
 #### Generalized nodal representation of Bezier finite element
 The work [S. Pamela et al. J. Comput. Phys. 464, 111101 (2022)](https://www.sciencedirect.com/science/article/pii/S0021999122001632?via%3Dihub) generalizes what has been shown in the previous paragraph for bi-cubic elements to any degree $n$ and usually imposing $G_m$ continuity with $m=(n-1)/2$.
 Instead of using $p_i,u_i,v_i,w_i$ vectors, the notation is $u_{ij}$ and $d_{u,i}$ with $h^{ij}$ For example, in the bi-cubic case we have $u_{i0}:=p_i, u_{i1}:=u_i, ...$. 
-Then the generalized formulation, only for group of node $\mathbf{P}_00$, reads as follows:
+Then the generalized formulation, only for group of node $\mathbf{P}_{00}$, reads as follows:
 
 $$
 \mathbf{P}_{ij} = h^{ij}u^{ij} + \sum_{k=0}^i\sum_{l=0}^i (-1)^{1+i+j+k+l}(1-\delta_{ki}\delta_{lj}) 
@@ -127,6 +157,12 @@ $$
 $$
 
 This is extremely helpful, for instance, when building the mesh, since derivatives of $R$ and $Z$ are used to obtain a flux aligned grid. 
+
+### Discretization with nodal formulation
+With the nodal representation, 
+
+### Implementation in the code
+
 
 ### The following is still to be adapted
 
