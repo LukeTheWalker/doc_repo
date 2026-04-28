@@ -1,6 +1,6 @@
 # Getting Started with full-kinetic Runaway Electrons on kinetic_main (WIP 2026 Feb, Chizhou) 
 
-This work is based on kinetic_develop branch [Introduction to the kinetic framework](./particles:Introduction.md), where RE super particles are evolved in full orbits and coupled with the fluid plasma. The compiling of the binary kinetic_main can be found in [Introduction to the kinetic framework](./particles:Introduction.md), which is similar to jorek2_main. The Strumpack solver have been usable for kinetic simulations. More general introduction to kinetic models in JOREK is given in [particles](./../particle_introduction.md)
+This work is based on kinetic_develop branch [Introduction to the kinetic framework](./../particle_introduction.md), where RE super particles are evolved in full orbits and coupled with the fluid plasma. The compiling of the binary kinetic_main can be found in [Introduction to the kinetic framework](./../particle_introduction.md), which is similar to jorek2_main. The Strumpack solver have been usable for kinetic simulations. More general introduction to kinetic models in JOREK is given in [particles](./../../particle.md)
 
 # Initialize the REs
 
@@ -10,7 +10,7 @@ Apart from the jorek_restart.h5, an part_restart.h5 file is required by any simu
 
 # Run main_kinetic
 
-''main_kinetic'' works similarly as ''jorek2_main'', but it can **ONLY** restart from a ''jorek_restart.h5'' **AND** a ''part_restart.h5'' instead of creating a new equilibrium with ''restart=.f.''. Apart from the particle restart file, You need to add some extra information about the particle groups in namelist (also see [Introduction to the kinetic framework](./particles:Introduction.md)). An RE-specified example is given below. You can add it to the end of your fluid namelist:
+''main_kinetic'' works similarly as ''jorek2_main'', but it can **ONLY** restart from a ''jorek_restart.h5'' **AND** a ''part_restart.h5'' instead of creating a new equilibrium with ''restart=.f.''. Apart from the particle restart file, You need to add some extra information about the particle groups in namelist (also see [Introduction to the kinetic framework](./../particle_introduction.md)). An RE-specified example is given below. You can add it to the end of your fluid namelist:
 
 ```
  restart_particles = .true.                                 ! If false, run as pure fluid without REs
