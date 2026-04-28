@@ -139,25 +139,6 @@ consecutively.
 These three arrays provide a random-access view into the BCOO list without
 requiring a sorted order.
 
-### MPI distribution
-
-Each MPI rank owns a contiguous range of block rows
-`my_ind_min` … `my_ind_max`.  The local scalar row count is
-`nr = my_ind_size × b`.
-
-| Field | Description |
-| --- | --- |
-| `ng` | Global scalar dimension $n_\text{global}$ |
-| `nr`, `nc` | Locally owned scalar rows / columns |
-| `nnz` | Locally owned scalar non-zeros |
-| `my_ind_min`, `my_ind_max` | Block-row range owned by this rank (inclusive) |
-| `my_ind_size` | `my_ind_max - my_ind_min + 1` |
-| `index_min(:)`, `index_max(:)` | Block-row ranges of every MPI rank (size `ncpu`) |
-| `comm` | MPI communicator over which the matrix is distributed |
-| `row_distributed` | `.true.` when rows are partitioned (standard for the transient system) |
-| `col_distributed` | `.true.` when columns are partitioned (PaStiX path) |
-| `reduced` | `.true.` when the matrix is replicated on all ranks |
-
 ### Status flags
 
 | Flag | Set when |
@@ -294,3 +275,87 @@ are now scalar CSR row pointers.  The remaining entries of `irn` past `nr+1`
 are stale and should not be read.  Note that `a_mat%iptr` is a separate array
 pointer that is **not** set by `convert_sorting`; callers that need the row
 pointer under the `iptr` name must copy or alias it explicitly.
+
+---
+
+## MPI Distribution
+
+The matrix is distributed across MPI ranks by **block rows**: each rank owns
+a contiguous, non-overlapping range of block rows and stores all non-zero entries
+that fall in those rows.  Column indices (`jcn`, `jcn_block`) are always global —
+a local row can couple to any column in the full matrix, regardless of which rank
+owns that column's rows.
+
+### Partitioning
+
+```text
+rank 0       rank 1       rank 2         ...     rank P-1
+┌──────────┐ ┌──────────┐ ┌──────────┐          ┌──────────┐
+│ brow  1  │ │ brow K₀+1│ │ brow K₁+1│          │ brow K   │
+│   ...    │ │   ...    │ │   ...    │    ...   │   ...    │
+│ brow K₀  │ │ brow K₁  │ │ brow K₂  │          │ brow Nᵤ  │
+└──────────┘ └──────────┘ └──────────┘          └──────────┘
+ my_ind_min   my_ind_min   my_ind_min             my_ind_min
+ = 1          = K₀+1       = K₁+1                = K+1
+```
+
+Each rank's range is `[my_ind_min, my_ind_max]` (1-based block-row indices).
+The global directory arrays `index_min(1:ncpu)` and `index_max(1:ncpu)` let any
+rank compute any other rank's range.
+
+The local scalar row count and index offset follow directly:
+
+$$n_r = \texttt{my_ind_size} \times b, \qquad
+  \text{offset} = (\texttt{my_ind_min} - 1) \times b$$
+
+where $b$ is the block size.  Global scalar row index $g$ maps to local scalar
+row $g - \text{offset}$.
+
+### Assembly
+
+Assembly is purely local: each rank loops over its own element set and checks
+whether a test-function block row falls within `[my_ind_min, my_ind_max]` before
+adding a contribution.  No inter-rank communication is required during matrix
+fill.
+
+### Distribution Modes
+
+| Field | Type | Meaning |
+| --- | --- | --- |
+| `ng` | integer | Global scalar dimension $n_\text{global}$ |
+| `nr` | integer | Locally owned scalar rows (`my_ind_size × b`) |
+| `nc` | integer | Locally owned scalar columns (= `ng` for row-distributed) |
+| `nnz` | integer | Locally owned scalar non-zeros |
+| `my_ind_min`, `my_ind_max` | integer | Inclusive block-row range of this rank |
+| `my_ind_size` | integer | `my_ind_max − my_ind_min + 1` |
+| `index_min(:)`, `index_max(:)` | integer(ncpu) | Block-row ranges of all ranks |
+| `ncpu` | integer | Number of MPI ranks |
+| `comm` | integer | MPI communicator |
+| `row_distributed` | logical | `.true.` — rows partitioned (standard transient matrix) |
+| `col_distributed` | logical | `.true.` — columns also partitioned (PaStiX path) |
+| `reduced` | logical | `.true.` — full matrix replicated on all ranks |
+
+The standard configuration for the global transient matrix is
+`row_distributed = .true.`, `col_distributed = .false.`, `reduced = .false.`.
+
+**`col_distributed`** is set for the PaStiX direct solver, which requires a
+column-distributed CSR input.  After `convert_sorting()`, `irn` is overwritten
+with scalar CSR row pointers and the column partition information is used to
+determine the local column range.
+
+**`reduced`** is used for matrices that must be available in full on every rank
+(e.g. certain preconditioner sub-matrices).  In this mode `nnz` counts global
+non-zeros and `irn`/`jcn`/`val` hold the complete matrix on every process.
+
+---
+
+## Format Used by Each Consumer
+
+| Consumer | Format | Key arrays |
+| --- | --- | --- |
+| Direct assembly / FE routines | BCOO | `irn`, `jcn`, `val`, `ijA_size`, `irn_jcn`, `ijA_index` |
+| Matrix–vector products (CPU) | BCSR | `iblockptr`, `jcn`, `val` |
+| Matrix–vector products (GPU) | Scalar CSR | `iptr`/`irn`, `jcn`, `val` |
+| MUMPS direct solve | Scalar COO (row-distributed) | `irn`, `jcn`, `val` |
+| PaStiX direct solve | Scalar CSR (column-distributed) | `iptr`, `jcn`, `val` |
+| STRUMPACK direct solve | Scalar COO | `irn`, `jcn`, `val` |
