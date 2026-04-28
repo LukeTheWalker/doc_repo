@@ -74,6 +74,7 @@ The basic idea of a projection is to calculate any particle quantity as a functi
 $$
   G(v_\parallel, \mu) = \sum_{i=1}^{N_\mathrm{p}} \Delta E_i \ w_i \delta(v_\parallel - v_{\parallel,i}) \delta(\mu - \mu_i)
 $$
+
 where $\Delta E_i$ is the energy change of the $i$th marker particle.
 
 In JOREK, these projections can be done in several ways. It is possible to use the function `new_phase_space_projection` and provide the projection function beforehand, or, fill up a value array with projection values for each single marker particle using the subroutine `project_single_particle_x`.
