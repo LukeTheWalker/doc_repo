@@ -1,5 +1,5 @@
 ---
-title: "References"
+title: "Free-boundary references"
 nav_order: 1
 parent: "Free Boundary Extension (STARWALL, CARIDDI)"
 grand_parent: "Model Extensions"
@@ -25,3 +25,6 @@ When using JOREK-STARWALL, please cite the two references A and B. If using the 
   * Artola F.J., Huijsmans G.T.A., Hoelzl M., Beyer P., Loarte A., Gribov Y. Non-linear magnetohydrodynamic simulations of Edge Localised Modes triggering via vertical oscillations. Nuclear Fusion 58, 096018 (2018). [PDF](http://www2.ipp.mpg.de/~mhoelzl/2018-Artola-NF.pdf)
   * Artola Such F.J., PhD thesis, Univ. Aix-Marseille (2018). [Link](https://hal.science/tel-02012234/)
   * N. Schwarz, PhD thesis, TUM, (2024) [Link](https://mediatum.ub.tum.de/1733821)
+
+## Others
+* [real_space2bezier.f90 (Guido's notes)](./real_space2bezier.md)
