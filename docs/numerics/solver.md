@@ -89,7 +89,15 @@ step than GMRES but avoids restarting costs.  Enable it at compile time with the
 
 ## Preconditioner
 
-The _block harmonic_ preconditioner exploits the **toroidal Fourier structure** of
+**Preconditioning** is essential in solving linear systems using iterative methods. The matrices resulting from the MHD formulations in JOREK are highly ill-conditioned and iterative methods do not converge without a proper preconditioner.  
+We choose a preconditioner$M$ such that we solve the modified left preconditioned system
+
+$$M^{-1}A x = M^{-1}b,$$
+
+where $M$ is "cheap" to invert and $M^{-1}A$ is a reasonably good approximation of the identity.
+There exist many "standard" techniques that can be applied to general systems without considering the original problem. These, of course, have the benefit of being "plug-and-play" and work reasonably well for a wide range of problems. When going into very ill-conditioned problems we find most of these approaches to have little to no effect. These cases require more advanced study to create tailored preconditioners to obtain good convergence.
+
+The _block harmonic_ preconditioner in JOREK exploits the **toroidal Fourier structure** of
 the MHD system to construct a preconditioner $M$ whose application requires only
 independent sparse-direct solves on smaller sub-systems, one per **mode family**.
 
@@ -153,8 +161,7 @@ Each GMRES / BiCGSTAB preconditioner application performs the following steps:
 
 ### Factorisation Reuse
 
-Refactoring the preconditioner at every time step is expensive.  JOREK reuses
-the existing factorisation (the `solve_only` path) when:
+Refactoring the preconditioner at every time step is expensive. Thus, we can reuse the factorized preconditioner matrices over multiple timesteps, where they still provide a good approximation of the linear system.  JOREK reuses the existing factorisation (the `solve_only` path) when:
 
 $$\texttt{iter_gmres} + \texttt{iter_prev} \le 2 \times \texttt{iter_precon}
 \quad \text{and} \quad
