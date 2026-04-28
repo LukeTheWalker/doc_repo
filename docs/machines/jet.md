@@ -21,9 +21,9 @@ Equilibrium data reconstructed by EFIT may be converted into JOREK input data by
 
 ## MGI and SPI relevant information
 
-[Slides](assets/jet/seminar_20150917_sjach.pdf) from S. Jachmich which contain information on **MGI experiments** and show the position of the various Disruption Mitigation Valves (DMVs).
+Slides (not publicly available) from S. Jachmich which contain information on **MGI experiments** and show the position of the various Disruption Mitigation Valves (DMVs).
 
-The **SPI system** installed in 2019 replaces DMV1. Its toroidal position, in JOREK coordinates, is therefore $\phi=6.08$, considering that $\phi=0$ corresponds to the middle of Octant 1. Some information on the SPI system can be found in these [slides](assets/jet/baylor_spi_jet_tsdw_2017.pdf) from L. Baylor.
+The **SPI system** installed in 2019 replaces DMV1. Its toroidal position, in JOREK coordinates, is therefore $\phi=6.08$, considering that $\phi=0$ corresponds to the middle of Octant 1. Some information on the SPI system can be found in these [slides](https://tsdw.pppl.gov/Talks/2017/Lexar/Monday%20Session%201/Baylor.pdf) from L. Baylor.
 
 ## Synthetic diagnostics
 

@@ -31,8 +31,8 @@ rho0 = 2*10^-7 kg/m^3 -> sqrt(mu0 rho0)=5e-7 is the JOREK time normalization
 - For the normalization of rho and T see [here](../physics/normalization)
 - Details we need to agree about when comparing in detail: eta, visco, ZK_par, ZK_perp, D_perp, ...
 
-## Internal Kink equilibrium for Isabel
+<!-- ## Internal Kink equilibrium for Isabel
 
 - [jorek-input-aug-like-fixed-boundary-equilibrium-for-isabel-with-q0-larger-than-1.tar.gz](assets/asdex_upgrade/jorek-input-aug-like-fixed-boundary-equilibrium-for-isabel-with-q0-larger-than-1.tar.gz)
 - [current_profile_for_isabel.dat.tar.gz](assets/asdex_upgrade/current_profile_for_isabel.dat.tar.gz)
-- [rminor_profile_for_isabel.dat.tar.gz](assets/asdex_upgrade/rminor_profile_for_isabel.dat.tar.gz)
+- [rminor_profile_for_isabel.dat.tar.gz](assets/asdex_upgrade/rminor_profile_for_isabel.dat.tar.gz) -->

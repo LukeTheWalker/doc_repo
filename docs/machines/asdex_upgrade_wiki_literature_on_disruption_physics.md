@@ -13,15 +13,15 @@ render_with_liquid: false
 
 ## Disruption onset
 
-- P.C. de Vries et al, Scaling of the MHD perturbation amplitude required to trigger a disruption and predictions for ITER, Nucl. Fusion 56, 026007 (2016) [PDF](assets/asdex_upgrade/de_vries_2016_nucl._fusion_56_026007.pdf)
+- P.C. de Vries et al, Scaling of the MHD perturbation amplitude required to trigger a disruption and predictions for ITER, Nucl. Fusion 56, 026007 (2016) [PDF](http://dx.doi.org/10.1088/0029-5515/56/2/026007)
 
 ## Vertical Instabilities
 
-- T. Sehmer et al, Growth of Axisymmetric Instabilities in ASDEX Upgrade, Fusion Science and Technology 70, 73 (2016) [PDF](assets/asdex_upgrade/sehmer_fusion_sci_technol_70_73_2016_.pdf)
+- T. Sehmer et al, Growth of Axisymmetric Instabilities in ASDEX Upgrade, Fusion Science and Technology 70, 73 (2016) [PDF](http://dx.doi.org/10.13182/FST15-175)
 
 ## Massive Gas Injection
 
-- V.A.Izzo et al, The role of MHD in 3D aspects of massive gas injection, Nucl Fusion 55, 073032 (2015) [PDF](assets/asdex_upgrade/izzo_2015_nucl._fusion_55_073032.pdf)
+- V.A.Izzo et al, The role of MHD in 3D aspects of massive gas injection, Nucl Fusion 55, 073032 (2015) [PDF](http://dx.doi.org/10.1088/0029-5515/55/7/073032)
 
 ## Runaway Electrons
 

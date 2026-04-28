@@ -10,7 +10,7 @@ render_with_liquid: false
 <!-- The missing attachments need to be downloaded from: https://www.jorek.eu/wiki/doku.php?id=asdex_upgrade -->
 
 # Information relevant for simulating ASDEX Upgrade
-For some specific test cases see also [ASDEX Upgrade JOREK Wiki](asdex_upgrade_wiki) (**OLD**)
+<!-- For some specific test cases see also [ASDEX Upgrade JOREK Wiki](asdex_upgrade_wiki) (**OLD**) -->
 
 The standard signs in ASDEX Upgrade correspond to the following in JOREK:
 
@@ -31,9 +31,9 @@ Psi_axis < Psi_xpoint
 
 # Equilibria
 
-### cliste2jorek Script
+<!-- ### cliste2jorek Script -->
 
-- The [cliste2jorek script](cliste2jorek_script) extracts the equilibrium information of ASDEX Upgrade shotfiles for JOREK.
+<!-- - The [cliste2jorek script](cliste2jorek_script) extracts the equilibrium information of ASDEX Upgrade shotfiles for JOREK. -->
 
 ### Conversion of NEMEC Equilibria
 
@@ -50,8 +50,15 @@ FF' &= \frac{2\pi}{\Delta\Psi_\text{NEMEC}}\;\frac{\mu_0^2}{4\pi^2}J_{pol}\frac{
 \end{align}
 $$
 
+### Simplified Equilibria for Tests
+
+- [Simplified Equilibria for Tests](simplified-equilibria-for-tests)
+- [Large aspect ratio tearing mode benchmark](large-aspect-ratio-tearing-mode-benchmark)
+- [Simplified X-point tearing mode test case](simplified-x-point-tearing-mode-test-case)
+
 # Coil geometry
 
+### PF coils
 The coil geometry for STARWALL was extracted from the machine description file provided by Mike Dunne and contains all PF coils.
 
 The tar file contains the original machine description file, the geometry of conducting structures of AUG, the vessel geometry, the PF coils for STARWALL as filaments, the thick band model of the PSL (which was benchmarked against CASTOR3D), and an example input file for STARWALL:
@@ -66,10 +73,8 @@ See also [pf coils](aug-pf-coils-cliste) for the geometry of the PF coils (in ma
 The coil currents for a specific shot can be directly extracted by cliste from the shotfile. During the free-boundary equilibrium the V2 coils are used for the feedback.
 When using the [controller](active_controller_model_for_vertical_stabilization) for active stabilization during the simulation, the CoI coils are used like in the experiment for fast feedback.
 
-[Coil feedings as ascii and sw input](assets/asdex_upgrade/aug_feeding.tar.gz)
 <!-- [Coil feedings as ascii and sw input](https://www.jorek.eu/wiki/lib/exe/fetch.php?media=aug_feeding.tar.gz) -->
-
-The coil feedings were provided by I. Zammuto and transformed into starwall data.
+The [coil feedings](assets/asdex_upgrade/aug_feeding.tar.gz) were provided by I. Zammuto and transformed into starwall data.
 The OH2o and OH2u coil are connected to the OH feeding and also have separate inputs.
 
 ```
@@ -85,3 +90,11 @@ And The OH2 coils get additional currents (in fact they have additional feeders,
 All these feedings are included in the OH file
 The V1+V2 coils consist of two different circuits each, so there is also a line connecting the two circuits.
 ```
+
+<!-- # RMP Coils
+
+- [R. Nazikian's slides 16-07-2015](assets/asdex_upgrade/nazikian_ipp_07152015.pdf) -->
+
+# Literature
+- [Literature on ELM Physics](asdex_upgrade_wiki_literature_on_elm_physics)
+- [Literature on Disruption Physics](asdex_upgrade_wiki_literature_on_disruption_physics)

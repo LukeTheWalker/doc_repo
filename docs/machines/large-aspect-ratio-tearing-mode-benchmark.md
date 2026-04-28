@@ -35,8 +35,8 @@ render_with_liquid: false
   - [q-profile as a function of Psi_N](assets/asdex_upgrade/q_tearcirc_ar10_b0.dat.gz)
     - $q=1.8\dots4.09$
 
-- Comparison of growth rates:
+<!-- - Comparison of growth rates:
 
 | eta | CASTOR3D | Q.Yu | JOREK | Flexi |
 | --- | -------- | ---- | ----- | ----- |
-|     |          |      |       |       |
+|     |          |      |       |       | -->
