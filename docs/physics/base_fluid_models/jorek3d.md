@@ -67,7 +67,7 @@ $$
 \\
 &\rho\left(\tderiv{\Phi},\Psi\right) - \rho\frac{F_v}{B_v}\llderiv\Omega\psderiv\tderiv{\Phi} + \rho B^2\tderiv{\vpar} + \frac{\rho\vpar}{2}\tderiv{B^2} + \rho B_v\left[\tderiv{\zeta},\Psi\right] + \rho F_v\left[\tderiv{\zeta},\Omega\right]_{\psi_v} = -\frac{\rho B_v}{2}\llderiv v^2 \\
 &- \frac{\rho B_v}{2}\left[v^2,\Psi\right] - \frac{\rho F_v}{2}\left[v^2,\Omega\right]_{\psi_v} - \frac{\rho\omega^\chi}{B_v}\llderiv\Phi - \frac{\rho\omega^\chi}{B_v}\left[\Phi,\Psi\right] - \frac{\rho\omega^\chi F_v}{B_v^2}\left[\Phi,\Omega\right]_{\psi_v} + \frac{\rho B^\chi}{B_v^2}\vec\omega\cdot\nabla\Phi - \rho\vec\omega\cdot(\nabla\zeta\times\nabla\chi) \\
-&+ \rho\omega^\chi(\Psi,\zeta) - \rho\vec\omega\cdot\nabla\Omega F_v\psderiv\zeta + \rho\omega^{\psi_v}(\Omega,\zeta) - \vec v\cdot\vec B~P - B_v\llderiv p - B_v\left[p,\Psi\right] - F_v\left[p,\Omega\right]_{\psi_v} + \nabla\cdot(\mu_\parallel\pgrad\vpar), \\
+&+ \rho\omega^\chi(\Psi,\zeta) - \rho\vec\omega\cdot\nabla\Omega F_v\psderiv\zeta + \rho\omega^{\psi_v}(\Omega,\zeta) - \vec v\cdot\vec B~P - B_v\llderiv p - B_v\left[p,\Psi\right] - F_v\left[p,\Omega\right]_{\psi_v} + \nabla\cdot(\mu_\parallel\nabla_\perp\vpar + \mu_{\parallel,\parallel}\nabla_\parallel\vpar), \\
 \\
 &B_v\left[\frac{\rho}{B_v^2},\tderiv{\Phi}\right] + B_v\left[\rho\tderiv{\vpar},\Psi\right] + B_v\left[\rho \vpar,\tderiv{\Psi}\right] - B_v\left[\frac{\rho}{B_v}\tderiv{}(\vpar\llderiv\Omega),\psi_v\right] + \nabla\cdot\left(\rho\pgrad\tderiv{\zeta}\right) \\
 &= -\nabla\cdot\left(\frac{\rho}{2}\pgrad v^2 + \frac{\rho\omega^\chi}{B_v^2}\pgrad\Phi - \frac{\rho \vpar B^\chi}{B_v^2}\nabla\chi\times\vec\omega + \frac{\rho \vpar\omega^\chi}{B_v^2}\nabla\chi\times\vec B\right) + B_v\left[\frac{\rho\omega^\chi}{B_v^2},\zeta\right] - B_v\left[\frac{P}{B_v^2},\Phi\right] \\
@@ -76,28 +76,33 @@ $$
 &\tderiv{\rho} = - B_v\left[\frac{\rho}{B_v^2},\Phi\right] - B_v\llderiv(\rho \vpar) - B_v[\rho \vpar,\Psi] - F_v[\rho \vpar,\Omega]_{\psi_v} - \nabla\cdot(\rho\pgrad\zeta) + P, \\
 \\
 &\tderiv{p} = - \frac{1}{B_v}\left[p,\Phi\right] - \vpar B_v\llderiv p - \vpar B_v\left[p,\Psi\right] - \vpar F_v \left[p,\Omega\right]_{\psi_v} - (\zeta,p) - \gamma p B_v\left[\frac{1}{B_v^2},\Phi\right] - \gamma p B_v\llderiv \vpar - \gamma p B_v\left[\vpar,\Psi\right] \\
-&- \gamma p F_v\left[\vpar,\Omega\right]_{\psi_v} - \gamma p\pLap\zeta + \nabla\cdot\vec q + (\gamma-1)(S_e + \eta j^2).
+&- \gamma p F_v\left[\vpar,\Omega\right]_{\psi_v} - \gamma p\pLap\zeta + \nabla\cdot\vec q + (\gamma-1)(S_e + \eta j^2),
 \end{aligned}
 $$
-No further assumptions have been made in this derivation beyond resistive MHD being valid, but we have added generic viscosity terms to the projected momentum equations. These generic viscosity terms do not accurately model viscous effects in a plasma, but they are often useful in avoiding numerical instabilities.
+where $[f,g] = \nabla\chi\cdot(\nabla f\times\nabla g)/B_v$ and $[f,g]_{\psi_v} = \nabla\psi_v\cdot(\nabla f\times\nabla g)/\Vert\nabla\psi_v\Vert$ are Poisson brackets, $(f,g) = \pgrad f\cdot\pgrad g$ is an inner product, $\nabla_\parallel = B^{-2}\vec B\vec B\cdot\nabla$ and $\nabla_\perp = \nabla - \nabla_\parallel$. No further assumptions have been made in this derivation beyond resistive MHD being valid, but we have added generic viscosity terms to the projected momentum equations. These generic viscosity terms do not accurately model viscous effects in a plasma, but they are often useful in avoiding numerical instabilities.
 
 ### Reduced MHD
 
 The equations that are actually implemented in JOREK are the **reduced MHD** equations, and one further step is required to obtain them from the **full MHD** equations above. Namely, we set $\Omega = 0$ and $\zeta = 0$ and drop the evolution equations for $\Omega$ and $\zeta$ from the full set of equations above. To conserve energy, we must also drop the components of $\vec j$ perpendicular to $\nabla\chi$ from the $\Psi$ evolution equation. The resulting **reduced MHD** equations are as follows:
 $$
 \newcommand{\red}[1]{{\color{red}#1}}
+\newcommand{\blue}[1]{{\color{blue}#1}}
 \begin{aligned}
-B_v\tderiv{\Psi} &= \llderiv\Phi - \left[\Psi,\Phi\right] - \eta\frac{j^\chi}{B_v}, \\
-\nabla\cdot\left[\frac{\rho}{B_v^2}\pgrad\tderiv{\Phi} + \rho\tderiv{}(\vpar\pgrad\Psi)\right] &= \frac{B_v}{2}\left[\frac{\rho}{B_v^2},v^2\right] + B_v\left[\frac{\rho\omega^\chi}{B_v^4},\Phi\right] - \nabla\cdot(\rho \vpar\vec\omega^\perp) + B_v\left[\frac{\rho \vpar\omega^\chi}{B_v^2},\Psi\right] \\
-&- \nabla\cdot\left(\frac{P}{B_v^2}\pgrad\Phi + P\vpar\pgrad\Psi\right) - \nabla\cdot\left(\frac{j^\chi}{B_v^2}\vec B\right) + B_v\left[\frac{1}{B_v^2},p\right] + \nabla\cdot(\mu_\perp\pgrad\pLap\Phi), \\
-\rho\left(\tderiv{\Phi},\Psi\right) + \rho B^2\tderiv{\vpar} + \frac{\rho\vpar}{2}\tderiv{B^2} &= -\frac{\rho B_v}{2}\llderiv v^2 - \frac{\rho B_v}{2}\left[v^2,\Psi\right] - \frac{\rho\omega^\chi}{B_v}\llderiv\Phi - \frac{\rho\omega^\chi}{B_v}\left[\Phi,\Psi\right] + \rho\vec\omega\cdot\nabla\Phi - \vec v\cdot\vec B~P - B_v\llderiv p \\
-&- B_v\left[p,\Psi\right] + \nabla\cdot(\mu_\parallel\pgrad\vpar), \\
+B_v\tderiv{\Psi} &= \llderiv\Phi - \left[\Psi,\Phi\right] - \eta\frac{j^\chi}{B_v} \blue{+ \eta^{(h)} B_v\pLap\left(\frac{j^\chi}{B_v^2}\right)}, \\
+\nabla\cdot\left[\frac{\rho}{B_v^2}\pgrad\tderiv{\Phi} \red{+ \rho\tderiv{}(\vpar\pgrad\Psi)}\right] &= \frac{B_v}{2}\left[\frac{\rho}{B_v^2},v^2\right] + B_v\left[\frac{\rho\omega^\chi}{B_v^4},\Phi\right] - \nabla\cdot(\rho \vpar\vec\omega^\perp) + B_v\left[\frac{\rho \vpar\omega^\chi}{B_v^2},\Psi\right] \\
+&- \nabla\cdot\left(\frac{P}{B_v^2}\pgrad\Phi \red{+ P\vpar\pgrad\Psi}\right) - \nabla\cdot\left(\frac{j^\chi}{B_v^2}\vec B\right) + B_v\left[\frac{1}{B_v^2},p\right] + \nabla\cdot(\mu_\perp\pgrad\pLap\Phi) \blue{- \mu_\perp^{(h)}\Delta^2\pLap\Phi}, \\
+\red{\rho\left(\tderiv{\Phi},\Psi\right)} + \rho B^2\tderiv{\vpar} + \frac{\rho\vpar}{2}\tderiv{B^2} &= -\frac{\rho B_v}{2}\llderiv v^2 - \frac{\rho B_v}{2}\left[v^2,\Psi\right] \red{- \frac{\rho\omega^\chi}{B_v}\llderiv\Phi - \frac{\rho\omega^\chi}{B_v}\left[\Phi,\Psi\right] + \rho\vec\omega\cdot\nabla\Phi} - (\red{(\Phi,\Psi)} + \vpar B^2)P \\
+&- B_v\llderiv p - B_v\left[p,\Psi\right] + \nabla\cdot(\mu_\parallel\nabla_\perp\vpar + \mu_{\parallel,\parallel}\nabla_\parallel\vpar) \blue{- \mu_\parallel^{(h)}\Delta^2\vpar}, \\
 \tderiv{\rho} &= - B_v\left[\frac{\rho}{B_v^2},\Phi\right] - B_v\llderiv(\rho \vpar) - B_v[\rho \vpar,\Psi] + P, \\
 \tderiv{p} &= - \frac{1}{B_v}\left[p,\Phi\right] - \vpar B_v\llderiv p - \vpar B_v\left[p,\Psi\right] - \gamma p B_v\left[\frac{1}{B_v^2},\Phi\right] - \gamma p B_v\llderiv \vpar - \gamma p B_v\left[\vpar,\Psi\right] \\
-&+ \nabla\cdot\vec q + (\gamma-1)(S_e + \eta j^2).
+&+ \nabla\cdot\vec q + (\gamma-1)(S_e + \eta j^2) \blue{- \kappa_\perp^{(h)}\Delta^2 T},
 \end{aligned}
 $$
-These are the equations that are implemented in **model 183**. A further reduction is possible by setting $\vpar = 0$ and dropping the $\vpar$ evolution equation from the set of equations above. This is achieved by setting `with_vpar = .false.` in the hard-coded parameters before compiling JOREK. Conversely, when `with_vpar = .true.`, all of the equations above are solved and no assumptions on $\vpar$ are made.
+where $j^\chi = \nabla\chi\cdot\vec j = -\nabla\cdot(B_v^2\pgrad\Psi)/\mu_0$ and $\omega^\chi = \nabla\chi\cdot\vec\omega = -\pLap\Phi \red{- \nabla\cdot(B_v^2\vpar\pgrad\Psi)}$.
+
+These equations, without the terms highlighted in red, are implemented in **model 183**. A further reduction is possible by setting $\vpar = 0$ and dropping the $\vpar$ evolution equation from the set of equations above. This is achieved by setting `with_vpar = .false.` in the hard-coded parameters before compiling JOREK. Conversely, when `with_vpar = .true.`, all of the equations above are solved and no assumptions on $\vpar$ are made. Note that none of the red terms would have contributed anyway if `with_vpar = .false.`.
+
+We have also added hyperresistivity, hyperviscosity and hyperconductivity terms (highlighted in blue) to the original equations. These terms do not model any physical effects, but are sometimes necessary to suppress numerical instabilities. If these terms are used, one should make sure that they are small enough not to affect the physics.
 
 ## The vacuum field
 
