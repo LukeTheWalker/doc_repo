@@ -17,30 +17,30 @@ To compile `eqdsk2jorek`, you first need to install the Dierckx library used for
 
 - Download the Dierckx library in your home directory (GitHub distribution thanks to Daan Van Vugt):
 
-```bash
-cd $HOME
-git clone https://github.com/Exteris/libdierckx.git
-```
+  ```bash
+  cd $HOME
+  git clone https://github.com/Exteris/libdierckx.git
+  ```
 
 - Compile the Dierckx library:
 
-```bash
-cd libdierckx
-make
-```
+  ```bash
+  cd libdierckx
+  make
+  ```
 
 - Go to your JOREK main directory and add the path to the Dierckx library in `Makefile.inc`. For example:
 
-```make
-# --- DIERCKX Library
-LIBDIERCKX = /marconi/home/userexternal/dbonfigl/libdierckx/libdierckx.a
-```
+  ```make
+  # --- DIERCKX Library
+  LIBDIERCKX = /marconi/home/userexternal/dbonfigl/libdierckx/libdierckx.a
+  ```
 
 - Compile `eqdsk2jorek`:
 
-```bash
-make eqdsk2jorek
-```
+  ```bash
+  make eqdsk2jorek
+  ```
 
 ## Running
 
@@ -84,7 +84,7 @@ Parameters in `eqdsk2jorek_params`:
     - `OUTSIDE_WALL`: $\kappa$: 1.85, $\delta_u$: 0.4, $\delta_l$: 0.4, $\zeta_u$: -0.2, $\zeta_l$: -0.2, `R_axis`: 1.7, `Z_axis`: 0, `r_minor`: 0.7
     - `NIMROD_M3DC1`: $\kappa$: 1.35/0.7, $\delta_u$: 0.3, $\delta_l$: 0.3, $\zeta_u$: 0, $\zeta_l$: 0, `R_axis`: 1.7, `Z_axis`: 0, `r_minor`: 0.7
 
-The number of poloidal angles used to discretize the plasma boundary is `n_tht_in=257` for all cases. Note that `R_axis`, `Z_axis`, and `r_minor` can be rescaled by setting `R_scale` different from 1. Examples of JET `OUTSIDE_WALL` and `OUTSIDE_WALL_SHORT_LEG` are shown in the **Tips and Tricks** section.
+The number of poloidal angles used to discretize the plasma boundary is `n_tht_in=257` for all cases. Note that `R_axis`, `Z_axis`, and `r_minor` can be rescaled by setting `R_scale` different from 1. Examples of JET `OUTSIDE_WALL` and `OUTSIDE_WALL_SHORT_LEG` are shown in the **Tips and Tricks** section below.
 
 - `ellip_in`: user-defined ellipticity (default: 1)
 - `tria_up_in`: user-defined upper triangularity (default: 0)
@@ -98,7 +98,7 @@ The number of poloidal angles used to discretize the plasma boundary is `n_tht_i
 - `B_scale`: magnetic-field scaling factor (default: 1)
 - `I_scale`: plasma-current scaling factor (default: 1)
 - `R_scale`: spatial scaling factor (default: 1)
-- `smth`: smoothing parameter of plasma profile interpolator (default: `1.d-6`, see **Tips and Tricks**)
+- `smth`: smoothing parameter of plasma profile interpolator (default: `1.d-6`, see **Tips and Tricks** below)
 - `eqdsk_string_r_min`: substring used to find plasma minor radius in EQDSK file (default: `MINOR RADIUS -> A [m]`). Currently used only for `JET` + `CIRCULAR`.
 
 ### Extension of the pressure profile to the SOL
