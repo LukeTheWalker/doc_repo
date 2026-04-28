@@ -6,8 +6,7 @@ layout: default
 render_with_liquid: false
 ---
 
-andres working on this one 
-## Grids
+# Grids
 
 Several kinds of finite element grids are implemented in JOREK. Some
 grids are used for the determination of the equilibrium only and are not
