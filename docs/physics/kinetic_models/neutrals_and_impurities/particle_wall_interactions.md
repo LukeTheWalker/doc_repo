@@ -6,7 +6,7 @@ layout: default
 render_with_liquid: false
 ---
 
-## Introduction to particle wall\_actions ##
+## Introduction to particle wall\_actions
 
 At the wall, there are a variety of things that could happen that influence the kinetic particles in your simulation. The plasma might for instance recombine into neutrals and simultaneously sputter tungsten, kinetic impurities species might neutralize and re-enter the domain with a different velocity, and tungsten might self sputter. In the backend (found at particles/mod\_particle\_wall\_interaction.f90) all of these interactions at the wall are handled through wall\_action objects which contain the information about the type of interaction, the origin species (what goes into the wall) and the target species (what comes out of the wall). Every wall\_action object only handles one interaction to keep the code modular. Currently the wall\_action %types that are implemented are: "reflection", which handles neutrals/impurities neutralising on the wall and re-entering the plasma with a different energy (but the same weight), "self sputter", which handles kinetic wall impurities which self sputter on the wall, "fluid sputter", which handles the sputtering done by the plasma, "wall recomb", which handles the plasma recombining at the wall into kinetic neutral particles, and "pump", which handles pumping surfaces. For the moment the implemented types focus on kinetic neutrals and impurities, but should boundary conditions be necessary for other types of particles, this framework could be extended to include them (e.g. diagnosing the wall loads from REs, or dealing with the exhaust of fusion He particles).
 
@@ -52,7 +52,7 @@ The "fluid sputter" types are grouped per target species and the creation scheme
 
 You can specify particle wall\_actions to happen more often than once every _fluid_ timestep (each n-th _particle_ step) through `part_group_configs(i)wall_act_each_nstep_part`. This is useful when a large fraction of your particles hit the wall during a single fluid timestep. See also [kinetic timestepping](../timestepping.md)
 
-### Practical example to showcase the functionality ###
+### Practical example to showcase the functionality
 
 Suppose you want to have a kinetic particle simulation with neutrals and you want the neutrals to reflect off the wall when they hit the wall. As normal you first specify your neutral species:
 
@@ -92,7 +92,7 @@ Now you also might want to simulate a pump duct. You can do this by setting a "p
 
 Okay, so with this setup pumping will be done with an absorption factor of (100%-70%=)30% in the defined polygon (because the "pump" action takes precedence over other particle particle actions, and only one particle particle action is executed per particle). Outside the polygon (everywhere else), particles will be reflected (thermal desorption or fast reflection) off the wall with absorption of (100%-98%=)2% to simulate a non fully saturated wall.
 
-Suppose your neutrals dominate the divertor area, and thus they also hit the wall a lot, then you want to do your wall_actions for this paricle group more often than once every _fluid_ timestep. If that is the case, you can set the wall actions to be done every n integer _particle_ timesteps (in this case every 2 particle timesteps)
+Suppose your neutrals dominate the divertor area, and thus they also hit the wall a lot, then you want to do your wall_actions for this particle group more often than once every _fluid_ timestep. If that is the case, you can set the wall actions to be done every n integer _particle_ timesteps (in this case every 2 particle timesteps)
 
 ```fortran90
 part_group_configs(1)wall_act_each_nstep_part  = 2

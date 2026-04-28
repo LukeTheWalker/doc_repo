@@ -6,11 +6,11 @@ layout: default
 render_with_liquid: false
 ---
 
-## Gas Puffing ##
+## Gas Puffing
 
 The gas injection system is coded in two parts: you can specify locations in your simulation domain using the valve object, after which you can puff from these valves for each part\_group\_configs by using the puff\_ctrl objects. 
 
-### Setting up a valve ###
+### Setting up a valve
 The valves are defined through the valves object from the namelist. You can specify at most n\_valves\_max = 20 valves. The options for each valve are:
 
 | valves(i)%           | option meaning |
@@ -26,7 +26,7 @@ The valves are defined through the valves object from the namelist. You can spec
 If the valves%(i)%type='circ' you need to define a circular valve in the poloidal plane with r\_valve, R\_valve\_loc, Z\_valve\_loc. You can optionally specify a specific toroidal location phi at which the valve is located (if left unspecified, the particles puffed from this valve will be put at a random toroidal location).
 If the valves%(i)%type='poly', you need to define a quadrangular valve by setting poly\_R and poly\_Z (both exactly 4 points) which defines a quadrangle with the following corners; top-left: (poly\_R(1),poly\_Z(1)), top-right: (poly\_R(2),poly\_Z(2)), bottom-left: (poly\_R(3),poly\_Z(3)), bottom-right: (poly\_R(4),poly\_Z(4)).
 
-### Setting up the puffrates at a valve ###
+### Setting up the puffrates at a valve
 
 With the valves defined, each neutral or impurity particle group can puff from each valve by setting the corresponding part\_group\_configs(j)%puff\_ctrl(i) object. Here part\_group\_configs(j)%puff\_ctrl(i) means the puff control object for valves(i) of species j (so setting a puffrate at part\_group\_configs(j)%puff\_ctrl(1) means puffing group j from the valve specified at valves(1)). The options for each puff\_ctrl object are:
 
