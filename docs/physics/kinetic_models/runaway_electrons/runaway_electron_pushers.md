@@ -60,15 +60,15 @@ When both collisions and radiation reaction force are present, then electrons in
 
 The results: 
 
-<img src="assets/particles_runaways/Test_bump_corrected.png" alt="Kinetic results agree with DREAM result" width="300">
+<img src="../../assets/runaway_electron_pushers/Test_bump_corrected.png" alt="Kinetic results agree with DREAM result" width="300">
 
 Results agree with DREAM result. 
 
-<img src="assets/particles_runaways/2022_test_bump_noe.png" alt="Kinetic results without E field return Maxwellian distribution" width="300">
+<img src="../../assets/runaway_electron_pushers/2022_test_bump_noe.png" alt="Kinetic results without E field return Maxwellian distribution" width="300">
 
 Turning off the electric field in JOREK produces Maxwellian distribution as expected. 
 
-<img src="assets/particles_runaways/2022_test_bump_ps.png" alt="Excellent match for the bump when the partial screening method is used" width="300">
+<img src="../../assets/runaway_electron_pushers/2022_test_bump_ps.png" alt="Excellent match for the bump when the partial screening method is used" width="300">
 
 Excellent match with on the bump when using the partial screening model. However, in theory there should be no difference as this test has hydrogen plasma. Therefore the difference is likely due to fact that the partial screening model uses expressions where incident particle is assumed to be highly energetic electron (in particular for the Coulomb logarithm). This could also explain why the Maxwellian is not reproduced that well unless it is an issue with timestep/Monte Carlo noise. 
 
