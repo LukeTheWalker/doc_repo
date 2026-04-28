@@ -77,7 +77,8 @@ This formulation is based on the following work: [O. Czarny, G. Huysmans, J.Comp
 #### Generalized nodal representation of Bezier finite element
 The work [S. Pamela et al. J. Comput. Phys. 464, 111101 (2022)](https://www.sciencedirect.com/science/article/pii/S0021999122001632?via%3Dihub) generalizes what has been shown in the previous paragraph for bi-cubic elements to any degree $n$ and usually imposing $G_m$ continuity with $m=(n-1)/2$.
 Instead of using $p_i,u_i,v_i,w_i$ vectors, the notation is $u_{ij}$ and $d_{u,i}$ with $h^{ij}$ For example, in the bi-cubic case we have $u_{i0}:=p_i, u_{i1}:=u_i, ...$. 
-Then the generalized formulation reads as follows:
+Then the generalized formulation, only for group of node $\mathbf{P}_00$, reads as follows:
+
 $$
 \mathbf{P}_{ij} = h^{ij}u^{ij} + \sum_{k=0}^i\sum_{l=0}^i (-1)^{1+i+j+k+l}(1-\delta_{ki}\delta_{lj}) 
 \begin{pmatrix}
@@ -88,11 +89,18 @@ j \\ l
 \end{pmatrix}
 \mathbf{P}_{kl}
 $$
+
 with $0\leq i,j \leq (n+1)/2$
 
-Imposing $G_m$ continuity on the previous formulation simply reads as follows:
+#### <u>Imposing the continuity on generalized nodal representation</u>
+In JOREK one node, i.e. $\mathbf{P}\_{00}$ is always shared by $4$ finite elements. 
+Let $\xi_{1,1}, \xi_{-1,1}, \xi_{-1,-1}, \xi_{1,-1}$ be the finite elements that share the node, listed counter clockwise. 
+Then each of these elements has a different set of vectors $u^{ij}$ (and values $h^{ij}$) as nodal representation used in tha shared node $\mathbf{P}\_{00}$. We say that $u^{ij}$ and $h^{ij}$ are the nodal representation used by element $\xi_{1,1}$, $u^{-ij}$ and $h^{-ij}$ for element $\xi_{-1,1}$, $u^{i-j}$ and $h^{i-j}$ for element $\xi_{1,-1}$ and finally $u^{-i-j}$ and $h^{-i-j}$ for element $\xi_{-1,-1}$. 
+
+With the introduced notation, $G_m$ continuity on the shared nodes is obtained by imposing the following constrains.
 
 $\forall j, \ \ h^{-ij}$ is constrained by:
+
 $$
 h^{-ij} = 
 \begin{cases}
@@ -102,6 +110,7 @@ h^{ij} & for i \neq 1
 $$
 
 $\forall i, \ \ h^{i-j}$ is constrained by:
+
 $$
 h^{i-j} = 
 \begin{cases}
@@ -109,6 +118,15 @@ h^{i-j} =
 h^{ij} & for j \neq 1
 \end{cases}
 $$
+
+#### <u>Brief intuition on the formulation</u>
+As demonstrated in Corollary 1 of [S. Pamela et al. J. Comput. Phys. 464, 111101 (2022)](https://www.sciencedirect.com/science/article/pii/S0021999122001632?via%3Dihub), in the particular nodal formulation used, the vectors $u^{ij}$ are **equal** in direction and sign (but not absolute value) with the **derivative** 
+
+$$
+\frac{\partial^{i+j} \mathbf{P}}{\partial^{i} s \partial^{j} t}(s=0,t=0)
+$$
+
+This is extremely helpful, for instance, when building the mesh, since derivatives of $R$ and $Z$ are used to obtain a flux aligned grid. 
 
 ### The following is still to be adapted
 
