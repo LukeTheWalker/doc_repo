@@ -15,25 +15,26 @@ Hannes working on this one now.
 Think page is a hub for the kinetic framework with links to all subpages. This kinetics wiki is still being written, so this is work in progress.
 
 ## Introduction
-* [Introduction to the kinetic framework](particles/particle_introduction.md) Read this first before you read any other link on this page.
+* [Introduction to the kinetic framework](\kinetic_models\particle_introduction.md) Read this first before you read any other link on this page.
+
 
 
 ## Introductions to the available particle species
-  * [Neutrals and Impurities](particles/neutrals_and_impurities.md)
-  * [Runaway Electrons](particles/runaway_electrons.md)
-  * [Energetic Ions](particles/energetic_ions.md)
+  * [Neutrals and Impurities](\kinetic_models\neutrals_and_impurities\neutral_neutral_collisions.md)
+  * [Runaway Electrons](\kinetic_models\runaway_electrons\runaway_electrons.md)
+  * [Energetic Ions](\kinetic_models\energetic_ions\energetic_ions.md)
 
 ## Known issues
-  * [Issues](particles/issues.md): See currently known issues and how to solve/avoid them.
+  * [Issues](\kinetic_models\issues.md): See currently known issues and how to solve/avoid them.
 
 ## Details on different aspects of the kinetics
   * [Coupling schemes](particles/coupling_schemes.md): How to couple your kinetic particles to the plasma (or not).
-  * [Initialization](particles/initialization.md): How to choose the initial distribution of your particles.
-  * [Wall actions](particles/wall_actions.md): How to choose the boundary conditions for your particles.
+  * [Initialization](\kinetic_models\initialization.md): How to choose the initial distribution of your particles.
+  * [Wall actions](kinetic_models\neutrals_and_impurities\particle_wall_interactions.md): How to choose the boundary conditions for your particles.
 
 ## Numerics details
-  * [Particle types](particles/particle_types.md): Which additional variables each particle type has.
-  * [Pushers](particles/pushers.md) (Incomplete) overview of available pushers.
+  * [Particle types](\kinetic_models\particle_types.md): Which additional variables each particle type has.
+  * [Pushers](\kinetic_models\pushers.md) (Incomplete) overview of available pushers.
 
 ## Available diagnostics and post-processors:
 
@@ -59,11 +60,7 @@ Think page is a hub for the kinetic framework with links to all subpages. This k
   * Andrés Cathey, [[andres.cathey@ipp.mpg.de]]
   * James Carpenter, [[james.s.carpenter@durham.ac.uk]]
 
-See also the [kinetics coordination](particles/kinetics_coordination.md) page, the [kinetic users](particles/kinetic_users.md) page, and the [[wp-kinetics|working group page where you can subscribe to the mailing list]] 
 
-## Old information
-
-Link to old information from before kinetic applications were brought together as kinetic_main: [old_kinetics](particles/old_kinetics.md)
 
 
 

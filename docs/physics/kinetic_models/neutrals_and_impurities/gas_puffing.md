@@ -1,5 +1,5 @@
 ---
-title: "Kinetics (old documentation)"
+title: "Gas Puffing"
 nav_order: 7
 parent: "Kinetic Particle Module"
 layout: default
