@@ -1,6 +1,6 @@
 ---
 title: "FAQ"
-nav_order: 92
+nav_order: 90
 layout: default
 render_with_liquid: false
 ---
