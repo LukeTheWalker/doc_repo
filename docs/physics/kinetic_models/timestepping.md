@@ -23,7 +23,7 @@ The output file will print some information at before entering the inner particl
 ### An example
 
 Let's see how this works in practice. Suppose you have a deuterium plasma with deuterium neutrals and the following settings:
-```fortran90
+```fortran
 tstep_n=30
 tstep_particles    = 5.d-7
 central_density = 0.425558

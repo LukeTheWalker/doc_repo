@@ -56,7 +56,7 @@ You can specify particle wall\_actions to happen more often than once every _flu
 
 Suppose you want to have a kinetic particle simulation with neutrals and you want the neutrals to reflect off the wall when they hit the wall. As normal you first specify your neutral species:
 
-```fortran90
+```fortran
 part_group_configs(1)%id              = "D01"
 part_group_configs(1)%Z               = -2
 part_group_configs(1)%mass            = 2.01410178
@@ -67,7 +67,7 @@ part_group_configs(1)%type            = 'particle_kinetic_leapfrog'
 
 With your origin species set up, you can set the wall action for this species:
 
-```fortran90
+```fortran
 part_group_configs(1)%wall_act_configs(1)%type = "reflection"
 ```
 
@@ -75,13 +75,13 @@ In the backend the new velocities are determined using an Eckstein formula of wh
  
 If you now want to have a non-fully saturated wall (or effectively a global pumping at the wall), you could set the %weight\_factor to something smaller than 1 to simulate partial absorption of neutrals into the wall:
 
-```fortran90
+```fortran
 part_group_configs(1)%wall_act_configs(1)%weight_factor=0.98d0
 ```
 
 Now you also might want to simulate a pump duct. You can do this by setting a "pump" action for a specific polygon (for example in the private flux region), setting weight\_factor < 1 (so that the absorption coefficient at the pump surface is 1-weight\_factor, to get a realistic absorption coefficient, refer to [Kukushkin et al. 2017](https://doi.org/10.1016/j.jnucmat.2007.01.094) equation 2) and defining the polygon in which the boundary is a pump surface (in this everything in the square with opposite corners of (R,Z)=(2.75,-1.4) and (3.2,-1.7)):
 
-```fortran90
+```fortran
   part_group_configs(1)%wall_act_configs(2)%type="pump"
   part_group_configs(1)%wall_act_configs(2)%weight_factor=0.7d0
   part_group_configs(1)%wall_act_configs(2)%only_in_polygon=.t.
@@ -94,13 +94,13 @@ Okay, so with this setup pumping will be done with an absorption factor of (100%
 
 Suppose your neutrals dominate the divertor area, and thus they also hit the wall a lot, then you want to do your wall_actions for this particle group more often than once every _fluid_ timestep. If that is the case, you can set the wall actions to be done every n integer _particle_ timesteps (in this case every 2 particle timesteps)
 
-```fortran90
+```fortran
 part_group_configs(1)wall_act_each_nstep_part  = 2
 ```
 
 Good, that is the neutrals settled. Now suppose you want to investigate the first plasma after boronization in a scenario where the tungsten divertor is still partially covered by the boron, and you are interested in the tungsten transport in this case (I don't know why, but hey, you do you). So you add a second kinetic species of tungsten impurities:
 
-```fortran90
+```fortran
 part_group_configs(2)%id              = 'W01'
 part_group_configs(2)%Z               = 74
 part_group_configs(2)%mass            = 183.84
@@ -111,7 +111,7 @@ part_group_configs(2)%type            = 'particle_kinetic_leapfrog'
 
 Suppose there's 20% B and 80% W on the wall surface, and you ignore boron entering the plasma so you want a "reflection" type on the boron but a "self sputter" type on the tungsten. You then set
 
-```fortran90
+```fortran
 part_group_configs(2)%wall_act_configs(1)%type          = "reflection"
 part_group_configs(2)%wall_act_configs(1)%weight_factor = 0.2d0
 part_group_configs(2)%wall_act_configs(2)%type          = "self sputter"
@@ -120,7 +120,7 @@ part_group_configs(2)%wall_act_configs(2)%weight_factor = 0.8d0
 
 Okay, on the particle side everything is set up, but now you want to specify how the MHD fluid should behave at the wall. Suppose you have a deuterium plasma with a trace of nitrogen (for the purpose of sputtering). You want the deuterium to wall recombine into kinetic neutral deuterium, you want the deuterium to sputter tungsten, and you want the nitrogen to sputter tungsten. So you set the fluid configs and their wall actions:
 
-```fortran90
+```fortran
 fluid_configs(1)%Z                = -2
 fluid_configs(1)%density_fraction = 0.99d0
 fluid_configs(1)%wall_act_configs(1)%type               = "wall recomb"

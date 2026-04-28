@@ -12,7 +12,7 @@ If you are running JOREK with particles, and you are using kinetic neutrals, the
 
 ### Namelist input
 To switch on neutral self collisions within a species, you need to set the flag %use_kin_neutral_coll = .true. for the neutral group you want to do collisions for, and specify the collisional parameters %neutral_coll_dTw (explained below). When neutral collisions are important, you probably want to do them more often than once every fluid timestep. This can be set through %ncoll_each_nstep_part (see also [kinetic timestepping](../timestepping.md)). For instance, when your neutrals are a Deuterium species, you set something like:
-```fortran90
+```fortran
 part_group_configs(1)%id              = "D01"
 part_group_configs(1)%Z               = -2
 part_group_configs(1)%mass            = 2.01410178
