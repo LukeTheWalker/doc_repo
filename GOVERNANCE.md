@@ -1,4 +1,11 @@
-# JOREK Governance & Community Agreement
+---
+title: "Community Governance Rules"
+nav_order: 100
+layout: default
+render_with_liquid: false
+---
+
+# JOREK Community Governance Rules
 
 ## 1. Mission
 JOREK remains a central community code for 3D non-linear MHD and hybrid fluid-kinetic fusion plasma simulations. Goals: Keep the code unified, share knowledge, ensure fair collaboration and citation.
@@ -9,15 +16,7 @@ JOREK remains a central community code for 3D non-linear MHD and hybrid fluid-ki
 - Maintainers review (or coordinate review) and merge pull requests.
 
 ## 3. Publication Rules (Mandatory)
-- Include all relevant co-authors who contributed to the work.
-- Comply with the local publication rules at your institute and the institutes of the co-authors.
-- **Always cite**:
-  1. Overview article:  M Hoelzl, GTA Huijsmans, SJP Pamela, M Becoulet, E Nardon, FJ Artola, B Nkonga, et al. Nuclear Fusion 61, 065001 (2021)
-  2. Most recent review article, at present: M Hoelzl, GTA Huijsmans, FJ Artola, E Nardon, M Becoulet, N Schwarz, A Cathey, SJP Pamela et al. Nuclear Fusion 64, 112016 (2024)
-  2. Relevant prior works you directly build up on (see CITATION.cff and code website).
-- **Preprints**
-  Please send your preprints (abstracts, slides, posters, manuscripts) to jorek-preprint@jorek.eu before submission to ensure the community keeps an overview of all ongoing work and that we can quick check for compliance with the community rules.
-- Tools: Use CITATION.cff for BibTeX. No publications without these citations—they harm the community.
+Please make sure you follow the [publication rules](/docs/publication_rules.md) for all conference contributions and publications.
 
 ## 4. Code Cohesion
 - **Forks**: Share modifications upstream with the main repository via pull requests.
@@ -25,11 +24,12 @@ JOREK remains a central community code for 3D non-linear MHD and hybrid fluid-ki
 - **Version Control**: Releases via GitHub tags. Merge upstream regularly.
 
 ## 5. Decision-Making
-- Proposals via Issues/Discussions.
-- Maintainer team decides (currently: Matthias Hoelzl, Nina Schwarz, Javier Artola, Guido Huijsmans); disputes via community vote.
+- Decisions are usually taken by the core developers team upon consultation of the community.
+- The core developers team decides by vote about changes of core developers team members and the list of gate keepers / maintainers.
+- A list of the main contributing institutions is maintained (updated by the core dev team upon request).
+- In case of conflicts in the core developers team regarding a decision, each of these institutions will nominate a representative; the committee formed by these representatives will take a decisions on the conflict matter.
 
 ## 6. Code of Conduct
 - Be respectful and collaborative. Report violations to maintainers.
-- Based on [Contributor Covenant].[web:6]
 
 This agreement binds the community. Questions? Open an Issue.

@@ -15,7 +15,7 @@ Standard operation in JET is with $I_p$ and $B_t$ both running clockwise when lo
 
 ## From EFIT to JOREK
 
-Equilibrium data reconstructed by EFIT may be converted into JOREK input data by using [eqdsk2jorek.f90](eqdsk2jorek.f90).
+Equilibrium data reconstructed by EFIT may be converted into JOREK input data by using [eqdsk2jorek.f90](../howto/eqdsk2jorek).
 
 **Note:** The sign convention for $\psi$ in EFIT (at least at JET) is opposite to the one in JOREK, i.e. a standard JET equilibrium has $\psi_{axis}^{EFIT}<\psi_{bnd}^{EFIT}$. As a consequence, we use $\psi_{JOREK}=-\psi_{EFIT}$ and $ff'_{JOREK}=-ff'_{EFIT}$.
 

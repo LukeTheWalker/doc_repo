@@ -2,7 +2,7 @@
 This tutorial shows how to include kinetic neutrals and/or impurities in JOREK simulations. We assume that the user is already familiar with running standalone JOREK simulations, see [[running_jorek_for_the_first_time|Running JOREK for the first time]].
 
 ## 1. Executable and input files
-At the moment, simulations are only possible on a branch called kinetic_develop (to be merged into develop). Checkout this branch, choose model600 in your Makefile.inc and compile kinetic_main with your preferred model settings. It has to be noted that the option with_vpar=.true. is needed to run with these particles. The model supports both one- and two-temperature settings and ntor=1 or higher, as well.
+At the moment, simulations are only possible on a branch called kinetic_develop (to be merged into develop). Checkout this branch, choose **`model600`** in your **`Makefile.inc`** and compile kinetic_main with your preferred model settings. It has to be noted that the option `with_vpar=.true.` is needed to run with these particles. The model supports both one- and two-temperature settings and `ntor=1` or higher, as well.
 
 The reaction rates for the atomic physics processes are extracted from OpenADAS files, the ones required for this tutorial are found here:
 
@@ -16,7 +16,7 @@ tstep_particles = 5.d-7
 
 deuterium_adas = .t.
 ```
-where tstep_particles defines the particle step size (for each fluid step) in seconds and restart_particles is no particle restart file is available. Otherwise set to .t. and have a part_restart.h5 ready. Set deuterium_adas=.t. to X.
+where `tstep_particles` defines the particle step size (for each fluid step) in seconds and `restart_particles` is no particle restart file is available. Otherwise set to .t. and have a **`part_restart.h5`** ready. Set `deuterium_adas=.t.` to X.
 
 We define valves, and initialize our particles inside the valves defined by polygons or circles:
 ```
@@ -97,7 +97,7 @@ part_group_configs(2)%puff_ctrl(1)%supers_num_puff = 20
 Now we can run with both neutrals and impurities.
 
 # 4. Tips and tricks
-  * When other impurity species are needed, one has to change the parameters Z, mass, atom_data_suffix and have the corresponding ADAS files.
-  * If the SOL is of interest it is recommended to enable grid_to_wall and set natural boundary conditions, using:
-  * To include particle projections in vtks, use the flag -proj jorek, with convert2vtk.sh
+  * When other impurity species are needed, one has to change the parameters `Z`, `mass`, `atom_data_suffix` and have the corresponding ADAS files.
+  * If the SOL is of interest it is recommended to enable `grid_to_wall` and set natural boundary conditions, using:
+  * To include particle projections in vtks, use the flag `-proj jorek`, with **`convert2vtk.sh`**
   * Excessive radiation can lead to negative temperatures and numerical problems, make sure that you don't use unreasonable puffing rates, then look into one of the workarounds at [[corr_neg|The following functionality allows to "correct" negative densities or temperatures in order to avoid floating point exceptions]].
