@@ -354,8 +354,8 @@ non-zeros and `irn`/`jcn`/`val` hold the complete matrix on every process.
 | Consumer | Format | Key arrays |
 | --- | --- | --- |
 | Direct assembly / FE routines | BCOO | `irn`, `jcn`, `val`, `ijA_size`, `irn_jcn`, `ijA_index` |
-| Matrix–vector products (CPU) | BCSR | `iblockptr`, `jcn`, `val` |
-| Matrix–vector products (GPU) | Scalar CSR | `iptr`/`irn`, `jcn`, `val` |
+| Matrix–vector products (CPU) | BCOO / BCSR | `iblockptr`, `irn`, `jcn`, `val` |
+| Matrix–vector products (GPU) | Scalar CSR / BCSR | `iblockptr`, `iptr`/`irn`, `jcn`, `val` |
 | MUMPS direct solve | Scalar COO (row-distributed) | `irn`, `jcn`, `val` |
 | PaStiX direct solve | Scalar CSR (column-distributed) | `iptr`, `jcn`, `val` |
 | STRUMPACK direct solve | Scalar COO | `irn`, `jcn`, `val` |
