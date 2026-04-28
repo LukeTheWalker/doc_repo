@@ -1,7 +1,7 @@
 ---
 title: "Simplified X-point tearing mode test case"
 nav_exclude: true
-parent: "Equilibria"
+parent: "ASDEX Upgrade"
 layout: default
 render_with_liquid: false
 ---

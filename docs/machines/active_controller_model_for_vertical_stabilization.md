@@ -7,7 +7,7 @@ render_with_liquid: false
 
 # Active controller model for vertical stabilization
 
-A PID controller was added to JOREK to enable active stabilization in free boundary simulation including n=0.
+A PID controller was added to JOREK to enable active stabilization in free-boundary simulations including $n=0$.
 
 ## Fundamentals
 
@@ -24,14 +24,14 @@ where $e=Z(t)-Z_\text{ref}(t)$ is the deviation from the reference value and $K_
 
 ## Implementation in JOREK
 
-The equation above is discretized and built into the coil_current_source routine in vacuum/vacuum_response.dat after the current profile of the PF coils is interpolated. There, it has the following form:
+The equation above is discretized and built into the `coil_current_source` routine in `vacuum/vacuum_response.dat` after the current profile of the PF coils is interpolated. There, it has the following form:
 
 $$
 \begin{align}
 \mathrm{d}Z_\text{err} &= Z_\text{axis}(t_n) - Z_\text{ref}(t_n)\\
 \mathrm{d}Z_\text{der} &= \frac{Z_\text{axis}(t_n) - Z_\text{axis}(t_{n-1})}{\Delta t}\\
 \mathrm{d}Z_\text{integral} +&= \left(Z_\text{axis}(t_n) - Z_\text{ref}(t_{n})\right)\Delta t \\\\
-\Delta I &=   K_\text{P}\,\mathrm{d}Z_\text{err} + K_\text{D}\,dZ_\text{der}   + K_\text{I} \,\mathrm{d}Z_\text{integral}\\
+\Delta I &=   K_\text{P}\,\mathrm{d}Z_\text{err} + K_\text{D}\,\mathrm{d}Z_\text{der}   + K_\text{I} \,\mathrm{d}Z_\text{integral}\\
 I(i) &=  I(i) + \mathrm{vert\_FB\_amp\_ts}(i)\,\Delta I  
 \end{align}
 $$
@@ -40,7 +40,7 @@ It has the following features with the parameters listed in the table below:
 
 - Activate the controller after a certain time `start_VFB_ts`
 - Use a constant reference value or an input profile
-- Specifiy tact time, a periodic interval after which the controller acts
+- Specify the tact time, a periodic interval after which the controller acts
 - Set coil current limits for each coil individually
 - Set an amplification factor for each coil individually to distribute the action
 
@@ -63,7 +63,7 @@ The controller is only activated if the amplification factors are specified and 
 
 ## How to specify the input profile
 
-The position can be specified by either 
+The position can be specified by either:
 
 - an input profile file (`vert_pos_file`)
   - the time is given in [$t_{\text{JOREK}}$]
@@ -73,16 +73,16 @@ The position can be specified by either
 - if none of this is specified, the initial or restart value of the axis is used
 
 ## Tuning
-The optimal gains can vary from case to case depending on the equilibrium parameters and the use case.
+The optimal gains can vary from case to case, depending on the equilibrium parameters and the use case.
 
-Normally, the axis oscillates during the first time steps, when the controller is active. 
+Normally, the axis oscillates during the first time steps when the controller is active.
 This oscillation can be used to adjust the gains. Otherwise, a sudden variation in the target value (a step response) can be used to improve the settings. 
 
 The tuning can be performed in three steps:
 
-- Increase $K_\text{P}$ with the other gains at 0 until the oscillation amplitude is low and the overshoot is small in case of a step response. If $K_\text{P}$ is too high the response will overshoot and the system becomes unstable.
+- Increase $K_\text{P}$ with the other gains at 0 until the oscillation amplitude is low and the overshoot is small in the case of a step response. If $K_\text{P}$ is too high, the response will overshoot and the system becomes unstable.
 - Increase $K_\text{D}$ to reduce the oscillations.
-- Increase $K_\text{I}$ if there is an error in steady state. (I haven't seen a big effect of this so far and the error was usually very low with only $K_\text{P}$ and $K_\text{D}$ gain.)
+- Increase $K_\text{I}$ if there is an error in steady state. (I have not seen a big effect of this so far, and the error was usually very low with only $K_\text{P}$ and $K_\text{D}$ gains.)
 
 
 

@@ -1,7 +1,7 @@
 ---
 title: "Simplified Equilibria for Tests"
 nav_exclude: true
-parent: "Equilibria"
+parent: "ASDEX Upgrade"
 layout: default
 render_with_liquid: false
 ---
