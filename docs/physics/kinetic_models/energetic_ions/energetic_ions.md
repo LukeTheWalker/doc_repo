@@ -10,15 +10,47 @@ $$
     f(\mathbf{r}, \mathbf{v}, t) = \sum_{i=1}^{N_\mathrm{p}} w_i \, \delta(\mathbf{r}-\mathbf{r}_i(t)) \, \delta(\mathbf{v}-\mathbf{v}_i(t))
 $$
 
-
+The markers are evolved in time with one of the available pushers e.g. the Boris pusher. 
 
 ## Coupling scheme
 
-pressure coupling
+The coupling between EPs and bulk MHD fluid is provided by a pressure coupling scheme. The EP pressure tensor $\boldsymbol{P}_\mathrm{h}$ enters the momentum balance equation according to
 
-CGL
+$$
+  \rho \frac{\partial \mathbf{u}}{\partial t}=-\rho \mathbf{u} \cdot \nabla \mathbf{u}+\mathbf{J} \times \mathbf{B}-\nabla p +  \left[ \nabla\cdot\underline{\boldsymbol{P}_\mathrm{h}}\right]_\perp
+$$
 
-6 variables
+Instead of the full tensor, usually the CGL form 
+
+$$
+  \underline{\boldsymbol{P}}_\mathrm{h} =  \left[  P_{\parallel} \mathbf{b}\mathbf{b} + P_{\perp}\left( \underline{1}-\mathbf{b}\mathbf{b} \right)  \right]
+$$
+
+is used with components
+
+$$
+  P_\parallel = m \int \mathrm{d}^3 \mathbf{v} \ f(\mathbf{r}, \mathbf{v}, t) v_\parallel^2
+$$
+
+$$
+  P_\perp = \frac{m}{2} \int \mathrm{d}^3 \mathbf{v} \ f(\mathbf{r}, \mathbf{v}, t) v_\perp^2
+$$
+
+In reduced MHD, it is possible to switch to a scalar pressure for the EPs by setting `use_pcs_full = .false.` and `use_pcs = .true.` In the full MHD models, only the CGL form is implemented and always switched on by `use_pcs = .true.`
+
+The pressure tensor is provided by the six components
+
+$$
+  \boldsymbol{P}_\mathrm{h}^{RR}, \ \boldsymbol{P}_\mathrm{h}^{ZZ}, \ \boldsymbol{P}_\mathrm{h}^{\phi\phi} \ \boldsymbol{P}_\mathrm{h}^{\phi\phi}, \ \boldsymbol{P}_\mathrm{h}^{RZ}, \ \boldsymbol{P}_\mathrm{h}^{R\phi}, \ \boldsymbol{P}_\mathrm{h}^{Z\phi}
+$$
+
+which are then used in the MHD system of equations in `mod_elt_matrix_fft`. 
+
+## Example
+
+An example use case can be found in `particles/examples/tae_phase_space_project.f90` with the input in `namelist/model307/itpa(_eq)` or `namelist/model710/itpa_full(_eq)`. 
+
+First equilibrium, then particles. 
 
 
 
