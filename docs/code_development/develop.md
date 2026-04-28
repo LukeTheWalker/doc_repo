@@ -9,7 +9,7 @@ render_with_liquid: false
 # Coding Guidelines
 
 - See also [**Committing Guidelines**](#committing-guidelines) below
-- See also [**Overview PDF by Matthias**](assets/develop/2021-10-mhoelzl-development-workflow.pdf)
+- See also [**Overview Slides by Matthias**](assets/develop/2021-10-mhoelzl-development-workflow.pdf)
 
 ## How the source code should look
 
@@ -105,12 +105,12 @@ end do loop_over_nodes
 
 
 # Committing Guidelines
+TODO: it needs to be updated based on the github workflow.
 - See also [**Coding Guidelines**](#coding-guidelines) above
 
 - See [ITER Development Guide](https://portal.iter.org/departments/POP/CM/IMAS/IM%20Development%20Guide.docx) written by Simon Pinches for a comprehensive introduction
 - [Slides by Guido (2016-04)](assets/develop//huijsmans_jorek_general_meeting_2016.pdf)
-- **[Slides by Matthias (2020-04)](assets/develop/2020-04-mhoelzl-development-coordination.pptx)** with some issues coming up regularly and suggested solutions
-- See also [Coding Guidelines](coding-guidelines)
+- [Slides by Matthias (2020-04)](assets/develop/2020-04-mhoelzl-development-coordination.pdf) with some issues coming up regularly and suggested solutions
 
 ## Setting up git properly
 

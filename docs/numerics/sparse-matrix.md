@@ -8,12 +8,10 @@ render_with_liquid: false
 
 # Sparse Matrix Format
 
-THIS SECTION REMAINS UNDER DEVELOPEMENT
-
 The central data structure for all linear algebra in JOREK is `type_SP_MATRIX`,
 defined in `datatypes/mod_sparse_matrix.f90`.
 The **primary storage format is block coordinate (BCOO)**: non-zero entries are
-stored as a flat list of dense $b \times b$ blocks in an arbitrary order,
+stored as a flat list of dense $b \times b$ blocks,
 sharing the same `irn`/`jcn`/`val` arrays at the scalar level.  A block-CSR
 view (`iblockptr`) is derived from the BCOO data on demand for the iterative
 solver and GPU paths.
@@ -22,41 +20,67 @@ solver and GPU paths.
 
 ## Block Structure and Degrees of Freedom
 
-Let $N_\text{nodes}$ be the total number of finite-element nodes.
-The global matrix dimension is
+JOREK uses bicubic Hermite finite elements.  Each physical mesh node carries
+$n_\text{dof} = n_\text{dof,1D}^2$ Hermite DOF indices representing the function
+value and its poloidal derivatives ($\partial_R$, $\partial_Z$,
+$\partial_R\partial_Z$).  For the default cubic order (`n_order = 3`) this gives
+$n_\text{dof} = 2^2 = 4$ Hermite DOF indices per physical node.  Each Hermite
+DOF index occupies its own **block row** of size $b$ in the global matrix — so
+"node $i$" in the matrix always refers to Hermite DOF index $i$, not a physical
+mesh point.
 
-$$n_\text{global} = N_\text{nodes} \times b, \qquad
-b = n_\text{var} \times n_\text{tor}$$
+The block size and global matrix dimension are
 
-where $n_\text{var}$ is the number of MHD variables and $n_\text{tor}$ is the
-number of retained toroidal Fourier modes (cosine and sine combined).
-The product $b$ is stored in `a_mat%block_size`.
+$$b = n_\text{var} \times n_\text{tor}, \qquad
+n_\text{global} = N_\text{unique} \times b$$
 
-A **block row** $i$ corresponds to node $i$.  It has one $b \times b$ nonzero
-block for each node $j$ that is coupled to node $i$ through the finite-element
-stencil.  The number of nonzero blocks in block row $i$ is `ijA_size(i)`; the
-maximum over all block rows is `maxsize`.
+where $n_\text{var}$ is the number of MHD variables, $n_\text{tor}$ is the number
+of retained toroidal Fourier modes, and
+$N_\text{unique}$ is the count of unique Hermite DOF indices.  The product $b$
+is stored in `a_mat%block_size`.
+
+**Axis sharing.** At the magnetic axis all $N_\text{axis}$ axis nodes share a
+single function-value Hermite DOF index (global index 1).  Their derivative DOF
+indices ($\partial_R$, $\partial_Z$, $\partial_R\partial_Z$) remain distinct per
+node.  Compared to a grid without an axis this saves $N_\text{axis} - 1$ indices:
+
+$$N_\text{unique}
+  = N_\text{nodes} \times n_\text{dof} - (N_\text{axis} - 1)$$
+
+where $N_\text{nodes}$ is the number of physical mesh nodes and
+$N_\text{axis}$ is the number of axis nodes.  The code computes $N_\text{unique}$
+implicitly as the maximum Hermite DOF index over all nodes:
+
+```fortran
+ng = max(node%index) * block_size  ! = N_unique * b
+```
+
+A **block row** $i$ corresponds to Hermite DOF index $i$.  It has one
+$b \times b$ nonzero block for each Hermite DOF index $j$ that is coupled to $i$
+through the finite-element stencil.  The number of nonzero blocks in block row
+$i$ is `ijA_size(i)`; the maximum over all block rows is `maxsize`.
 
 ### DOF ordering and index mapping
 
 The scalar row (or column) index of degree of freedom
-(node $i$, variable $v$, toroidal component $t$) is
+(Hermite DOF index $i$, variable $v$, toroidal component $t$) is
 
 $$\text{idx}(i,\,v,\,t) \;=\; (i-1)\,b \;+\; (v-1)\,n_\text{tor} \;+\; t$$
 
 Variable varies slowly (stride $n_\text{tor}$), toroidal mode varies fastest
 (stride 1).  The following diagram shows the layout for a small example
-($N = 3$ nodes, $n_\text{var} = 2$, $n_\text{tor} = 2$, $b = 4$):
+($N_\text{unique} = 3$, $n_\text{var} = 2$, $n_\text{tor} = 3$, $b = 6$):
 
 ```
- ┌─────┬─────┬─────┬─────┐     ┌─────┬─────┬─────┬─────┐     ···
- │  1  │  2  │  3  │  4  │     │  5  │  6  │  7  │  8  │     ···
- │ m1  │ m2  │ m1  │ m2  │     │ m1  │ m2  │ m1  │ m2  │     ···
- ├─────┴─────┼─────┴─────┤     ├─────┴─────┼─────┴─────┤     ···
+ ┌───┬───┬───┬───┬───┬───┐     ┌───┬───┬───┬───┬───┬───┐     ···
+ │ 1 │ 2 │ 3 │ 4 │ 5 │ 6 │     │ 7 │ 8 │ 9 │10 │11 │12 │     ···
+ ├───┴───┴───┼───┴───┴───┤     ├───┴───┴───┼───┴───┴───┤     ···
  │   var 1   │   var 2   │     │   var 1   │   var 2   │     ···
  ├───────────┴───────────┤     ├───────────┴───────────┤     ···
- │        node 1         │     │        node 2         │     ···
- └───────────────────────┘     └───────────────────────┘
+ │    Hermite DOF 1      │     │    Hermite DOF 2      │     ···
+ ├───────────────────────┘     └───────────────────────┘
+ │                       Node 1                              ···
+ └──────────────────────────────────────────────────────
 ```
 
 The same ordering applies to rows and columns.  A $b \times b$ block
@@ -65,18 +89,18 @@ sub-blocks of size $n_\text{tor} \times n_\text{tor}$, one per
 variable-coupling pair:
 
 ```
- Block B(node i, node j)               columns: DOFs of node j
+ Block B(node i, node j)
 
-           ← var 1 →   ← var 2 →   ···   ← var n_var →
-         ┌───────────┬───────────┬─────┬───────────┐
- var 1   │  Bψψ      │  Bψu      │     │  BψT      │  ← rows: DOFs
-         ├───────────┼───────────┼─────┼───────────┤     of node i
- var 2   │  Buψ      │  Buu      │     │  BuT      │
-         ├───────────┼───────────┼─────┼───────────┤
-  ⋮      │           │           │  ⋱  │           │
-         ├───────────┼───────────┼─────┼───────────┤
- var Nv  │  BTψ      │  BTu      │     │  BTT      │
-         └───────────┴───────────┴─────┴───────────┘
+           ← var 1 →   ← var 2 →   ···  ← var n_var →
+         ┌───────────┬───────────┬─────┬────────────┐
+ var 1   │    Bψψ    │    Bψu    │     │    BψT     │
+         ├───────────┼───────────┼─────┼────────────┤
+ var 2   │    Buψ    │    Buu    │     │    BuT     │
+         ├───────────┼───────────┼─────┼────────────┤
+ ...     │           │           │ ... │            │
+         ├───────────┼───────────┼─────┼────────────┤
+ var Nv  │    BTψ    │    BTu    │     │    BTT     │
+         └───────────┴───────────┴─────┴────────────┘
 
  Each sub-block is n_tor × n_tor and encodes how one MHD variable at
  node i couples to one MHD variable at node j across all retained
@@ -114,25 +138,6 @@ consecutively.
 
 These three arrays provide a random-access view into the BCOO list without
 requiring a sorted order.
-
-### MPI distribution
-
-Each MPI rank owns a contiguous range of block rows
-`my_ind_min` … `my_ind_max`.  The local scalar row count is
-`nr = my_ind_size × b`.
-
-| Field | Description |
-| --- | --- |
-| `ng` | Global scalar dimension $n_\text{global}$ |
-| `nr`, `nc` | Locally owned scalar rows / columns |
-| `nnz` | Locally owned scalar non-zeros |
-| `my_ind_min`, `my_ind_max` | Block-row range owned by this rank (inclusive) |
-| `my_ind_size` | `my_ind_max - my_ind_min + 1` |
-| `index_min(:)`, `index_max(:)` | Block-row ranges of every MPI rank (size `ncpu`) |
-| `comm` | MPI communicator over which the matrix is distributed |
-| `row_distributed` | `.true.` when rows are partitioned (standard for the transient system) |
-| `col_distributed` | `.true.` when columns are partitioned (PaStiX path) |
-| `reduced` | `.true.` when the matrix is replicated on all ranks |
 
 ### Status flags
 
@@ -208,11 +213,11 @@ After `set_block_csr_permutations`, `iblockptr` expresses the same BCOO data
 as a CSR row pointer over blocks:
 
 ```
- iblockptr:   1           3                  6     8
-              │           │                  │     │
-              ▼           ▼                  ▼     ▼
+ iblockptr:   1               3                      6               8
+              │               │                      │               │
+              ▼               ▼                      ▼               ▼
  flat list: [ B(1,1) B(1,2) | B(2,1) B(2,2) B(2,3) | B(3,2) B(3,3) ]
-              └─ brow 1 ──┘   └──────── brow 2 ────────┘  └─ brow 3 ─┘
+              └─ brow 1 ──┘   └──── brow 2 ──────┘   └─ brow 3 ──┘
 ```
 
 Block row $i$ owns flat-list positions `iblockptr(i)` … `iblockptr(i+1)−1`,
@@ -234,7 +239,7 @@ counts how many blocks belong to each block row:
 
 ```fortran
 do i = 1, nnz_blocks
-    i_glob   = (i - 1)*b² + 1               ! first scalar entry of block i
+    i_glob   = (i - 1)*b*b + 1               ! first scalar entry of block i
     j        = (irn(i_glob) - offset)/b + 1  ! block row of block i
     jcn_block(i) = jcn(i_glob)/b + 1         ! block column of block i
     iblockptr(j+1) = iblockptr(j+1) + 1
@@ -256,10 +261,10 @@ it only produces valid pointers when the flat BCOO list is already **sorted by
 block row** — all blocks of row 1 before all blocks of row 2, and so on.
 This ordering is guaranteed by the row-by-row finite-element assembly.
 
-### Scalar CSR (for direct solvers and GPU)
+### Scalar CSR 
 
 A separate scalar CSR conversion is performed by `convert_sorting()` when
-required (e.g. PaStiX, or the GPU matvec path).  This routine:
+required (e.g. PaStiX).  This routine:
 
 1. Sorts `jcn` and `val` within each scalar row into ascending column order.
 2. Overwrites `irn(1:nr+1)` **in-place** with the resulting scalar CSR row
@@ -270,3 +275,87 @@ are now scalar CSR row pointers.  The remaining entries of `irn` past `nr+1`
 are stale and should not be read.  Note that `a_mat%iptr` is a separate array
 pointer that is **not** set by `convert_sorting`; callers that need the row
 pointer under the `iptr` name must copy or alias it explicitly.
+
+---
+
+## MPI Distribution
+
+The matrix is distributed across MPI ranks by **block rows**: each rank owns
+a contiguous, non-overlapping range of block rows and stores all non-zero entries
+that fall in those rows.  Column indices (`jcn`, `jcn_block`) are always global —
+a local row can couple to any column in the full matrix, regardless of which rank
+owns that column's rows.
+
+### Partitioning
+
+```text
+rank 0       rank 1       rank 2         ...     rank P-1
+┌──────────┐ ┌──────────┐ ┌──────────┐          ┌──────────┐
+│ brow  1  │ │ brow K₀+1│ │ brow K₁+1│          │ brow K   │
+│   ...    │ │   ...    │ │   ...    │    ...   │   ...    │
+│ brow K₀  │ │ brow K₁  │ │ brow K₂  │          │ brow Nᵤ  │
+└──────────┘ └──────────┘ └──────────┘          └──────────┘
+ my_ind_min   my_ind_min   my_ind_min             my_ind_min
+ = 1          = K₀+1       = K₁+1                = K+1
+```
+
+Each rank's range is `[my_ind_min, my_ind_max]` (1-based block-row indices).
+The global directory arrays `index_min(1:ncpu)` and `index_max(1:ncpu)` let any
+rank compute any other rank's range.
+
+The local scalar row count and index offset follow directly:
+
+$$n_r = \texttt{my_ind_size} \times b, \qquad
+  \text{offset} = (\texttt{my_ind_min} - 1) \times b$$
+
+where $b$ is the block size.  Global scalar row index $g$ maps to local scalar
+row $g - \text{offset}$.
+
+### Assembly
+
+Assembly is purely local: each rank loops over its own element set and checks
+whether a test-function block row falls within `[my_ind_min, my_ind_max]` before
+adding a contribution.  No inter-rank communication is required during matrix
+fill.
+
+### Distribution Modes
+
+| Field | Type | Meaning |
+| --- | --- | --- |
+| `ng` | integer | Global scalar dimension $n_\text{global}$ |
+| `nr` | integer | Locally owned scalar rows (`my_ind_size × b`) |
+| `nc` | integer | Locally owned scalar columns (= `ng` for row-distributed) |
+| `nnz` | integer | Locally owned scalar non-zeros |
+| `my_ind_min`, `my_ind_max` | integer | Inclusive block-row range of this rank |
+| `my_ind_size` | integer | `my_ind_max − my_ind_min + 1` |
+| `index_min(:)`, `index_max(:)` | integer(ncpu) | Block-row ranges of all ranks |
+| `ncpu` | integer | Number of MPI ranks |
+| `comm` | integer | MPI communicator |
+| `row_distributed` | logical | `.true.` — rows partitioned (standard transient matrix) |
+| `col_distributed` | logical | `.true.` — columns also partitioned (PaStiX path) |
+| `reduced` | logical | `.true.` — full matrix replicated on all ranks |
+
+The standard configuration for the global transient matrix is
+`row_distributed = .true.`, `col_distributed = .false.`, `reduced = .false.`.
+
+**`col_distributed`** is set for the PaStiX direct solver, which requires a
+column-distributed CSR input.  After `convert_sorting()`, `irn` is overwritten
+with scalar CSR row pointers and the column partition information is used to
+determine the local column range.
+
+**`reduced`** is used for matrices that must be available in full on every rank
+(e.g. certain preconditioner sub-matrices).  In this mode `nnz` counts global
+non-zeros and `irn`/`jcn`/`val` hold the complete matrix on every process.
+
+---
+
+## Format Used by Each Consumer
+
+| Consumer | Format | Key arrays |
+| --- | --- | --- |
+| Direct assembly / FE routines | BCOO | `irn`, `jcn`, `val`, `ijA_size`, `irn_jcn`, `ijA_index` |
+| Matrix–vector products (CPU) | BCOO / BCSR | `iblockptr`, `irn`, `jcn`, `val` |
+| Matrix–vector products (GPU) | Scalar CSR / BCSR | `iblockptr`, `iptr`/`irn`, `jcn`, `val` |
+| MUMPS direct solve | Scalar COO (row-distributed) | `irn`, `jcn`, `val` |
+| PaStiX direct solve | Scalar CSR (column-distributed) | `iptr`, `jcn`, `val` |
+| STRUMPACK direct solve | Scalar COO | `irn`, `jcn`, `val` |

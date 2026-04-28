@@ -9,38 +9,38 @@ render_with_liquid: false
 
 # EQDSK to JOREK (eqdsk2jorek.f90)
 
-Equilibrium data reconstructed by EFIT and saved in the EQDSK format may be converted into JOREK input data by using `eqdsk2jorek.f90`.
+Equilibrium data reconstructed by EFIT and saved in EQDSK format can be converted into JOREK input data using `eqdsk2jorek.f90`.
 
 ## Compiling
 
-To compile `eqdsk2jorek`, you first need to install the Dierckx library used for interpolating the poloidal flux function, provided in the EQDSK file on a rectangular $(R,Z)$ grid, along the JOREK boundary.
+To compile `eqdsk2jorek`, you first need to install the Dierckx library. It is used to interpolate the poloidal flux function from the EQDSK rectangular $(R,Z)$ grid onto the JOREK boundary.
 
-- Download the Dierckx library in your home directory (GitHub distribution thanks to Daan Van Vugt):
+- Download the Dierckx library in your home directory (GitHub distribution from Daan Van Vugt):
 
-```bash
-cd $HOME
-git clone https://github.com/Exteris/libdierckx.git
-```
+  ```bash
+  cd $HOME
+  git clone https://github.com/Exteris/libdierckx.git
+  ```
 
 - Compile the Dierckx library:
 
-```bash
-cd libdierckx
-make
-```
+  ```bash
+  cd libdierckx
+  make
+  ```
 
 - Go to your JOREK main directory and add the path to the Dierckx library in `Makefile.inc`. For example:
 
-```make
-# --- DIERCKX Library
-LIBDIERCKX = /marconi/home/userexternal/dbonfigl/libdierckx/libdierckx.a
-```
+  ```make
+  # --- DIERCKX Library
+  LIBDIERCKX = /marconi/home/userexternal/dbonfigl/libdierckx/libdierckx.a
+  ```
 
 - Compile `eqdsk2jorek`:
 
-```bash
-make eqdsk2jorek
-```
+  ```bash
+  make eqdsk2jorek
+  ```
 
 ## Running
 
@@ -52,7 +52,7 @@ Pipe your EQDSK file to `eqdsk2jorek`:
 
 ## Input files
 
-This program reads standard **EQDSK** files. However, in some cases the **EQDSK** numeric formatting (number of digits per value) can differ. In that case, some read statements in `eqdsk2jorek.f90` may need to be adapted.
+This program reads standard **EQDSK** files. In some cases, however, EQDSK numeric formatting (number of digits per value) differs. In that case, some read statements in `eqdsk2jorek.f90` may need to be adapted.
 
 A namelist file named `eqdsk2jorek.nml` can be used to change the default behavior of **eqdsk2jorek** without recompiling. The `eqdsk2jorek_params` namelist must be defined inside `eqdsk2jorek.nml`.
 
@@ -61,7 +61,7 @@ Parameters in `eqdsk2jorek_params`:
 - `tokamak_name`: defines the hard-coded plasma boundary parameter family
   - Available tokamak-specific families: `ITER` (default), `JET`, `DIII-D`
   - User-defined plasma boundary parameters from namelist: `USER_DEFINED`
-- `boundary_type`: defines plasma boundary parameters for a specific tokamak. Parameters are magnetic-axis major radius and vertical position (`R_axis`, `Z_axis`), minor radius (`r_minor`), ellipticity ($\kappa$), upper/lower triangularity ($\delta_u$, $\delta_l$), upper/lower quadrangularity ($\zeta_u$, $\zeta_l$).
+- `boundary_type`: defines plasma boundary parameters for a specific tokamak. Parameters are magnetic-axis major radius and vertical position (`R_axis`, `Z_axis`), minor radius (`r_minor`), ellipticity ($\kappa$), upper/lower triangularity ($\delta_u$, $\delta_l$), and upper/lower quadrangularity ($\zeta_u$, $\zeta_l$).
 
   Omitting upper/lower identifiers, the plasma boundary is computed as:
 
@@ -73,7 +73,7 @@ Parameters in `eqdsk2jorek_params`:
 
   - `ITER`
     - `CLOSE_WALL_FIT`: $\kappa$: 2, $\delta_u$: 0.55, $\delta_l$: 0.65, $\zeta_u$: -0.1, $\zeta_l$: 0.15, `R_axis`: 6.2, `Z_axis`: 0.1, `r_minor`: 2.25
-    - `OUTSIDE_WALL` (default): $\kappa$: 2.1, $\delta_u$: 0.58, $\delta_l$: 0.65, $\zeta_u$: -0.12, $\zeta_l$: -0., `R_axis`: 6.2, `Z_axis`: -0.05, `r_minor`: 2.34
+    - `OUTSIDE_WALL` (default): $\kappa$: 2.1, $\delta_u$: 0.58, $\delta_l$: 0.65, $\zeta_u$: -0.12, $\zeta_l$: -0.0, `R_axis`: 6.2, `Z_axis`: -0.05, `r_minor`: 2.34
   - `JET`
     - `OUTSIDE_WALL`: $\kappa$: 1.85, $\delta_u$: 0.4, $\delta_l$: 0.4, $\zeta_u$: -0.2, $\zeta_l$: -0.2, `R_axis`: 2.9, `Z_axis`: 0.1, `r_minor`: 1.08
     - `OUTSIDE_WALL_SHORT_LEG` (default): $\kappa$: 1.7, $\delta_u$: 0.4, $\delta_l$: 0.4, $\zeta_u$: -0.4, $\zeta_l$: -0.2, `R_axis`: 2.85, `Z_axis`: 0.15, `r_minor`: 1.1
@@ -84,21 +84,21 @@ Parameters in `eqdsk2jorek_params`:
     - `OUTSIDE_WALL`: $\kappa$: 1.85, $\delta_u$: 0.4, $\delta_l$: 0.4, $\zeta_u$: -0.2, $\zeta_l$: -0.2, `R_axis`: 1.7, `Z_axis`: 0, `r_minor`: 0.7
     - `NIMROD_M3DC1`: $\kappa$: 1.35/0.7, $\delta_u$: 0.3, $\delta_l$: 0.3, $\zeta_u$: 0, $\zeta_l$: 0, `R_axis`: 1.7, `Z_axis`: 0, `r_minor`: 0.7
 
-The number of poloidal angles used to discretize the plasma boundary is `n_tht_in=257` for all cases. Note that `R_axis`, `Z_axis`, and `r_minor` can be rescaled by setting `R_scale` different from 1. Examples of JET `OUTSIDE_WALL` and `OUTSIDE_WALL_SHORT_LEG` are shown in the **Tips and Tricks** section.
+For predefined machine families, `n_tht_in` is typically set to `257`. Note that `R_axis`, `Z_axis`, and `r_minor` can be rescaled by setting `R_scale` different from 1. Examples of JET `OUTSIDE_WALL` and `OUTSIDE_WALL_SHORT_LEG` are shown in the **Tips and Tricks** section below.
 
 - `ellip_in`: user-defined ellipticity (default: 1)
 - `tria_up_in`: user-defined upper triangularity (default: 0)
 - `tria_low_in`: user-defined lower triangularity (default: 0)
 - `quad_up_in`: user-defined upper quadrangularity (default: 0)
 - `quad_low_in`: user-defined lower quadrangularity (default: 0)
-- `n_tht_in`: number of poloidal angles used to discretize plasma boundary (default: 259)
+- `n_tht_in`: number of poloidal angles used to discretize the plasma boundary (default: 259)
 - `r0_in`: major radius of magnetic axis (default: 3)
 - `z0_in`: vertical position of magnetic axis (default: 0)
 - `a0_in`: plasma minor radius (default: 1)
 - `B_scale`: magnetic-field scaling factor (default: 1)
 - `I_scale`: plasma-current scaling factor (default: 1)
 - `R_scale`: spatial scaling factor (default: 1)
-- `smth`: smoothing parameter of plasma profile interpolator (default: `1.d-6`, see **Tips and Tricks**)
+- `smth`: smoothing parameter of plasma profile interpolator (default: `1.d-6`, see **Tips and Tricks** below)
 - `eqdsk_string_r_min`: substring used to find plasma minor radius in EQDSK file (default: `MINOR RADIUS -> A [m]`). Currently used only for `JET` + `CIRCULAR`.
 
 ### Extension of the pressure profile to the SOL
@@ -135,11 +135,11 @@ psi_norm   F   pres   FdF/dpsi   dp/dpsi   q
 
 `psiRZ_eqdsk` is an ASCII file containing the $\Psi(R,Z)$ map.
 
-`eqdsk.ps` can be used to assess whether the produced data is usable for JOREK (for an expert eye).
+`eqdsk.ps` can be used to assess whether the produced data is usable for JOREK (mainly for experienced users).
 
 ## Tips and Tricks
 
-The `OUTSIDE_WALL` (blue line) and `OUTSIDE_WALL_SHORT_LEG` (red line) boundaries of the `JET` family are shown below. `OUTSIDE_WALL_SHORT_LEG` is used to avoid very long divertor legs. `LIMITER` has limiter shape without legs, while `INSIDE LIMITER` is inside the limiter and includes part of a limiter leg (useful for STARWALL extensions when the first wall is used as the resistive wall, since response matrices are computed between the JOREK boundary and first wall and should not intersect).
+The `OUTSIDE_WALL` (blue line) and `OUTSIDE_WALL_SHORT_LEG` (red line) boundaries of the `JET` family are shown below. `OUTSIDE_WALL_SHORT_LEG` is used to avoid very long divertor legs. `LIMITER` has limiter shape without legs, while `INSIDE_LIMITER` is inside the limiter and includes part of a limiter leg (useful for STARWALL extensions when the first wall is used as the resistive wall, since response matrices are computed between the JOREK boundary and first wall and should not intersect).
 
 ![JET wall contours](assets/eqdsk2jorek/eqdsk2jorek_contours_wall.png)
 ![JET first-wall contours](assets/eqdsk2jorek/eqdsk2jorek_contours_first_wall.png)
