@@ -71,8 +71,8 @@ The coil currents for a specific shot can be directly extracted by cliste from t
 When using the [controller](active_controller_model_for_vertical_stabilization) for active stabilization during the simulation, the CoI coils are used like in the experiment for fast feedback.
 
 <!-- [Coil feedings as ascii and sw input](https://www.jorek.eu/wiki/lib/exe/fetch.php?media=aug_feeding.tar.gz) -->
-The [coil feedings](assets/asdex_upgrade/aug_feeding.tar.gz) were provided by I. Zammuto and transformed into starwall data.
-The OH2o and OH2u coil are connected to the OH feeding and also have separate inputs.
+The coil feedings were provided by I. Zammuto and transformed into STARWALL data.
+The OH2o and OH2u coils are connected to the OH feeding and also have separate inputs.
 
 ```
 1. +OH1
@@ -81,10 +81,10 @@ The OH2o and OH2u coil are connected to the OH feeding and also have separate in
 4. -OH2u > +OH3u
 5. -OH3u > +OH3o
 6. -OH3o
-And The OH2 coils get additional currents (in fact they have additional feeders, the reserve in the mesh file):
+The OH2 coils get additional currents (in fact they have additional feeders, the reserve in the mesh file):
 1. the OH2o has the current IOH+dIOH2s and
 2. the OH2u has the current IOH+dIOH2s+dIOH2u 
-All these feedings are included in the OH file
+All these feedings are included in the OH file.
 The V1+V2 coils consist of two different circuits each, so there is also a line connecting the two circuits.
 ```
 

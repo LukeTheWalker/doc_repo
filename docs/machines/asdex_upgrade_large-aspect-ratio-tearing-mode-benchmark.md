@@ -1,7 +1,7 @@
 ---
 title: "Large aspect ratio tearing mode benchmark"
 nav_exclude: true
-parent: "Equilibria"
+parent: "ASDEX Upgrade"
 layout: default
 render_with_liquid: false
 ---

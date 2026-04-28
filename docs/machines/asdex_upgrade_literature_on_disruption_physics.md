@@ -1,12 +1,14 @@
 ---
 title: "Literature on Disruption Physics"
 nav_exclude: true
-parent: "ASDEX Upgrade JOREK Wiki"
+parent: "ASDEX Upgrade"
 layout: default
 render_with_liquid: false
 ---
 
-# Experimental work
+# Literature on Disruption Physics
+
+## Experimental work
 
 ## Disruption onset
 
