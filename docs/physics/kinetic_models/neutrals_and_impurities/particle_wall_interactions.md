@@ -1,7 +1,7 @@
 ---
 title: "Introduction to the particle wall_actions"
-nav_order: 7
-parent: "Kinetic Particle Module"
+nav_order: 8
+parent: "Neutrals and Impurities"
 layout: default
 render_with_liquid: false
 ---

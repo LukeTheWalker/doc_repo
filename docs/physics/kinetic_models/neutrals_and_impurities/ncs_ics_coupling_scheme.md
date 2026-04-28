@@ -1,7 +1,7 @@
 ---
-title: "NCS and ICS Coupling Schemes"
-nav_order: 7
-parent: "Kinetic Particle Module"
+title: "Coupling Scheme"
+nav_order: 8
+parent: "Neutrals and Impurities"
 layout: default
 render_with_liquid: false
 ---
