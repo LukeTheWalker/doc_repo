@@ -10,7 +10,7 @@ render_with_liquid: false
 
 The derivation and implementation of the (kinetic) neutral model for JOREK is described in [*S. Q. Korving et al. PoP 2023*](https://doi.org/10.1063/5.0135318).
 
-For the neutral (ncs) and impurity (ics) coupling scheme, sources and sinks for particles are projected for the density, momentum, and energy equations. However, as the JOREK form of the equations is different than the typical Euler form of the equations, the source terms need to be corrected. The sources are corrected as follows:
+For the neutral (ncs) and impurity (ics) coupling scheme, sources and sinks for particles are projected for the density, (parallel) momentum, and energy equations. However, as the JOREK form of the equations is different than the typical Euler form of the equations, the source terms need to be corrected. The sources are corrected as follows:
 
 $$
 \begin{align}
@@ -23,6 +23,13 @@ $$
 $$
 
 Where $`S_E`$, $`\vec{S}_{\rho v}`$ and $`S_\rho`$ are the physical source terms.
+
+
+<figure style="float: right; margin-left: 15px; text-align: center;">
+  <img src="../neutrals_and_impurities/assets/ncs_ics_coupling_scheme.md/coupling.png" alt="Flowchart of the two-way coupling" width="200" style="background-color: white;">
+  <figcaption style="font-size: 0.9em; font-style: italic; color: #555;">Flowchart of the two-way coupling</figcaption>
+</figure>
+The particles are two-way coupled to the MHD equations, the schematics can be seen in the picture on the right:
 
 ### Overview of source terms
 
