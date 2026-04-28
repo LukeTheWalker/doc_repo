@@ -6,9 +6,6 @@ layout: default
 render_with_liquid: false
 ---
 
-<!-- #TODO_BY_HAOWEI -->
-<!-- The missing attachments need to be downloaded from: https://www.jorek.eu/wiki/doku.php?id=asdex_upgrade -->
-
 # Information relevant for simulating ASDEX Upgrade
 <!-- For some specific test cases see also [ASDEX Upgrade JOREK Wiki](asdex_upgrade_wiki) (**OLD**) -->
 
@@ -29,7 +26,7 @@ Psi_axis < Psi_xpoint
 <!-- ![](jorek-coordinates.png){: width="500"} -->
 <img src="assets/asdex_upgrade/jorek-coordinates.png" width="500" alt="Description of image">
 
-# Equilibria
+## Equilibria
 
 <!-- ### cliste2jorek Script -->
 
@@ -52,11 +49,11 @@ $$
 
 ### Simplified Equilibria for Tests
 
-- [Simplified Equilibria for Tests](simplified-equilibria-for-tests)
-- [Large aspect ratio tearing mode benchmark](large-aspect-ratio-tearing-mode-benchmark)
-- [Simplified X-point tearing mode test case](simplified-x-point-tearing-mode-test-case)
+- [Simplified Equilibria for Tests](asdex_upgrade_simplified-equilibria-for-tests)
+- [Large aspect ratio tearing mode benchmark](asdex_upgrade_large-aspect-ratio-tearing-mode-benchmark)
+- [Simplified X-point tearing mode test case](asdex_upgrade_simplified-x-point-tearing-mode-test-case)
 
-# Coil geometry
+## Coil geometry
 
 ### PF coils
 The coil geometry for STARWALL was extracted from the machine description file provided by Mike Dunne and contains all PF coils.
@@ -65,10 +62,10 @@ The tar file contains the original machine description file, the geometry of con
 [aug_freeb_input.tar](assets/asdex_upgrade/aug_freeb_input.tar)
 <!-- [aug_freeb_input.tar](https://www.jorek.eu/wiki/lib/exe/fetch.php?media=aug_freeb_input.tar) -->
 
-See also [pf coils](aug-pf-coils-cliste) for the geometry of the PF coils (in magenta in the picture below) and an explanation of the Machine Description file.
+See also [pf coils](asdex_upgrade_pf-coils-cliste) for the geometry of the PF coils (in magenta in the picture below) and an explanation of the Machine Description file.
 
 <!-- ![](aug_coils_eng.png){: width="300"} -->
-<img src="assets/asdex_upgrade/aug_coils_eng.png" width="300" alt="Description of image">
+<img src="assets/asdex_upgrade/aug_coils_eng.png" width="500" alt="Description of image">
 
 The coil currents for a specific shot can be directly extracted by cliste from the shotfile. During the free-boundary equilibrium the V2 coils are used for the feedback.
 When using the [controller](active_controller_model_for_vertical_stabilization) for active stabilization during the simulation, the CoI coils are used like in the experiment for fast feedback.
@@ -95,6 +92,6 @@ The V1+V2 coils consist of two different circuits each, so there is also a line 
 
 - [R. Nazikian's slides 16-07-2015](assets/asdex_upgrade/nazikian_ipp_07152015.pdf) -->
 
-# Literature
-- [Literature on ELM Physics](asdex_upgrade_wiki_literature_on_elm_physics)
-- [Literature on Disruption Physics](asdex_upgrade_wiki_literature_on_disruption_physics)
+## Literature
+- [Literature on ELM Physics](asdex_upgrade_literature_on_elm_physics)
+- [Literature on Disruption Physics](asdex_upgrade_literature_on_disruption_physics)

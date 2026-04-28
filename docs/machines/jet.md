@@ -31,4 +31,4 @@ The **SPI system** installed in 2019 replaces DMV1. Its toroidal position, in JO
 
 ## JET ELM tutorial
 
-Follow the JET ELM tutorial here: [JET ELM tutorial](jet_tutorial).
+- [JET ELM tutorial](jet_tutorial)

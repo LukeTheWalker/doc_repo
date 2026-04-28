@@ -6,9 +6,6 @@ layout: default
 render_with_liquid: false
 ---
 
-<!-- #TODO_BY_HAOWEI -->
-<!-- The missing attachments need to be downloaded from: https://jorek.eu/aug/doku.php?id=large_aspect_ratio_tearing_mode_benchmark -->
-
 # Large Aspect Ratio Tearing Mode Benchmark
 
 - circular plasma

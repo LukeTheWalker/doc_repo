@@ -13,11 +13,13 @@ A PID controller was added to JOREK to enable active stabilization in free bound
 
 
 It acts on specific coils based on the vertical axis position and its evolution in the simulation according to:
+
 $$
 \begin{align}
 \Delta I &=  K_\text{P}\,e(t) + K_\text{D} \frac{\mathrm{d} e(t)}{\mathrm{d} t} + K_\text{I} \int_{t_0}^{t} e(t)
 \end{align}
 $$
+
 where $e=Z(t)-Z_\text{ref}(t)$ is the deviation from the reference value and $K_\text{P}$, $K_\text{I}$, $K_\text{D}$ are the proportional, integral and derivative gains.
 
 ## Implementation in JOREK

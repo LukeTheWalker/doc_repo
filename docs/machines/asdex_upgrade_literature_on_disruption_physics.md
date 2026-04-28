@@ -6,9 +6,6 @@ layout: default
 render_with_liquid: false
 ---
 
-<!-- #TODO_BY_HAOWEI -->
-<!-- The missing attachments need to be downloaded from: https://jorek.eu/aug/doku.php?id=literature_on_disruption_physics -->
-
 # Experimental work
 
 ## Disruption onset

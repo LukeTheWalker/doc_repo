@@ -5,9 +5,6 @@ layout: default
 render_with_liquid: false
 ---
 
-<!-- #TODO_BY_HAOWEI -->
-<!-- The missing attachments need to be downloaded from: https://jorek.eu/aug/doku.php?id=aug-pf-coils-cliste&s[]=pf&s[]=coils -->
-
 # PF coils
 
 **E-Mail 2.3.2016:**
@@ -76,6 +73,6 @@ render_with_liquid: false
 0.6610,-2.0072,0.3380,0.4145, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00,0.00,0.00,0.00
 ```
 
-- [aug-pf-coils.tar.gz](assets/asdex_upgrade/aug-pf-coils.tar.gz)
+<!-- - [aug-pf-coils.tar.gz](assets/asdex_upgrade/aug-pf-coils.tar.gz) -->
 
-![PF coils](assets/asdex_upgrade/aug-pf-coils.png)
+<img src="assets/asdex_upgrade/aug-pf-coils.png" width="500" alt="Description of image">

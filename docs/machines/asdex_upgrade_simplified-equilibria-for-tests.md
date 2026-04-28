@@ -5,8 +5,6 @@ parent: "Equilibria"
 layout: default
 render_with_liquid: false
 ---
-<!-- #TODO_BY_HAOWEI -->
-<!-- The missing attachments need to be downloaded from: https://jorek.eu/aug/doku.php?id=simplified_equilibria_for_tests -->
 
 # Simplified Equilibria for Tests
 
