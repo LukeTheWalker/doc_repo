@@ -3,7 +3,7 @@
 ## Note:
   * The wall collision check has been implemented fully only for relativistic particle and relativistic guiding center modes. For other modes the algorithm still exists but you can't get a full output without implementing how the particle energy is evaluated in the export routine (so this is a simple thing to do).
   * You'll need a triangular mesh that represents PFCs to use this module. If you don't have one, use this script to generate simple wall mesh from the edges of the JOREK computational grid.
-  * See also the [internship report](./../../assets/internship_report_with_chapters.pdf) of Miko Skyllas.
+  * See also the [internship report](./../../assets/wall_loads/internship_report_with_chapters.pdf) of Miko Skyllas.
 
 ### namelist2wall.py
 ```python
