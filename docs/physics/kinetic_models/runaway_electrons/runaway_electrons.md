@@ -1,3 +1,11 @@
+---
+title: "Kinetic Runaway Electrons"
+nav_order: 7
+parent: "Kinetic Particle Module"
+layout: default
+render_with_liquid: false
+---
+
 # Runaway Electrons
 For getting started with REs, refer to [run jorek with runaway electrons](./)
 # Coupling Scheme 

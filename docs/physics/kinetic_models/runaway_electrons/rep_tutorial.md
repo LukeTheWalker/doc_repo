@@ -1,3 +1,11 @@
+---
+title: "Running with Kinetic Runaway Electrons"
+nav_order: 8
+parent: "Kinetic Runaway Electrons"
+layout: default
+render_with_liquid: false
+---
+
 # Getting Started with full-kinetic Runaway Electrons on kinetic_main (WIP 2026 Feb, Chizhou) 
 
 This work is based on kinetic_develop branch [Introduction to the kinetic framework](./../particle_introduction.md), where RE super particles are evolved in full orbits and coupled with the fluid plasma. The compiling of the binary kinetic_main can be found in [Introduction to the kinetic framework](./../particle_introduction.md), which is similar to jorek2_main. The Strumpack solver have been usable for kinetic simulations. More general introduction to kinetic models in JOREK is given in [particles](./../particle.md)

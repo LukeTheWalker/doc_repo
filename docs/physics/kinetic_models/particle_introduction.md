@@ -1,7 +1,7 @@
 ---
-title: "Introduction to the kinetic framework"
-nav_order: 7
-parent: "Kinetic Particle Module"
+title: "Kinetic Particle Module"
+nav_order: 6
+parent: "Physics Models"
 layout: default
 render_with_liquid: false
 ---

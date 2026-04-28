@@ -1,3 +1,11 @@
+---
+title: "Energetic Ion"
+nav_order: 7
+parent: "Kinetic Particle Module"
+layout: default
+render_with_liquid: false
+---
+
 # Energetic ions
 
 A species of suprathermal ions can be included in JOREK via the kinetic particle framework. To simulate the interaction of energetic particles (EPs) with MHD modes a hybrid kinetic-MHD model is used [1]. The plasma is split into a bulk part, which is treated with an MHD model, and the energetic particles, which are treated kinetically. More details about the JOREK implementation and applications can be found in [2].
