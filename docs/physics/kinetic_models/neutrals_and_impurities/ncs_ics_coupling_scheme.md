@@ -1,3 +1,11 @@
+---
+title: "NCS and ICS Coupling Schemes"
+nav_order: 7
+parent: "Kinetic Particle Module"
+layout: default
+render_with_liquid: false
+---
+
 # Coupling scheme
 
 The derivation and implementation of the (kinetic) neutral model for JOREK is described in [*S. Q. Korving et al. PoP 2023*](https://doi.org/10.1063/5.0135318).

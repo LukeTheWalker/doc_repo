@@ -1,3 +1,11 @@
+---
+title: "NCS and ICS Atomic Processes"
+nav_order: 7
+parent: "Kinetic Particle Module"
+layout: default
+render_with_liquid: false
+---
+
 # Atomic physics
 Currently the following atomic physics processes are modeled, usually using coefficients from OpenADAS ([[adas|Brief overview]]):
 

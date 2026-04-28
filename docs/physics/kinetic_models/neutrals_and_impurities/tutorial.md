@@ -1,3 +1,11 @@
+---
+title: "Run with kinetic neutrals and impurities"
+nav_order: 7
+parent: "Kinetic Particle Module"
+layout: default
+render_with_liquid: false
+---
+
 # Run with kinetic neutrals and impurities
 This tutorial shows how to include kinetic neutrals and/or impurities in JOREK simulations. We assume that the user is already familiar with running standalone JOREK simulations, see [[running_jorek_for_the_first_time|Running JOREK for the first time]].
 
