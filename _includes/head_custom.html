@@ -1,5 +1,4 @@
 <style>
-  /* Remove the max-width cap on the content area so it fills all space to the right of the sidebar */
   .main-content-wrap {
     max-width: 100% !important;
   }
@@ -10,7 +9,16 @@
     tex: {
       inlineMath: [['$', '$']],
       displayMath: [['$$', '$$'], ['\\[', '\\]']],
-      processEscapes: true
+      processEscapes: true,
+      macros: {
+        vpar:    "v_\\parallel",
+        pgrad:   "\\nabla^\\perp",
+        tderiv:  ["\\frac{\\partial #1}{\\partial t}", 1],
+        llderiv: "\\partial^\\parallel",
+        psderiv: "\\partial_{\\psi_v}",
+        pLap:    "\\Delta^\\perp",
+        red:     ["{\\color{red}#1}", 1]
+      }
     }
   };
 </script>
