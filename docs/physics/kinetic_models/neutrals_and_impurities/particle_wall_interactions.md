@@ -46,9 +46,11 @@ In the backend all wall\_actions will be generated from these wall\_act\_configs
 
 If you specified multiple wall\_actions for the same species in the same area (such as a local "pump" action on top of a global "self sputter" action), only one interaction will be done for any given particle upon hitting the wall. The  "pump" action is hardcoded to take precedence over "self sputter" and "reflection". E.g. if you set both a "pump" action and a "self sputter" action in the same area (for example because the "pump" is local with only\_in\_polygon=.t., and the "self sputter" is the default global), only the "pump" action will happen in that area.
 
-More complicated scenario's: avoid specifying other overlapping actions (e.g. 2 overlapping local "pump"s, or overlapping "reflection" and "self sputter". It will do the first applicable "pump" action or else the first applicable "reflection" or "self sputter" action that you specified, but that is all way more confusing than just making sure the polygons don't overlap. There is no check for this.) If you somehow want to pump everywhere except a local area where you want "reflection" or "self sputter", then just define a polygon that excludes the part where you don't want pumping for the "pump" action.
+More complicated scenario's: avoid specifying other overlapping actions (e.g. 2 overlapping local "pump"s, or overlapping "reflection" and "self sputter". It will do the first applicable "pump" action or else the first applicable "reflection" or "self sputter" action that you specified, but that is all way more confusing than just making sure the polygons don't overlap. There is no check for this.). If you somehow want to pump everywhere except a local area where you want "reflection" or "self sputter", then just define a polygon that excludes the part where you don't want pumping for the "pump" action.
 
 The "fluid sputter" types are grouped per target species and the creation scheme of the first "fluid sputter" type is used for the group rather than for that individual sputter action as this means the weight of the generated W is more homogeneous. (E.g. in a D plasma with trace N; the $D^+ \rightarrow W$ fluid sputtering generates the same weight W superparticles as the $N^+ \rightarrow W$ fluid sputtering.)
+
+You can specify particle wall\_actions to happen more often than once every _fluid_ timestep (each n-th _particle_ step) through `part_group_configs(i)wall_act_each_nstep_part`. This is useful when a large fraction of your particles hit the wall during a single fluid timestep. See also [kinetic timestepping](../timestepping.md)
 
 ### Practical example to showcase the functionality ###
 
@@ -89,6 +91,12 @@ Now you also might want to simulate a pump duct. You can do this by setting a "p
 ```
 
 Okay, so with this setup pumping will be done with an absorption factor of (100%-70%=)30% in the defined polygon (because the "pump" action takes precedence over other particle particle actions, and only one particle particle action is executed per particle). Outside the polygon (everywhere else), particles will be reflected (thermal desorption or fast reflection) off the wall with absorption of (100%-98%=)2% to simulate a non fully saturated wall.
+
+Suppose your neutrals dominate the divertor area, and thus they also hit the wall a lot, then you want to do your wall_actions for this paricle group more often than once every _fluid_ timestep. If that is the case, you can set the wall actions to be done every n integer _particle_ timesteps (in this case every 2 particle timesteps)
+
+```fortran90
+part_group_configs(1)wall_act_each_nstep_part  = 2
+```
 
 Good, that is the neutrals settled. Now suppose you want to investigate the first plasma after boronization in a scenario where the tungsten divertor is still partially covered by the boron, and you are interested in the tungsten transport in this case (I don't know why, but hey, you do you). So you add a second kinetic species of tungsten impurities:
 
