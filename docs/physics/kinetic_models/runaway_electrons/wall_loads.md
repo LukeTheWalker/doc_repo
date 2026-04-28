@@ -131,11 +131,17 @@ Optionally, one can also output the particle restart file, where i_elm indicates
 
 The post-processing script is util/plot_wallload.py that will output the wetted area, and maximum particle and heat loads. The script requires wall input, wall loads and optionally also the particle restart file. The script also visualizes the losses (note that the default settings are for ITER):
 
-{{::wallloadscatter_1_.png?400|}} {{:wallload3d_1_.png?400|}}
+<p float="left">
+  <img src="./../../assets/wall_loads/wallloadscatter_1_.png" width="45%" />
+  <img src="./../../assets/wall_loads/wallload3d_1_.png" width="45%" />
+</p>
 
 (**Left**) Scatter plot of marker final positions. (**Right**) Loads on the 3D wall mesh
 
-{{::wallloadmean_1_.png?400|}} {{::wallloadhist.png?400|}}
+<p float="left">
+  <img src="./../../assets/wall_loads/wallloadmean_1_.png" width="45%" />
+  <img src="./../../assets/wall_loads/wallloadhist.png" width="45%" />
+</p>
 
 (**Left**) Load pattern on the wall. Note that these losses are projected on the blue curve shown in the first figure, so this figure does not show exact losses or their distribution but just the general pattern. (**Right**) Histogram showing area affected at least by the given heat load.
 
@@ -147,4 +153,6 @@ The post-processing script is util/plot_wallload.py that will output the wetted 
 
 The algorithm is relatively simple. At each time-step, the line segment between the marker new and old positions is used to perform ray-tracing with respect to wall triangles using Möller-Trumbore algorithm. To optimize the process, ray tracing is only performed against triangles that are in close proximity. This is accomplished by recursively dividing the volume into eight quadrants, and only checking collisions against those triangles that are inside the same volume(s) as the marker new or old position. This //octree// is built upon initialization, and it's effectiveness can be seen in the following plot (for simulations max_depth=6 is recommended):
 
-{{::octreeconvergence.png?400|}}
+![octreeconvergence](./../../assets/wall_loads/octreeconvergence.png)
+
+
