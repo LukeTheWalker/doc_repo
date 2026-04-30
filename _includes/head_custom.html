@@ -1,16 +1,90 @@
-<style>
-  /* Remove the max-width cap on the content area so it fills all space to the right of the sidebar */
-  .main-content-wrap {
-    max-width: 100% !important;
-  }
-</style>
-
 <script>
   MathJax = {
     tex: {
-      inlineMath: [['$', '$']],
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
       displayMath: [['$$', '$$'], ['\\[', '\\]']],
-      processEscapes: true
+      processEscapes: true,
+      macros: {
+        vpar:    "v_\\parallel",
+        pgrad:   "\\nabla^\\perp",
+        tderiv:  ["\\frac{\\partial #1}{\\partial t}", 1],
+        llderiv: "\\partial^\\parallel",
+        psderiv: "\\partial_{\\psi_v}",
+        pLap:    "\\Delta^\\perp",
+        red:     ["{\\color{red}#1}", 1]
+      }
+    },
+    startup: {
+      pageReady: function() {
+        try {
+          /* Change this selector if your main content area has a different class */
+          var el = document.querySelector('.main-content');
+          if (el) {
+            var rawHTML = el.innerHTML;
+
+            /* 0. Fix Kramdown's $`...`$ behavior which creates $<code class="...">...</code>$ */
+            /* We strip the code tags so MathJax can process the math inside. */
+            rawHTML = rawHTML.replace(/\$<code[^>]*>([\s\S]*?)<\/code>\$/g, '$$$1$$');
+
+            /* 0.5 Fix Kramdown accidentally turning inline math with unescaped pipes into tables */
+            /* If a single line has | characters, Kramdown wraps it in a table without a header */
+            rawHTML = rawHTML.replace(/(?:<div class="table-wrapper">\s*)?<table>\s*<tbody>\s*<tr>([\s\S]*?)<\/tr>\s*<\/tbody>\s*<\/table>(?:\s*<\/div>)?/g, function(match, inner) {
+              var cells = inner.match(/<td>([\s\S]*?)<\/td>/g);
+              if (!cells || cells.length < 2) return match;
+              var firstDollars = (cells[0].match(/\$/g) || []).length;
+              var lastDollars = (cells[cells.length - 1].match(/\$/g) || []).length;
+              if (firstDollars % 2 !== 0 && lastDollars % 2 !== 0) {
+                return cells.map(function(c) { return c.replace(/^<td>([\s\S]*?)<\/td>$/, '$1'); }).join('|');
+              }
+              return match;
+            });
+
+            /* 1. Match ALL math blocks: $$...$$, \[...\], \(...\), and $...$ */
+            /* We use [\s\S]+? to ensure it matches across multiple lines. */
+            var mathRegex = /(\$\$[\s\S]+?\$\$|\\\[[\s\S]+?\\\]|\\\([\s\S]+?\\\)|\$[^$]+?\$)/g;
+            
+            el.innerHTML = rawHTML.replace(mathRegex, function(math) {
+              
+              /* A. Fix Kramdown underscores: Convert <em>x</em> back to _x_ */
+              var cleaned = math.replace(/<\/?(em|strong)>/g, function(tag) {
+                return tag.includes('strong') ? '__' : '_';
+              });
+
+              /* B. Aggressive Comment Stripping */
+              /* We protect escaped percent signs (\%) first */
+              cleaned = cleaned.replace(/\\%/g, '@@PCT@@');
+              
+              /* Remove specific full-line commented environments (like %\begin{split} or %\end{split}) */
+              cleaned = cleaned.replace(/%\\(?:begin|end)\{[^}]*\}/g, '');
+
+              /* Remove comments (%) and everything until the next newline OR */
+              /* a backslash (which usually starts a LaTeX command on the next line */
+              /* like \end, \mathbf, \\), OR the end of the math block. */
+              /* This is a best-effort approach since Kramdown flattens newlines into spaces. */
+              cleaned = cleaned.replace(/%.*?(?=\n|<br\s*\/?>|$|\\|\$\$|\\\]|\\\))/gi, ' ');
+              
+              /* Restore literal percent signs */
+              cleaned = cleaned.replace(/@@PCT@@/g, '\\%');
+
+              /* C. Convert Kramdown escaped pipes (\|) to \Vert so MathJax renders them correctly */
+              cleaned = cleaned.replace(/\\\|/g, '\\Vert ');
+              
+              /* Kramdown incorrectly wraps inline-styled $$ blocks in \(...\). */
+              /* If this block contains a display environment, force it to block display \[...\] */
+              if (cleaned.startsWith('\\(') && cleaned.endsWith('\\)')) {
+                if (/\\begin\{(?:align|equation|eqnarray|gather|split|multline|matrix|pmatrix|bmatrix|Bmatrix|vmatrix|Vmatrix|cases|array)/.test(cleaned)) {
+                  cleaned = '\\[' + cleaned.substring(2, cleaned.length - 2) + '\\]';
+                }
+              }
+
+              return cleaned;
+            });
+          }
+        } catch(e) {
+          console.error('MathJax preprocess failed:', e);
+        }
+        return MathJax.startup.defaultPageReady();
+      }
     }
   };
 </script>

@@ -10,7 +10,7 @@ render_with_liquid: false
 
 ## Reference scenarios
 
-[Zipped folder](assets/iter/201905_iter_scenarios.zip) containing data from **CORSICA simulations of ITER reference scenarios**. Contains G-files (i.e. eqdsk files, which can be converted into JOREK input using [eqdsk2jorek.f90](eqdsk2jorek.f90)), P-files (profiles) and T-files (time traces) for the following scenarios:
+[Zipped folder](assets/iter/201905_iter_scenarios.zip) containing data from **CORSICA simulations of ITER reference scenarios**. Contains G-files (i.e. eqdsk files, which can be converted into JOREK input using [eqdsk2jorek.f90](../howto/eqdsk2jorek), P-files (profiles) and T-files (time traces) for the following scenarios:
 
 - 15MA/5.3T H-mode (D-T plasma)
 - 15MA/5.3T L-mode (H plasma)

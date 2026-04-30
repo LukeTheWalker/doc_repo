@@ -6,14 +6,14 @@ render_with_liquid: false
 ---
 
 # JET ELM tutorial
-One of the more usual cases to run is a JET elm.
+One of the most common cases to run is a JET ELM.
 This page will explain the steps required to run this case successfully on a cluster.
 
 ## Setup
-First you will have to compile a working version of JOREK, using the instructions on [compiling](../compiling/cat_compiling). We will use model 303 in the rest of this tutorial.
+First you will have to compile a working version of JOREK, using the instructions on [compiling](../compiling/getting_started/compiling). We will use model 303 in the rest of this tutorial.
 There are two different executables that we need to compile to run this simulation.
 The first is used to calculate the equilibria, and uses toroidal symmetry.
-The second has the right number of fourier modes for this testcase.
+The second has the right number of Fourier modes for this test case.
 These are [hard-coded_parameters](../compiling/getting_started/hard-coded_parameters) which must be set at compile time.
 
 Check your `Makefile.inc` to remove debugging flags and extra checks if the simulation takes too much time.
@@ -39,12 +39,13 @@ make -j4
 We can keep the name of this executable as-is.
 
 ## Running the simulation
-The simulation consists of three steps. The first step is calculating the equilibrium (solving Grad-Shafranov), the second step is calculating the equilibrium including flows, and the last step is calculating the solution in the situation with a specified number of harmonics.
+The simulation consists of three steps. The first step is calculating the equilibrium (solving Grad-Shafranov), the second step is calculating the equilibrium including flows, and the last step is calculating the solution with a specified number of harmonics.
 
 You can obtain the required input files from [jet_tutorial.zip](assets/jet/jet_tutorial.zip).
 This contains 3 input files for the different stages of the simulation.
 These are generated from an `eqdsk` file, using the program `eqdsk2jorek.f90`. Both are included in the archive. A plot of the equilibrium flux contours (linearly interpolated) is shown below.
-![text16](assets/jet/text16.png)
+
+<img src="assets/jet/text16.png" width="300" alt="Description of image">
 
 The important differences between these files are highlighted below, but most of the content is identical.
 For a list of parameters and their meanings, see [Running JOREK](../compiling/getting_started/running).
@@ -56,7 +57,7 @@ restart = .f.
 nstep   = 0
 ```
 which tells JOREK to calculate a new equilibrium for the other parameters in this input file.
-We can then use `jorek_model303_equil` to calculate the equilibrium and save it in `jorek_restart.rst`
+We can then use `jorek_model303_equil` to calculate the equilibrium and save it in `jorek_restart.h5`
 
 ### Equilibrium with flows
 To add flows we only need to set a nonzero number of timesteps and timestep sizes, in the file `in_jet_n0`.
@@ -88,7 +89,7 @@ First change your email address in this file, change the queue, number of system
 ./launch_jet_equil.sh
 ```
 
-The first line in the script of 'launch_jet_equil.sh' is #!/bin/sh . You might need to change this line to  #!/bin/bash . The same goes for the 'launch_jet_run.sh'script.
+The first line in `launch_jet_equil.sh` is `#!/bin/sh`. You might need to change this to `#!/bin/bash`. The same goes for `launch_jet_run.sh`.
 
 After these jobs are done, you can start the ELM run with
 
@@ -97,15 +98,15 @@ After these jobs are done, you can start the ELM run with
 ```
 
 
-If you can't run './launch_jet_equil.sh', because the system replies with: 'Permission denied'; enter the command: chmod u+x launch_jet_equil.sh
-The same goes for './launch_jet_run.sh'
+If you cannot run `./launch_jet_equil.sh` because the system replies with `Permission denied`, run `chmod u+x launch_jet_equil.sh`.
+The same applies to `./launch_jet_run.sh`.
 
 ### Restarting the simulation
 
-The easiest way of restarting a simulation to longer time simulated is copiing the last restart (.rst) file to the jorek_restart.rst file and then rerun JOREK.
+The easiest way to restart a simulation to a longer simulated time is to copy the last restart (`.h5`) file to `jorek_restart.h5` and then rerun JOREK.
 
 ```bash
-cp jorekXXXXX.rst jorek_restart.rst
+cp jorekXXXXX.h5 jorek_restart.h5
 ./launch_jet_run.sh
 ```
 
@@ -121,9 +122,9 @@ This will keep watching for these files to appear and print new changes from the
 The equilibrium calculation will create a file `jorek2.ps` containing plots of the grid and flux surfaces.
 These are shown below.
 
-![flux-surfaces](assets/jet/flux-surfaces.png)
-![grid](assets/jet/grid.png)
+<img src="assets/jet/flux-surfaces.png" width="200" alt="Description of image">
+<img src="assets/jet/grid.png" width="200" alt="Description of image">
 
-The output files can be converted using jorek2vtk(.sh), and then processed with paraview to create movies. The image below shows the density in a poloidal cross-section.
-[jorek_jet.mp4](jorek_jet.mp4)
-![elm_square](assets/jet/elm_square.png)
+The output files can be converted using jorek2vtk(.sh), and then processed with paraview to create movies (for example, [jorek_jet.mp4](assets/jet/jorek_jet.mp4)). The image below shows the density in a poloidal cross-section.
+
+<img src="assets/jet/elm_square.png" width="500" alt="Description of image">

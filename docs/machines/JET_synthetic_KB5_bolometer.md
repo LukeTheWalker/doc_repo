@@ -14,7 +14,7 @@ KB5H is in Octant 6 ($\phi=3\pi/4$ in JOREK, considering that $\phi=0$ is Octant
 ![JET KB5H](assets/jet/jet_kb5h.png)
 ![JET KB5V](assets/jet/jet_kb5v.png)
 
-Here is an example of [postproc script](jorek2_postproc) to produce synthetic KB5 data:
+Here is an example of [postproc](../howto/introduction_to_jorek_diagnostics) script to produce synthetic KB5 data:
 
 ```text
 namelist JET85943_R3P4Z0P9
