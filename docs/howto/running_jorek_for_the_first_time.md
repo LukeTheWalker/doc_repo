@@ -140,6 +140,9 @@ When you need debugging options, for example during code development, you can co
 
 
 ## Running a simple test case
+*Branch note:* This setup has not yet been successfully tested with the `refluid` branch, you should therefore use the `develop` branch instead.
+
+
 
 In this tutorial we run a very simple test case: a tearing mode in a large aspect-ratio circular plasma. You need to structure directories for your simulations yourself. For this tutorial we assume the following directory structure with the source code and `Makefile.inc` prepared, for example in your Marconi home folder:
 
