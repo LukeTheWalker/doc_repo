@@ -178,6 +178,19 @@ tstep = 3000.
 nstep = 50
 ```
 
+*Additional variables:* For model600, it may also be useful to add the following options to the input file `intear`:
+```fortran
+eta_coul_log_dep  = .f.
+zkpar_T_dependent = .f.
+visco_old_setup   = .t.
+```
+
+*Solver note:* Depending on the available libraries, it may be necessary to explicitly select the linear solver in the input file. For example, you can try:
+```fortran
+use_pastix    = .f.
+use_strumpack = .t.
+```
+
 ## Running interactively
 
 On a machine where you can run a small case like this interactively (not possible on all systems), you can directly do something like the following (details depend on the machine):
