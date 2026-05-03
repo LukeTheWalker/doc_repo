@@ -15,14 +15,29 @@ The discretization of JOREK is well described in the papers [O. Czarny, G. Huysm
 
 As extensively explained [here](http://localhost:4000/doc_repo/docs/physics/coordinates.html), JOREK uses the cylindrical coordinates $(R,Z,\phi)$. The discretization on the poloidal plane (variables $R$ and $Z$) is discretized using 2D Bezier finite elements, discussed the [following section](#2d-bezier-finite-elements-in-the-poloidal-plane) whereas the discretization along the toroidal direction (variable $\phi$) is performed with a truncated real Fourier series, as explained in [this section](#real-fourier-series-in-toroidal-direction).
 
-The two discretizations combined read as follows:
+On a finite element $K$, using a local coordinate system $s,t$ (see [Appendix A](#appendix-a-introduction-on-bezier-curves-and-bezier-surfaces)), the two discretizations combined read as follows:
 
 $$
-\mathbf{X}(R,Z,\phi) = \left(\sum_{l=1}^{N_{tor}} Z_l(\phi) \left (\sum_{i = 1}^{N_{vert}}\sum_{j = 1}^{\text{dof_per_vertex}} h^{ij} \vec{u}^{ij} b^*_{i,j}(R,Z)\right) \right ) \tag{1}
+\mathbf{X}^{(K)}(s,t,\phi) = \left(\sum_{l=1}^{N_\text{tor}} Z_l(\phi) \left (\sum_{i = 1}^{N_\text{vert}}\sum_{j = 1}^{\text{dof}} h^{ij} \vec{u}^{ijl} b_{i,j}(s,t)\right) \right ) \tag{1}
+$$
+
+with $\mathbf{X}$ the vector of variables (i.e. $\rho$, $T$, $u$, ...).
+For the geometrical poloidal variables $R,Z$, there is a similar relation:
+
+$$
+\begin{pmatrix}
+R \\
+Z
+\end{pmatrix}(s,t,\phi) 
+= \left(\sum_{l=1}^{N_{\text{coord_tor}}} Z_l(\phi) \left (\sum_{i = 1}^{N_{vert}}\sum_{j = 1}^{\text{dof}} h^{ij} \vec{v}^{ijl} b_{i,j}(s,t)\right) \right ) \tag{3}
 $$
 
 The inner parenthesis is the poloidal discretization, which uses the basis functions $b^*_i$, while $Z_l$ are the basis functions for the toroidal discretization.
 
+### Parameters of the formulation
+- $N_\text{tor}$, in the code `n_tor` and $N_\text{coord_tor}$, in the code `n_coord_tor`, are two parameters to be specified at compile time
+- $N_\text{vert}$ is fixed to $4$ 
+- $\text{dof}$ (`n_degrees`), that is the number of degrees of freedom for each vertex for each problem variable (ex: $T$), is determined by the polynomial degree `n_order` (user can choose it) with the following relation: `n_degrees = ((n_order+1)/2)^2`.
 
 ## 2D Bezier finite elements in the poloidal plane
 
@@ -124,7 +139,7 @@ with $0\leq i,j \leq (n+1)/2$
 
 #### <u>Imposing the continuity on generalized nodal representation</u>
 In JOREK one node, i.e. $\mathbf{P}\_{00}$ is always shared by $4$ finite elements. 
-Let $\xi_{1,1}, \xi_{-1,1}, \xi_{-1,-1}, \xi_{1,-1}$ be the finite elements that share the node, listed counter clockwise. 
+Let $\xi_{1,1}, \xi_{-1,1}, \xi_{-1,-1}, \xi_{1,-1}$ be the finite elements that share the node, listed counter clockwise ($\xi_{1,1}$ is the top right element). 
 Then each of these elements has a different set of vectors $u^{ij}$ (and values $h^{ij}$) as nodal representation used in tha shared node $\mathbf{P}\_{00}$. We say that $u^{ij}$ and $h^{ij}$ are the nodal representation used by element $\xi_{1,1}$, $u^{-ij}$ and $h^{-ij}$ for element $\xi_{-1,1}$, $u^{i-j}$ and $h^{i-j}$ for element $\xi_{1,-1}$ and finally $u^{-i-j}$ and $h^{-i-j}$ for element $\xi_{-1,-1}$. 
 
 With the introduced notation, $G_m$ continuity on the shared nodes is obtained by imposing the following constrains.
@@ -269,10 +284,10 @@ The degrees of freedom of each node corresponding to the $l$-th toroidal harmoni
 
 $$
 \begin{align}
-&\texttt{node%values(l,1,\nu)} \rightarrow p_k  \\
-&\texttt{node%values(l,2,\nu)} \rightarrow u_k  \\
-&\texttt{node%values(l,3,\nu)} \rightarrow v_k  \\
-&\texttt{node%values(l,4,\nu)} \rightarrow w_k 
+&\texttt{node\%values(l,1,\nu)} \rightarrow p_k  \\
+&\texttt{node\%values(l,2,\nu)} \rightarrow u_k  \\
+&\texttt{node\%values(l,3,\nu)} \rightarrow v_k  \\
+&\texttt{node\%values(l,4,\nu)} \rightarrow w_k 
 \end{align}
 $$
 
@@ -280,10 +295,10 @@ The degrees of freedom of the coordinates $R$ ($\mu = 1$) and $Z$ ($\mu = 2$) ar
 
 $$
 \begin{align}
- &\texttt{node%x(1,\mu)} \rightarrow p_k  \\
- &\texttt{node%x(2,\mu)} \rightarrow u_k  \\
- &\texttt{node%x(3,\mu)} \rightarrow v_k  \\
- &\texttt{node%x(4,\mu)} \rightarrow w_k 
+ &\texttt{node\%x(1,\mu)} \rightarrow p_k  \\
+ &\texttt{node\%x(2,\mu)} \rightarrow u_k  \\
+ &\texttt{node\%x(3,\mu)} \rightarrow v_k  \\
+ &\texttt{node\%x(4,\mu)} \rightarrow w_k 
 \end{align}
 $$
 
