@@ -140,6 +140,9 @@ When you need debugging options, for example during code development, you can co
 
 
 ## Running a simple test case
+*Branch note:* This setup has not yet been successfully tested with the `refluid` branch, you should therefore use the `develop` branch instead.
+
+
 
 In this tutorial we run a very simple test case: a tearing mode in a large aspect-ratio circular plasma. You need to structure directories for your simulations yourself. For this tutorial we assume the following directory structure with the source code and `Makefile.inc` prepared, for example in your Marconi home folder:
 
@@ -173,6 +176,19 @@ Now open the file `intear` with your favorite editor. It contains the descriptio
 ```text
 tstep = 3000.
 nstep = 50
+```
+
+*Additional variables:* For model600, it may also be useful to add the following options to the input file `intear`:
+```fortran
+eta_coul_log_dep  = .f.
+zkpar_T_dependent = .f.
+visco_old_setup   = .t.
+```
+
+*Solver note:* Depending on the available libraries, it may be necessary to explicitly select the linear solver in the input file. For example, you can try:
+```fortran
+use_pastix    = .f.
+use_strumpack = .t.
 ```
 
 ## Running interactively
