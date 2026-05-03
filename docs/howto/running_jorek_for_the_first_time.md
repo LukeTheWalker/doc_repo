@@ -25,7 +25,7 @@ On most machines it is possible to load modules to make additional software avai
 module load intel ...
 ```
 
-For machines used regularly by our community, you can find the names of modules (and much more) here: [here](/docs/compiling/getting_started/systems.html).
+For machines used regularly by our community, you can find the names of modules (and much more) here: [here](/docs/compiling/getting_started/systems.md).
 
 If you add it to the `.bashrc` file, it will become active after you have logged out and back in again, you opened a new terminal, or you do `source ~/.bashrc` manually.
 
@@ -40,7 +40,7 @@ cd <where you want to check out the code>
 git clone https://github.com/<REPOSITORY>
 ```
 
-In case you would like to do developments yourself on the code, it is better to clone the repository via ssh. This requires you to register on GutHub, set up an ssh keypair and upload your public ssh key to GitHub. After doing that, you can clone as follows:
+In case you would like to do developments yourself on the code, it is better to clone the repository via ssh. This requires you to register on GitHub, set up an ssh keypair and upload your public ssh key to GitHub. After doing that, you can clone as follows:
 ```bash
 cd <where you want to check out the code>
 git clone git@github.com:<REPOSITORY>
@@ -54,7 +54,7 @@ After cloning the repository now, you have a local copy of the JOREK source code
 
 These steps are described in more detail in the following. 
 
-First, you need to prepare the `Makefile.inc` configuration file that contains information regarding which compiler to use, where to find libraries (in case of a new computing system, you might need to compile some of the libraries yourself; this goes beyond this tutorial), etc.. This file needs to be adapted for the respective computing system you are using. For computing systems that are in frequent use by the community, you can find the files at [here](/docs/compiling/getting_started/systems.html). The `Makefile.inc` needs to be placed into the main folder of the repository you cloned, where you also find `jorek2_main.f90`.
+First, you need to prepare the `Makefile.inc` configuration file that contains information regarding which compiler to use, where to find libraries (in case of a new computing system, you might need to compile some of the libraries yourself; this goes beyond this tutorial), etc.. This file needs to be adapted for the respective computing system you are using. For computing systems that are in frequent use by the community, you can find the files at [here](/docs/compiling/getting_started/systems.md). The `Makefile.inc` needs to be placed into the main folder of the repository you cloned, where you also find `jorek2_main.f90`.
 
 Before compiling the code, you need to set a few **hard-coded parameters**. The most important ones are:
 
@@ -197,7 +197,7 @@ On a machine where you can run a small case like this interactively (not possibl
 
 ```bash
 export OMP_NUM_THREADS=4
-nice mpirun -n 2 ./jorek_model199 < ./intear | tee logfile
+nice mpirun -n 2 ./jorek_model600 < ./intear | tee logfile
 ```
 
 JOREK uses a hybrid MPI + OpenMP parallelization. The total number of CPU cores used is the product of the MPI tasks and the OpenMP threads. The first line sets the number of OpenMP threads to four. `mpirun -n 2` means that we are running two MPI tasks, one per toroidal harmonic. Thus, this example uses eight CPU cores. The number of MPI tasks should usually be a multiple of the number of toroidal `n` harmonics:
@@ -214,7 +214,7 @@ We pipe the namelist input file `intear` into the code so it can read the case s
 
 Usually, production simulations are prepared as follows. You compile the code, prepare the JOREK input file, and set up a specific **batch job file**. In this file, you specify what should be executed exactly and on what hardware. You "submit" this job and the job scheduler will run it once the required hardware becomes available. This is the usual way of running simulations on large systems. Waiting times can depend a lot on the size of the job, the amount of resources you used already, on the size of the project you have on the system, and other parameters.
 
-For example jobscript files, see the [pages for different computing systems](/docs/compiling/getting_started/systems.html).
+For example jobscript files, see the [pages for different computing systems](/docs/compiling/getting_started/systems.md).
 
 When you have your jobfile prepared, you can submit it as follows (for computing systems that use the [SLURM scheduler](https://slurm.schedmd.com/documentation.html)):
 
@@ -353,7 +353,7 @@ You can inspect the evolution of magnetic and kinetic energies in the individual
 
 An example for `./util/plot_live_data.sh` output for the `intear` test case:
 
-<img src="assets/running_jorek_for_the_first_time/tutorial_intear-energies-example.png" alt="Alt text" width="600">
+<img src="assets/running_jorek_for_the_first_time/tutorial_intear-energies-example-600.png" alt="Alt text" width="600">
 
 
 Pressing `u` should update the plot while your simulation is running. You can zoom in with the right mouse button and switch between logarithmic and normal y-axis with `l`. There are more quantities available for plotting:
@@ -387,7 +387,7 @@ and then plot `jorek_tmp.vtk`.
 
 An example for a VTK plot for the `intear` test case (perturbation of the current density created using the `-no0` option):
 
-<img src="assets/running_jorek_for_the_first_time/tutorial_intear-current-pert.png" alt="Alt text" width="600">
+<img src="assets/running_jorek_for_the_first_time/tutorial_intear-current-pert.jpg" alt="Alt text" width="600">
 
 ### jorek2_postproc
 
@@ -415,7 +415,7 @@ A more detailed explanation is given in the [JOREK diagnostics tutorial](/docs/h
 ## Exercises
 
 - **Exercise 2**: Run the described case, plot the grid, the energies, the growth rates, the input profiles, and the mode structure (VTK files with `no0`). How does the mode structure evolve during the simulation?
-- **Exercise 3**: Run the same case with different settings for resistivity or viscosity and see how the linear growth rate changes. Is the growth rate affected when you modify the grid resolution or numerical parameters like the hyperviscosity or hyperresistivity (`visco_num` / `eta_num`)? You can also change `F0` to modify the toroidal field strength and shift the q-profile. Feel free to experiment. The result (mode growth rate) of a resistivity scan with the baseline resolution and `F0` for `model199` with `n_tor=2` is shown in the original tutorial.
+- **Exercise 3**: Run the same case with different settings for resistivity or viscosity and see how the linear growth rate changes. Is the growth rate affected when you modify the grid resolution or numerical parameters like the hyperviscosity or hyperresistivity (`visco_num` / `eta_num`)? You can also change `F0` to modify the toroidal field strength and shift the q-profile. Feel free to experiment. The result (mode growth rate) of a resistivity scan with the baseline resolution and `F0` for `model600` with `n_tor=2` is shown in the original tutorial.
 - **Exercise 4**: Run the same case with toroidal mode numbers `n=0,1,2` and compare the results to the previous `n=0,1` simulation, for example using VTK `no0` and energies. Note that you need to change hard-coded parameters and the job script file.
 - **Exercise 5**: How does the batch script need to be adapted if you want to run the case of Exercise 4 on 1, 3, or 6 compute nodes? Is such a small case running faster if you use more compute nodes? You can also change the number of OpenMP threads while always running on three compute nodes to see the effect.
 
@@ -447,6 +447,7 @@ cd ../inxflow_nper6
 ln -s ../jorek.git/util                                     # create link to util/
 ```
 
+
 ### Run
 
 The following can be run interactively for tests again, but is best done via batch scripts of courese:
@@ -464,6 +465,18 @@ nice mpirun -n 2 ./jorek_model600 < ./inxflow | tee -a logfile
 ```
 
 Blanks are not allowed when setting variables via `setinput.sh`. You can obviously change the input file (called `inxflow` here) also by hand.
+
+The same considerations as in Case 1 also apply here. Thus, in the input file `inxflow`, it may be useful to add:
+
+```fortran
+eta_coul_log_dep  = .f.
+zkpar_T_dependent = .f.
+visco_old_setup   = .t.
+
+use_pastix    = .f.
+use_strumpack = .t.
+```
+
 
 An example for the energies plot and the mode structure for the `inxflow` test case:
 
