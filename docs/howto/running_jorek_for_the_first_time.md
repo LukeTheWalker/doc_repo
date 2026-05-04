@@ -466,11 +466,11 @@ nice mpirun -n 2 ./jorek_model600 < ./inxflow | tee -a logfile
 
 Blanks are not allowed when setting variables via `setinput.sh`. You can obviously change the input file (called `inxflow` here) also by hand.
 
-The same considerations as in Case 1 also apply here. Thus, in the input file `inxflow`, it may be useful to add:
+The same considerations as in Case 1 also apply here. Thus, in the input file `inxflow`, it may be useful to add (note the difference in the parallel heat diffusivity):
 
 ```fortran
 eta_coul_log_dep  = .f.
-zkpar_T_dependent = .f.
+zkpar_T_dependent = .t.
 visco_old_setup   = .t.
 
 use_pastix    = .f.
