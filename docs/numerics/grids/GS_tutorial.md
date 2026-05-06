@@ -37,7 +37,7 @@ generic manner, so that this can apply to any experimental input.
 However, before starting, it should be noted that the simplest method to
 import data into a JOREK input file is to use the JOREK executable
 `eqdsk2jorek`, which takes an `eqdsk` equilibrium file as input. Some
-documentation about this tool can be found in the [eqdsk2jorek](eqdsk2jorek.md) page.
+documentation about this tool can be found in the [eqdsk2jorek](eqdsk2jorek.md) page. It is helpful to be aware that very often a normalization factor of $ 2\pi $ is used for the poloidal magnetic flux $ \Psi = \psi/(2\pi)$ (this is the case when the COCOS number has two digits). When this is done, users should account for it both in the psi value on the boundary and in the ffprime profile (as F' is the derivative with respect to $\psi$ and __not__ $\psi_\mathrm{norm}$). 
 
 ------------------------------------------------------------------------
 
@@ -61,6 +61,8 @@ R_boundary(100) = 3.90, Z_boundary(100) = 0.01, psi_boundary(100) = -1.48
 
 where the __first and last points need to be the same__.
 
+It is important to reall that the actual value of $\psi$ is important as a relative quantity to the value either on the magnetic axis and/or the separatrix. When constructing a magnetic equilibrium completely inside of the separatrix (either by giving an R,Z,psi boundary describing a speficic flux-surface or using Fourier coefficients with `mf => 2` and corresponding coefficients for the series with `fbnd(1:mf)` and `fpsi(1:mf)`), the default behaviour in the code is to assign a value of zero for the flux on the boundary and find the correct sign and value for `psi_axis`.
+
 ------------------------------------------------------------------------
 
 # The pressure profile
@@ -69,11 +71,11 @@ where the __first and last points need to be the same__.
 
 JOREK solves for
 density and temperature, such that the input pressure profile must be
-decomposed into a density and temperature profiles. We will not describe
+decomposed into density and temperature profiles. We will not describe
 here how to convert experimental data into JOREK profiles, but we will
 here describe the basic modified tanh profiles commonly used in JOREK. A
 simple way to have input profiles is just to use the `num_profiles`
-option, where you can simply feed an array profile to JOREK.
+option, where you can simply feed an array profile to JOREK. For example, for the FF' profile with `ffprime_file = 'jorek_ffprime.dat'`.
 
 ------------------------------------------------------------------------
 
@@ -161,7 +163,7 @@ In JOREK, the FF\' profile input is given as:
 
 # Other inputs
 
-Note, another input required for the GS solver is `F0` ($= R_0 B_{\phi}$)
+Note, another input required for the GS solver is `F0` ($= R_0 B_{\phi}$). Note the [sign convention](/docs/physics/coordinates.md) is that a positive `F0` corresponds to a toroidal magnetic field which is __clockwise__ as seen from above. This is opposite to the standard coordinate system in ASDEX Upgrade and DIII-D, for example. Similarly, a positive current 
 
 ------------------------------------------------------------------------
 
