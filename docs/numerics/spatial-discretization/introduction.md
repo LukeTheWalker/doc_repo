@@ -5,14 +5,12 @@ parent: "Spatial Discretization"
 layout: default
 render_with_liquid: false
 ---
-# WARNING: still work in progress
-Giacomo is working on this
 
 # Introduction to spatial Discretization in JOREK
 
 The discretization of JOREK is well described in the papers [O. Czarny, G. Huysmans, J.Comput.Phys 227, 7423 (2008)](https://www.sciencedirect.com/science/article/pii/S0021999108002118) and [S. Pamela et al. J. Comput. Phys. 464, 111101 (2022)](https://www.sciencedirect.com/science/article/pii/S0021999122001632?via%3Dihub). Here we present a summary of the most important aspects and the code implementation.
 
-As extensively explained [here](/docs/physics/coordinates.html), JOREK uses the cylindrical coordinates $(R,Z,\phi)$. The discretization on the poloidal plane (variables $R$ and $Z$) is discretized using 2D Bezier finite elements, discussed in the [following section](#2d-bezier-finite-elements-in-the-poloidal-plane) whereas the discretization along the toroidal direction (variable $\phi$) is performed with a truncated real Fourier series, as explained in [this section](#real-fourier-series-in-toroidal-direction).
+As extensively explained [here](/docs/physics/coordinates.html), JOREK uses the cylindrical coordinates $(R,Z,\phi)$. The discretization on the poloidal plane (variables $R$ and $Z$) is discretized using 2D Bezier finite elements, discussed in the [following section](#2d-bezier-finite-elements-in-the-poloidal-plane) whereas the discretization along the toroidal direction (variable $\phi$) is performed with a truncated real Fourier series, as explained in [this section](#toroidal-discretization-with-real-fourier-series).
 
 On a finite element $K$, using a local coordinate system $s,t$ (see [Introduction to Bezier surfaces](introduction-to-bezier.md)), the two discretizations combined read as follows:
 
@@ -42,8 +40,8 @@ Note that when building the mesh, all the degrees of freedom $\vec{v}^{ijl}$ in 
 - $\text{dof}$ (`n_degrees`), that is the number of degrees of freedom for each vertex for each problem variable (ex: $T$), is determined by the polynomial degree `n_order` (user can choose it) with the following relation: `n_degrees = ((n_order+1)/2)^2`.
 
 ## 2D Bezier finite elements in the poloidal plane
-$G_m$ continuous Bezier finite elements of order $p$ are used to discretize the poloidal plane RZ.  
-Each Bezier finite element is a Bezier surface with $p^2$ control points, of which $4$ interpolation points.
+$G_m$ continuous Bezier finite elements of order $n$ are used to discretize the poloidal plane RZ.  
+Each Bezier finite element is a Bezier surface with $n^2$ control points, of which $4$ interpolation points.
 
 A Bezier surface is defined as
 
@@ -51,7 +49,7 @@ $$
 \mathbf{X}(s,t) = \sum_{i=0}^{n} \sum_{j=0}^{n} \mathbf{P}_{ij}B_i^n(s) B_j^n(s)  \tag{3}
 $$
 
-where $\mathbf{P}_{ij}$ are the control points and $B_i^n$ and $B_j^n$ are the so-called Bernstein polynomials, defined as:
+where $\mathbf{P}_{ij}$ are the control points and $B_i^n$ and $B_j^n$ are the Bernstein polynomials, defined as:
 
 $$
 B_i^n(s) = \frac{n!}{i!(n-i)!} s^i (1-s)^n-1
@@ -75,11 +73,12 @@ However, in practice, geometrical variables and physical variables are _decouple
 
 A more in depth explanation on Bezier surfaces can be found in [Introduction to bezier surfaces](introduction-to-bezier.md).
 
+### Nodal formulation
+Tipically degrees of freedom (here the control points) are grouped for each face (here Bezier patch). In JOREK instead they are grouped by nodes. Each Bezier surfaces have $4$ interpolation points, which are called nodes. So this means that all other control points are assigned to one interpolation point.  
+Indeed, as shown in [Introduction to bezier surfaces](introduction-to-bezier.md), each control point is connected with the deriative on one node. 
 
-### Nodal degrees of freedom
-Instead of looking at the degrees of freedom (i.e. control points) for each finite element (i.e. each Bezier surface), degrees of freedom are assigned to the interpolation points (called _nodes_, which are $4$ for each face). A particular formulation is then chosen, where the control points assigned to one node are expressed as a linear combination of certain vectors local to the node. This vectors are chosen such that they coincide with the $\partial_s^i\partial_t^j \mathbf{X}$ evaluated in the node. 
-
-With bicubic Bezier finite elements, for example, the nodal representation at a generic node $\mathbf{P}_{00}$ is:
+In JOREK for each node a local vectorial basis is defined and the control points associated to the node are expressed in function of this basis. 
+For example, with bi-cubic Bezier surfaces, control points of node $\mathbf{P}\_{00}$ would be expressed as follows:
 
 $$
 \begin{align}
@@ -87,64 +86,29 @@ $$
 \mathbf{P}_{0,1} &= \vec{u}^{00} + \vec{u}^{01}\, h_{01} \\
 \mathbf{P}_{1,0} &= \vec{u}^{00} + \vec{u}^{10}\, h_{10} \\
 \mathbf{P}_{1,1} &= \mathbf{P}_{0,1} + \mathbf{P}_{1,0} - \vec{u}^{00} + \vec{u}^{11}\, h_{11} \\ 
-\end{align}
+\end{align} \tag{4}
 $$
 
-For a general Bezier surface of degree $n$, the formulation reads as:
-$$
-\mathbf{P}_{ij} = h^{ij}\vec{u}^{ij} + \sum_{k=0}^i\sum_{l=0}^j (-1)^{1+i+j+k+l}(1-\delta_{ki}\delta_{lj}) 
-\begin{pmatrix}
-i \\ k
-\end{pmatrix}
-\begin{pmatrix}
-j \\ l
-\end{pmatrix}
-\mathbf{P}_{kl} \tag{4}
-$$
+where $h^{ij}$ are called _element sizes_ and are set during the mesh construction phase.
 
-with $0\leq i,j \leq (n+1)/2$
+This formulation has the main advantage of making easier how $G_m$ continuity is imposed. When $4$ patches share a node $\mathbf{P}_{00}$, $G_m$ continuity is imposed by:
+1. Sharing the local basis $\{\vec{u}^{ij}\}_{ij}$ among all $4$ patches.
+2. Setting certain simple constraints on $h_{ij}$ (see [Poloidal discretization](poloidal-discretization.md))
 
-### $G_m$ continuity
-The nodal formulation makes easier imposing $G_m$ continuity.  
-In JOREK, most nodes are shared by $4$ finite elements, except for the boundary and few special points (x points and grid axis, which are treated differently). Let $\xi_{11}$, $\xi_{-11}$, $\xi_{-1-1}$, $\xi_{1-1}$ be the $4$ finite elements sharing one node $\mathbf{P}_{00}$, as in the following figure:
- 
-ADD FIGURE HERE
-
-and let every of this elements have a formulation as $(4)$ but with $h^{ij}$ and $\mathbf{P}_{kl}$ that are unique for each element (see appendix A of [Poloidal discretization](poloidal-discretization.md)), then $G_m$ continuity is imposed with the following costraints:
-
-$\forall j, \ \ h^{-ij}$ is constrained by:
-$$
-h^{-ij} = 
-\begin{cases}
--\alpha h^{ij} & \text{for } i = 1 \text{ and } \alpha > 0 \\
-h^{ij} & for i \neq 1
-\end{cases} \tag{5a}
-$$
-
-$\forall i, \ \ h^{i-j}$ is constrained by:
+Using $(4)$, which can be generalized to a Bezier curve of any order $n$ (see [Poloidal discretization](poloidal-discretization.md)), then $(3)$ can be rewritten as
 
 $$
-h^{i-j} = 
-\begin{cases}
--\beta h^{ij} & \text{for } j = 1 \text{ and } \beta > 0 \\
-h^{ij} & for j \neq 1
-\end{cases} \tag{5b}
+\mathbf{X}_{\text{pol}}^{(K)} = \sum_{i=0}^{\text{n_vertices}} \sum_{j=0}^{\text{n_degrees}} h^{ij}\vec{u}^{ij} b_{ij}^n(s,t) \tag{5}
 $$
 
-where the $-$ signs on the indices identify the $\xi_{xy}$ element.
+where $b_{ij}$ are the new basis functions, obtained by gathering together all the terms with $\vec{u}^{ij}$.
 
-### Nodal formulation
-With the formalism introduced in $(4)$, when substituted in $(3)$, a new formulation of the finite element, called nodal formulation, is obtained:
-$$
-\mathbf{X}_{\text{pol}}^{(K)} = \sum_{i=0}^{\text{n_vertices}} \sum_{j=0}^{\text{n_degrees}} h^{ij}\vec{u}^{ij} b_{ij}^n(s,t) \tag{6}
-$$
-
-The new basis functions $b_{ij}$ are simply obtained by gathering all the terms with $\vec{u}^{ij}$. An example of such basis for the bicubic case is given in the [Poloidal discretization page](poloidal-discretization.md)
 
 ### Decoupling geometrical variables and physical variables
-Until now, vector $\mathbf{X}$ had both the geometrical variables and phyisical variables. However, the two formulations are decoupled in two analogous but separate formulations. Why this? Because they have different toroidal discretization!
+Until now, vector $\mathbf{X}$ had both the geometrical variables and phyisical variables. However, in practice the two formulations are decoupled in two analogous but separate formulations. Why this? Because they have different _toroidal_ discretization.
 
 The two formulations read as
+
 $$
 \mathbf{X}_\text{pol}^{(K)}(s,t) = \sum_{i=0}^{N_\text{vert}-1} \sum_{j=0}^{\text{dof_per_vertex}} h^{ij} \vec{u}^{ij} b_{ij}(s,t)
 $$
@@ -163,7 +127,7 @@ Note that $h^{ij}$ are the **same**
 
 ## Toroidal discretization with real Fourier series
 
-Toroidal discretization is applied both to the physical variables both to the coordinate variables. As the two formulations are distinct in the poloidal case, as well here are separate. The difference lies in how many elements of the Fourier series are used in the two discretizations.
+Toroidal discretization is applied both to the physical variables both to the coordinate variables. They are both discretized with the same approach, that is truncated real Fourier series, but using different parameters (number of harmonics included and periodicity of the harmonics, see after the table).
 
 A real Fourier series ($\cos$, $\sin$) is used, as shown in the following table:
 
@@ -241,11 +205,13 @@ For all $\nu = 1\ldots N_{var}$ and $i_G, j_G = 1\ldots N_{Gauss}$ and $p = 1\ld
 
 $$
 \begin{align}
-X_{\nu}(s_{i_G},t_{j_G},\phi_{p}) &= \sum_{k = 1}^{N_{vert}}\sum_{j = 1}^{N_{ord}}\sum_{l = 1}^{N_{tor}} \mathrm{nodes}(i)\text{\%}\mathrm{values}(1,j,\nu) \\
-&\qquad \cdot \mathrm{H}(k,j,i_G,j_G) \cdot \mathrm{element}\text{\%}\mathrm{size}(k,j) \cdot \mathrm{HZ}(1,p)
+X_{\nu}(s_{i_G},t_{j_G},\phi_{p}) &= \sum_{k = 1}^{N_{vert}}\sum_{j = 1}^{N_{ord}}\sum_{l = 1}^{N_{tor}} \mathrm{nodes}(i)\text{\%}\mathrm{values}(l,j,\nu) \\
+&\qquad \cdot \mathrm{H}(k,j,i_G,j_G) \cdot \mathrm{element}\text{\%}\mathrm{size}(k,j) \cdot \mathrm{HZ}(l,p)
 \end{align}
 \tag{9}
 $$
+
+Above notation is slightly different from $(1)$ and $(2)$. Indeed we have $H(k,j,i_g,j_g):=b_{kj}(s_{i_g}, t_{j_g})$ . Furthermore $HZ(l,p):=Z_l(\phi_p)$.
 
 ### Gaussian points
 For the heavy part, that is the integration, precomputed values of basis functions $b_{ij}$ at gaussian points are used. 
@@ -253,3 +219,27 @@ These values are computed by the `initialize_basis()` function in `basis_at_gaus
 
 ### Using high order finite elements
 When using high order finite elements ($n\geq 7$), basis functions files and their evaluation at gaussian points has to be calculated before compiling the code. To do this, `tools/util/generate_codes_for_norder_gt_7.py` must be invoked. At the beginning of the file there are some parameters to be set, such as `n_order`.
+
+### Other routines
+Other routines involving Bezier finite elements are the ones doing the mapping $(K, s,t) \rightarrow (R,Z)$ (`interp_RZP.f90`) and its reverse mapping (`find_RZ.f90`). $K$ is a finite element.
+
+#### interp_RZP.f90
+Simply uses expression $(2)$. Some overloads also provide up to second derivatives (also crossed) $\partial_s^i \partial_t^j R$ and $\partial_s^i \partial_t^j Z$. 
+
+#### find_RZ.f90 
+There is no general mapping $(R,Z) \rightarrow (s,t)$, because $(s,t)$ are coordinates local to each element $K$. In general there is no direct way to detect which is the element that contains $(R_\text{find},Z_\text{find})$, so a tree is built.  
+Instead of iterating through all the elements to see which contains $(R_\text{find},Z_\text{find})$, elements are ordered into a quadtree (`mod_quadtree.f90`). See, for example the [quadtree wikipedia page](https://en.wikipedia.org/wiki/Quadtree) for an explanation of this data structure.  
+This does not provide a single element as container of $(R_\text{find},Z_\text{find})$ but a few elements as _potential containers_.  
+
+After having used the quadtree, for each of the remaining elements Newton method is used to solve the following system:
+$$
+\begin{cases}
+R(s,t) = R_\text{find} \\
+Z(s,t) = Z_\text{find}
+\end{cases}
+$$
+
+For each of these elements Newton method is executed for 20 iterations, after which, if the point has not been found, another starting point is tried.  
+Starting points used are hard coded in `find_RZ.f90` file.  
+The first element in which convergence is reached (that is, the error is under a certain threshold), is returned, along with the found solutions `s` and `t`.
+
