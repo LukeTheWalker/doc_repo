@@ -1,0 +1,137 @@
+&in1
+
+ restart = .f.
+ regrid  = .f.
+ refinement=.false.
+ tstep_n   = 4., 10., 20., 40., 
+ nstep_n   = 5, 5, 100, 190
+
+ nout = 40
+ 
+deuterium_adas = .t.  
+
+freeboundary = .f.
+ 
+time_evol_scheme = "Gears"
+fix_axis_nodes=.t.
+
+keep_current_prof = .f.
+using_spi = .f.
+imp_type = 'Ne'
+adas_dir = '/marconi_work/FUA37_REDIS/vkb/tutorial_refluid/adas_data/'
+                 
+gamma_rel = 39.d0
+re_initialize = 2  ! 1=Gaussian; 2=scaled-down-J; other=0
+initial_re_current_fraction = 1.d-6
+re_trit_seed = .t.
+re_compt_seed = .t.
+re_sec_source = .t.
+vpar_re_sign = -1.d0
+re_adv_fact = 0.d0
+Dre_par = 1.d-4
+Dre_iso = 1.d-8			              
+Dre_num = 5.d-14
+tgnum_nre = 1.d0
+
+!num_rhon = .f.
+rhon_0 = 0.d0
+rhon_1 = 0.d0
+D_neutral_x = 1.d-8    ! 1.62d-4
+D_neutral_y = 1.d-8    ! 1.62d-4
+D_neutral_p = 1.d-8    ! 1.62d-4
+
+impdens_init = 1.d20
+
+! rst_hdf5 = 1    ! = 0 ; restart from binary files
+!                 ! = 1 ; restart from HDF5 files
+
+ fbnd(1)   = 2.
+ fbnd(2:4) = 0.
+ mf        = 0
+
+ ellip  = 1.
+ tria_u = 0.
+ tria_l = 0.
+ quad_u = -0.
+ quad_l = -0.
+
+ freeboundary = .f.
+
+ xampl  = +0.
+ xsig   = 0.6
+ xwidth = 1.5
+ xtheta = 4.7
+ xshift = 0.0
+ xpoint = .f.
+
+ R_begin = 2.9
+ R_end   = 3.1
+ Z_begin = -0.1
+ Z_end   = 0.1
+
+ R_geo = 10.0
+ Z_geo = 0.
+
+ F0    = 10.0
+
+ amin     = 2.
+
+ n_R      = 0
+ n_Z      = 0
+ n_radial = 51
+ n_pol    = 16
+
+ n_flux   = 41
+ n_tht    = 16
+ n_open   = 0
+ n_leg    = 0
+ n_private = 0
+
+ eta   = 3.d-5
+ visco = 1.d-7
+
+ eta_num = 0.d-10
+ visco_num = 0.d0
+
+ D_par  = 0.d0
+ D_perp = 1.d-7
+
+ ZK_par  = 1.d0
+ ZK_perp = 1.d-7
+
+ FF_0 = -35.0 ! -1.173
+ FF_1 = 0.
+ FF_coef(1)  = -1.0
+ FF_coef(2)  = 0.d0
+ FF_coef(3)  = 0.d0
+ FF_coef(4)  = 0.03d0
+ FF_coef(5)  = 5.0d0
+ FF_coef(6)  = 1.d0
+ FF_coef(7)  = 10.d0
+ FF_coef(8)  = 1.d0
+
+ heatsource     = 0.d0
+ particlesource = 0.d0
+
+ T_0 = 1.d-4
+ T_1 = 1.d-8
+ T_coef(1) = -0.8d0
+ T_coef(2) = +0.0d0
+ T_coef(3) = 0.d0
+ T_coef(4) = 1.d0
+ T_coef(5) = 5.d0
+
+ rho_0 = 1.
+ rho_1 = 1.
+ rho_coef(1)  =  0.0
+ rho_coef(2)  =  0.0
+ rho_coef(3)  =  0.0
+ rho_coef(4)  =  1.d0
+ rho_coef(5)  =  5.d0
+
+ iter_precon = 22
+ gmres_m = 20
+ gmres_4 = 1.d0
+ gmres_max_iter = 200
+ gmres_tol = 1.d-8
+/
