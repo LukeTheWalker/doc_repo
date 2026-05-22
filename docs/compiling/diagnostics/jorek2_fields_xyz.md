@@ -9,7 +9,7 @@ parent: "General"
 
 This program reads JOREK restart files and calculates the magnetic field at arbitrary (x,y,z) points. The particularity with respect to jorek2_postroc is that you can get the fields also outside the JOREK grid. For example, it could be used to produce GEQDSK files from JOREK restart files.
 
-To get the complete fields **you need to run your simulations in full free-boundary mode (including the n=0 mode)**. Otherwise you cannot know the vacuum fields outside the plasma domain. For more information on how to run in free-boundary see [here](jorek-starwall-faqs.md). If case are running with freeboundary=.f. then you only get the fields produced by the plasma currents.
+To get the complete fields **you need to run your simulations in full free-boundary mode (including the n=0 mode)**. Otherwise you cannot know the vacuum fields outside the plasma domain. For more information on how to run in free-boundary see [here](../../physics/model_extensions/freebound.md). In case are running with freeboundary=.f. then you only get the fields produced by the plasma currents.
 
 It involves the computation of expensive volume integrals in the plasma, so run it in parallel with several MPI processes for large cases. Submit the same job scripts that you would use for JOREK (just replacing "jorek_modelXXX" by "jorek2_fields_xyz". To compile it just type
 

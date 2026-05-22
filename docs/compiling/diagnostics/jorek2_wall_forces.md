@@ -7,7 +7,7 @@ parent: "General"
 
 # jorek2_wall_forces
 
-This program reads JOREK restart files and calculates the total wall forces. **You need to run your simulations in full free-boundary mode (including the n=0 mode)**. Otherwise you cannot know the vacuum fields outside the plasma domain. For more information on how to run in free-boundary see [here](jorek-starwall-faqs.md). 
+This program reads JOREK restart files and calculates the total wall forces. **You need to run your simulations in full free-boundary mode (including the n=0 mode)**. Otherwise you cannot know the vacuum fields outside the plasma domain. For more information on how to run in free-boundary see [here](../../physics/model_extensions/freebound.md). 
 
 It involves the computation of expensive volume integrals in the plasma, so run it in parallel with several MPI processes for large cases. Submit the same job scripts that you would use for JOREK (just replacing "jorek_modelXXX" by "jorek2_wall_forces". To compile it just type
 

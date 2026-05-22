@@ -32,6 +32,7 @@ See [this tutorial](./jorek_startwall_tutorial_ex1.md) to get started.
 ## JOREK input file free-boundary parameters
 
 ### Main parameters
+
 | Parameter | Description |
 |-----------|-------------|
 | `freeboundary` | Run with free-boundary activated |
