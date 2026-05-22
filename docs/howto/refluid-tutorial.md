@@ -1,8 +1,7 @@
 ---
-title: "REs — Tutorial"
+title: "RE fluid — Tutorial"
 nav_order: 2
-parent: "Runaway Electrons"
-grand_parent: "Model Extensions"
+parent: "Howto"
 layout: default
 render_with_liquid: false
 ---
@@ -28,7 +27,7 @@ For extracting the current density/$T_e$ profile, compile [jorek2_postproc](post
 ```bash
 namelist input_REfluid
 si-units
-expressions R Z Psi_N curr_dens Te
+expressions R Z Psi_N currdens Te
 for step XXX to XXX by XXX do
 average
 done 
