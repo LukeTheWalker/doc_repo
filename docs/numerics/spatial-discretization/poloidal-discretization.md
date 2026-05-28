@@ -230,14 +230,6 @@ $$
 Note that $h^{ij}$ and $b_{ij}$ are the same for both formulations! A formulation that has the same basis $\{b_{ij}}$ for both geometical and physical variables is called **isoparametric**.
 
 
-### Discretization with nodal formulation
-TODO
-With the nodal representation, 
-
-- SPLIT COORDINATE AND PHYSICAL FORMULATION FROM THE VERY BEGINNING or at least be more clear
-- talk about vertex ordering (I enumerate them 0,1,2,4 but in which direction? Clockwise or anticlockwise?)
-  - does it matter where I set the origin $(s,t)=(0,0)$
-
 ## Appendix A: full generic nodal formulation
 The generic nodal formulation introduced in a [previous paragraph](#generalized-nodal-representation-of-bezier-finite-element) expresses only the control points of element $\xi_{11}$. To represent control points of elements $\xi_{-1-1}$, $\xi_{-11}$, $\xi_{1-1}$, the formulation is basically the same but negative index must be handled. It is fundamental to note that sizes ($h^{ij}$) will vary (they are element-dependent) but the basis vectors $\vec{u}^ij$ will be the same across all 4 elements. 
 
