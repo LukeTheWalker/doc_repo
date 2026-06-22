@@ -31,6 +31,7 @@ render_with_liquid: false
    - If you don't have a fork already, create a new one under your user account. 
    - Navigate to the main repository on [GitHub](https://github.com/iterorganization/JOREK.git).
    - Click the "Fork" button to create a personal copy of the repository under your GitHub account.
+   - Add collaborators to your fork if you are working closely with someone else.
 
 3. **Clone Your Fork**:
    - Clone your fork to your local machine:
