@@ -23,7 +23,7 @@ render_with_liquid: false
 
 ---
 
-## 1. Setting up the workflow
+## Setting up the workflow
 1. **Create a github account**
     - If you do not have one already, setup a github account and make sure your username contains your last name and initial.
 
@@ -54,7 +54,7 @@ render_with_liquid: false
      ```
 
 
-## 2. Development and Bugfixes
+## Development and Bugfixes
 
 1. **Develop Features or Fix Bugs**:
    - Create a new branch for each feature or bug fix:
@@ -79,7 +79,6 @@ render_with_liquid: false
    - Ensure the PR is reviewed and approved before merging by at least two people. 
 
 
-
 ## Best practices
 - Merge changes from the main repository into your fork frequently to avoid large merge conflicts. This is especially important for long developments
 - Keep feature and bug fix branches small and focused.
@@ -92,10 +91,24 @@ render_with_liquid: false
   git merge upstream/main
   ```
 
----
+## Using the GitHub Issue Tracker
+Use the [GitHub Issue Tracker](https://github.com/iterorganization/JOREK/issues) to bring up important bugfixes and discussions on new developments or to make a feature request.
+
+1. **Creating Issues**:
+  - Provide a clear and concise title and description.
+  - Include relevant details such as steps to reproduce a bug, expected behavior, or the motivation for a new feature.
+  - Mention specific users with `@username` to make them aware of the issue.
+  - Use appropriate labels (e.g., `bug`, `enhancement`, `discussion`) to categorize issues.
+
+2. **Linking Pull Requests**:
+  - Reference issues in pull requests using keywords like `Fixes #<issue-number>` to automatically close the issue when the PR is merged.
+  - Ensure the issue is resolved and all discussions are addressed before closing.
+  - More infos here about [linking an issue to a PR](https://docs.github.com/en/issues/tracking-your-work-with-issues/using-issues/linking-a-pull-request-to-an-issue)
 
 
-## 3. Migration to GitHub
+
+
+## Migration to GitHub
 During the migration to GitHub, the history of commit hashes will change. Follow these steps to ensure a smooth transition:
 
 1. **Push Your Branches Before Migration (end of July)**:
