@@ -64,7 +64,7 @@
               cleaned = cleaned.replace(/%.*?(?=\n|<br\s*\/?>|$|\\|\$\$|\\\]|\\\))/gi, ' ');
               
               /* Restore literal percent signs */
-              cleaned = cleaned.replace(/@@PCT@@/g, '\\%');
+              cleaned = cleaned.replace(/@@PCT@@/g, '\%');
 
               /* C. Convert Kramdown escaped pipes (\|) to \Vert so MathJax renders them correctly */
               cleaned = cleaned.replace(/\\\|/g, '\\Vert ');
