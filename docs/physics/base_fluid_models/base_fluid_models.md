@@ -43,11 +43,12 @@ In addition to __model 600__, there are older, legacy, reduced MHD models shown 
 
 ## [Full MHD](full_mhd.md)
 
-| Model | Variables: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 |
-| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| model710 | $A_3$ | $A_R$ | $A_Z$ | $u_R$ | $u_Z$ | $u_\phi$ | $\rho$ | $T$ | | |
-| model711 | $A_3$ | $A_R$ | $A_Z$ | $u_R$ | $u_Z$ | $u_\phi$ | $\rho$ | $Ti$ | $Te$ | |
-| model712 | $A_3$ | $A_R$ | $A_Z$ | $u_R$ | $u_Z$ | $u_\phi$ | $\rho$ | $Ti$ | $Te$ | $\rho_n$ |
+| Model | Variables: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| model710 | $A_3$ | $A_R$ | $A_Z$ | $u_R$ | $u_Z$ | $u_\phi$ | $\rho$ | $T$ | | | | |
+| model711 | $A_3$ | $A_R$ | $A_Z$ | $u_R$ | $u_Z$ | $u_\phi$ | $\rho$ | $Ti$ | $Te$ | | | |
+| model712 | $A_3$ | $A_R$ | $A_Z$ | $u_R$ | $u_Z$ | $u_\phi$ | $\rho$ | $Ti$ | $Te$ | $\rho_n$ | | |
+| model750 | $A_3$ | $A_R$ | $A_Z$ | $u_R$ | $u_Z$ | $u_\phi$ | $\rho$ | $T$ | $Ti$ | $Te$ | $\rho_n$ | $\rho_{\text{imp}}$ |
 
 
 Refer also to the page about [Notation Conventions](../notation.md).
