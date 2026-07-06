@@ -1,6 +1,6 @@
 ---
-title: "Development Workflow"
-nav_order: 1
+title: "Coding Guidelines"
+nav_order: 2
 parent: "Code Development"
 layout: default
 render_with_liquid: false
@@ -8,7 +8,7 @@ render_with_liquid: false
 
 # Coding Guidelines
 
-- See also [**Committing Guidelines**](#committing-guidelines) below
+- See also [**Committing Guidelines**](development_workflow) 
 - See also [**Overview Slides by Matthias**](assets/develop/2021-10-mhoelzl-development-workflow.pdf)
 
 ## How the source code should look
@@ -104,47 +104,3 @@ end do loop_over_nodes
 ```
 
 
-# Committing Guidelines
-TODO: it needs to be updated based on the github workflow.
-- See also [**Coding Guidelines**](#coding-guidelines) above
-
-- See [ITER Development Guide](https://portal.iter.org/departments/POP/CM/IMAS/IM%20Development%20Guide.docx) written by Simon Pinches for a comprehensive introduction
-- [Slides by Guido (2016-04)](assets/develop//huijsmans_jorek_general_meeting_2016.pdf)
-- [Slides by Matthias (2020-04)](assets/develop/2020-04-mhoelzl-development-coordination.pdf) with some issues coming up regularly and suggested solutions
-
-## Setting up git properly
-
-***This is an important step!*** Make sure not to skip it when starting to work with GIT. What you need to do is  nicely described in the [ITER Development Guide](https://portal.iter.org/departments/POP/CM/IMAS/IM%20Development%20Guide.docx) in Section 5.1.
-
-## Different kinds of branches
-
-- `feature/<name>` -- For new developments
-- `bugfix/<name>` -- For fixing problems in the code
-
-## How to commit a small bugfix
-
-- **Create a bugfix branch [in Stash](https://git.iter.org/projects/STAB/repos/jorek/branches)**
-  - Select the base branch in the drop-down menu (typically `develop`)
-  - Click the '...' next to this drop-down menu and select "Create branch from here"
-- **Check out the branch locally**
-  - `git checkout bugfix/<name>`
-- **Implement the modifications, test and commit them**
-  - `git add <list of modified files>`
-  - `git commit`
-- **Push the commits to the central repository**
-  - `git push origin`
-- **Raise a pull request** from the `bugfix/<name>` branch into `develop`
-  - Select the branch `develop` in the drop-down menu [in Stash](https://git.iter.org/projects/STAB/repos/jorek/branches)
-  - Click onto your `bugfix/<name>` branch
-  - Click "Create Pull Request"
-  - Select appropriate reviewer(s) for your modifications
-  - Note, that a pull request only makes sense when the automatic non-regression tests were successful for your branch.
-- **Announce the bugfix via our [mailing list](mailto:everyone@jorek.eu)** if it affects a larger number of people
-
-## How to develop a larger code modification
-
-- This works essentially in the same way as for a bugfix.
-- However, since such a development will typically take longer, it may be useful to merge modifications from `develop` into your `feature/<name>` branch every now and then in order to keep track of the changes.
-- Make sure to create new [regression tests](nrt) for your developments.
-- Make sure to merge all changes from develop into your feature branch before you raise your pull request to develop.
-- Make sure to select two people as reviewers for your pull request.
